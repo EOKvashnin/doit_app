@@ -1,0 +1,224 @@
+@import 'tailwindcss';
+@source "../node_modules/flowbite-datepicker";
+
+body {
+  background-color: oklch(20.8% 0.042 265.755);
+
+  background-image:
+    linear-gradient(to bottom, oklch(20.8% 0.042 265.755 / 0.9), oklch(40% 0.042 265.755 / 0.6)),
+    url('./assets/wall.webp');
+  background-attachment: fixed; /* или scroll */
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
+}
+
+.btn {
+  @apply w-50 text-white bg-gray-400 hover:bg-pink-700 focus:ring-1 focus:outline-none focus:ring-pink-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-400/20 dark:hover:bg-pink-700 dark:focus:ring-pink-800;
+}
+
+.btn-submit {
+  @apply w-full text-white bg-pink-600 hover:bg-pink-700 focus:ring-4 focus:outline-none focus:ring-pink-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-800;
+}
+.btn-submit:disabled {
+  @apply bg-gray-400 cursor-not-allowed hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-600;
+}
+
+.btn-logout {
+  @apply w-full text-white bg-pink-600 hover:bg-pink-700 focus:ring-4 focus:outline-none focus:ring-pink-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-pink-600 dark:hover:bg-pink-700 dark:focus:ring-pink-800;
+}
+
+.input-gray {
+  @apply bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-gray-600 focus:border-gray-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-pink-500 dark:focus:border-pink-500;
+}
+
+.input-filter {
+  @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-white focus:border-white block w-full p-2.5 dark:bg-gray-700/10 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white;
+}
+
+.input-modal {
+  @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5 dark:bg-gray-700/10 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-pink-500 dark:focus:border-pink-500;
+}
+
+.container {
+  @apply w-screen h-screen flex justify-center items-center;
+}
+
+header {
+  @apply mb-8 text-4xl font-bold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white;
+}
+
+mark {
+  @apply px-2 text-white bg-pink-600 rounded-sm dark:bg-pink-600;
+}
+
+/* -------------  TABLE  ------------- */
+.tr {
+  @apply h-4 bg-white border-b dark:bg-gray-800/50 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 leading-0.5;
+}
+/* Применение эффекта к полю статуса при наведении на строку */
+.tr:hover .status-cell {
+  @apply transition-transform duration-300 ease-in-out transform -translate-x-0.5 -translate-y-0.5;
+}
+
+.td {
+  @apply h-5 px-1 text-sm text-gray-300 font-normal  align-middle truncate;
+}
+
+table {
+  table-layout: fixed;
+}
+
+/*--------------- MODAL ---------------*/
+
+.modal {
+  @apply fixed top-[80px] left-1/2 -translate-x-1/2 w-[800px] p-4 z-[1000] rounded-[10px] shadow-[2px_3px_10px_rgba(255,255,255,0.2)]  backdrop-blur-[10px];
+}
+
+.modal-backdrop {
+  @apply fixed inset-0 bg-black/35  z-[100];
+}
+
+/* ---------- FORM ----------*/
+
+.label-modal {
+  @apply block mb-1 mt-3 text-sm text-gray-800 dark:text-gray-400;
+}
+
+.area-modal {
+  @apply block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-pink-500 focus:border-pink-500 dark:bg-gray-700/10 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-pink-500 dark:focus:border-pink-500 mb-5;
+}
+
+.select-modal {
+  @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5 dark:bg-gray-700/50  dark:border-gray-600/60 dark:placeholder-gray-400 dark:text-gray-200 dark:focus:ring-pink-500 dark:focus:border-pink-500;
+}
+
+/* --------- СТАТУС -------------------*/
+
+.badge {
+  @apply inline-block w-full px-2 py-1 text-[11px] text-center font-medium rounded-lg overflow-hidden  shadow-[2px_2px_2px_rgba(96,96,96,0.5)] transition-all duration-1000 ease-in-out;
+}
+
+.truncate-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.primary {
+  @apply text-blue-600 border border-blue-600;
+}
+
+.neutral {
+  @apply text-gray-500 border border-gray-500;
+}
+
+.success {
+  @apply text-white bg-green-500 border-none;
+}
+.secondary {
+  @apply text-white bg-pink-500 border-none;
+}
+
+.danger {
+  @apply text-white bg-red-400 border-none;
+}
+
+.warning {
+  @apply text-yellow-300 border border-gray-400;
+}
+
+.end {
+  @apply text-gray-200 bg-red-500/50 border-none;
+}
+
+/* --------------- ПЛОЩАДКА ---------------*/
+
+/* Head Hunter */
+.red {
+  @apply text-white border border-pink-500;
+}
+
+/* Avito */
+.orange {
+  @apply text-white border border-green-500;
+}
+
+/* Телефон */
+.green {
+  @apply text-gray-500 border border-gray-500;
+}
+
+/* Центр занятости */
+.purple {
+  @apply text-gray-500 border border-gray-500;
+}
+
+/* Газета Спутник */
+.black {
+  @apply text-gray-500 border border-gray-500;
+}
+
+/* Газета Прораб */
+.brown {
+  @apply text-gray-500 border border-gray-500;
+}
+
+/* ВКонтакте */
+.light-blue {
+  @apply text-gray-500 border border-gray-500;
+}
+
+/* Работа в России */
+.dark-green {
+  @apply text-gray-500 border border-gray-500;
+}
+
+/* Привел друг */
+.yellow {
+  @apply text-gray-500 border border-gray-500;
+}
+
+/* Сайт ЧЛМЗ */
+.grey {
+  @apply text-gray-500 border border-gray-500;
+}
+
+/*-------------- СКРОЛЛБАР --------------*/
+
+/* Для браузеров на основе Webkit (Chrome, Safari) */
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: oklch(20.8% 0.042 265.755 / 0.9);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:active,
+::-webkit-scrollbar-thumb:hover {
+  background-color: #0a58ca;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+/* Для Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(20.8% 0.042 265.755 / 0.9) transparent;
+}
+
+.scrollbar-thumb {
+  background-color: oklch(20.8% 0.042 265.755 / 0.9);
+  border-radius: 10px;
+}
+
+.scrollbar-thumb:active,
+.scrollbar-thumb:hover {
+  background-color: #0a58ca;
+}
