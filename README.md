@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # CHLMZ_workers
 
 This template should help get you started developing with Vue 3 in Vite.
@@ -42,3 +43,6 @@ npm run build
 ```sh
 npm run lint
 ```
+=======
+# CLMZ_candidate
+>>>>>>> 70c14bdb4b14a00af11de355109137c5aab4c504
