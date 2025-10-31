@@ -292,14 +292,17 @@
             <option value="medical_referred">Направлен на медкомиссию</option>
           </select>
         </div>
-        <input
-          v-if="isNeedAddDateEmployment"
-          class="input-modal"
-          type="date"
-          id="new_employment_Date"
-          v-model="new_employment_Date"
-          @change="onDateChange"
-        />
+        <transition name="input-width">
+          <div v-if="isNeedAddDateEmployment" class="input-wrapper">
+            <input
+              class="input-modal"
+              type="date"
+              id="new_employment_Date"
+              v-model="new_employment_Date"
+              @change="onDateChange"
+            />
+          </div>
+        </transition>
         <button
           class="flex flex-row gap-2 px-4 py-2 my-auto border border-gray-500/30 text-white rounded hover:bg-pink-600 transition-colors"
         >
@@ -579,6 +582,26 @@ export default {
 .footer-enter-from,
 .footer-leave-to {
   transform: translateY(30%);
+  opacity: 0;
+}
+
+/*-------------- INPUT_FOOTER ----------------------- */
+
+.input-wrapper {
+  width: 280px; /* или любая подходящая фиксированная ширина */
+}
+
+.input-width-enter-active,
+.input-width-leave-active {
+  transition:
+    width 0.6s ease,
+    opacity 0.6s ease;
+  overflow: hidden;
+}
+
+.input-width-enter-from,
+.input-width-leave-to {
+  width: 0;
   opacity: 0;
 }
 </style>
