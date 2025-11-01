@@ -1,32 +1,32 @@
 <template>
   <div
-    class="flex justify-center max-w-2xl w-full bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6"
+    class="flex flex-col justify-center items-center max-w-2xl w-full h-[330px] bg-white rounded-lg shadow-sm dark:bg-gray-800 p-1 md:p-4"
   >
-    <div
-      class="w-12 h-12 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center me-3"
+    <svg
+      class="w-15 h-15 text-gray-800 dark:text-gray-300"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      fill="none"
+      viewBox="0 0 24 24"
     >
-      <svg
-        class="w-6 h-6 text-gray-500 dark:text-gray-400"
-        aria-hidden="true"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="currentColor"
-        viewBox="0 0 20 19"
-      >
-        <path
-          d="M14.5 0A3.987 3.987 0 0 0 11 2.1a4.977 4.977 0 0 1 3.9 5.858A3.989 3.989 0 0 0 14.5 0ZM9 13h2a4 4 0 0 1 4 4v2H5v-2a4 4 0 0 1 4-4Z"
-        />
-        <path
-          d="M5 19h10v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2ZM5 7a5.008 5.008 0 0 1 4-4.9 3.988 3.988 0 1 0-3.9 5.859A4.974 4.974 0 0 1 5 7Zm5 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm5-1h-.424a5.016 5.016 0 0 1-1.942 2.232A6.007 6.007 0 0 1 17 17h2a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5ZM5.424 9H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h2a6.007 6.007 0 0 1 4.366-5.768A5.016 5.016 0 0 1 5.424 9Z"
-        />
-      </svg>
-    </div>
+      <path
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-width="2"
+        d="M4.5 17H4a1 1 0 0 1-1-1 3 3 0 0 1 3-3h1m0-3.05A2.5 2.5 0 1 1 9 5.5M19.5 17h.5a1 1 0 0 0 1-1 3 3 0 0 0-3-3h-1m0-3.05a2.5 2.5 0 1 0-2-4.45m.5 13.5h-7a1 1 0 0 1-1-1 3 3 0 0 1 3-3h3a3 3 0 0 1 3 3 1 1 0 0 1-1 1Zm-1-9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"
+      />
+    </svg>
+
     <div>
-      <h5 class="leading-none text-2xl font-bold text-gray-900 dark:text-white pb-1">
+      <p class="text-md font-semibold text-gray-500 dark:text-gray-400">Всего кандидатов</p>
+      <h5
+        class="leading-none text-6xl text-center font-semibold text-green-500 dark:text-gray-300 pt-8 pb-1"
+      >
         {{ length }}
       </h5>
-      <p class="text-sm font-normal text-gray-500 dark:text-gray-400">С момента начала подбора</p>
     </div>
-    <h3 class="text-gray-300 font-semibold text-2xl"></h3>
   </div>
 </template>
 
@@ -40,5 +40,5 @@ const store = useStore()
 // Получаем список всех работников из Vuex
 const workers = computed(() => store.getters['workers/workers'] || [])
 
-const length = computed(() => `${workers.value.length || 'Нет значения'} чел`)
+const length = computed(() => workers.value.length || 'Нет значения')
 </script>

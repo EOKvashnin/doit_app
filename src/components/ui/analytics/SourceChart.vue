@@ -4,8 +4,8 @@
   >
     <VueApexCharts
       type="bar"
-      height="270"
-      width="650"
+      height="267"
+      width="580"
       :options="chartOptions"
       :series="chartOptions.series"
     />
@@ -55,10 +55,9 @@ const chartOptions = computed(() => {
   return {
     chart: {
       type: 'bar',
-      height: '320px',
+
       fontFamily: 'Inter, sans-serif',
       toolbar: { show: false },
-      width: '300',
     },
 
     title: {
@@ -81,6 +80,9 @@ const chartOptions = computed(() => {
     ],
     plotOptions: {
       bar: {
+        dataLabels: {
+          position: 'top',
+        },
         horizontal: false,
         columnWidth: '80%',
         borderRadiusApplication: 'end',
@@ -98,12 +100,12 @@ const chartOptions = computed(() => {
       textAnchor: 'middle',
       distributed: false,
       offsetX: 0,
-      offsetY: 0,
+      offsetY: -30,
       style: {
         fontSize: '14px',
         fontFamily: 'Roboto, sans-serif',
         fontWeight: 'bold',
-        colors: ['#fff'],
+        colors: ['#9CA3AF'],
       },
       background: {
         enabled: false,

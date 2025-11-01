@@ -2,7 +2,7 @@
   <div
     class="flex justify-center max-w-2xl w-full bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6"
   >
-    <apex-chart type="line" :options="chartOptions" :series="series" width="550" height="250" />
+    <apex-chart type="line" :options="chartOptions" :series="series" width="500" height="250" />
   </div>
 </template>
 

@@ -4,6 +4,7 @@ import store from '../store'
 import HelpPage from '../views/HelpPage.vue'
 import AuthPage from '../views/AuthPage.vue'
 import HomePage from '@/views/HomePage.vue'
+import Dashboard from '@/views/Dashboard.vue'
 
 import AnalyticsPage from '@/views/AnalyticsPage.vue'
 
@@ -31,6 +32,15 @@ const routes = [
     path: '/analytics',
     name: AnalyticsPage,
     component: () => import('../views/AnalyticsPage.vue'),
+    meta: {
+      layout: 'main',
+      auth: true,
+    },
+  },
+  {
+    path: '/dashboard',
+    name: Dashboard,
+    component: () => import('../views/Dashboard.vue'),
     meta: {
       layout: 'main',
       auth: true,
