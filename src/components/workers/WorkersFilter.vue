@@ -27,7 +27,9 @@
       </select>
     </div>
 
-    <button class="btn w-50" v-if="isActive" @click="reset" type="button">Очистить</button>
+    <transition name="slide-right">
+      <button class="btn w-50" v-if="isActive" @click="reset" type="button">Очистить</button>
+    </transition>
   </div>
 </template>
 
@@ -108,3 +110,30 @@ export default {
   },
 }
 </script>
+<style scoped>
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition: all 0.4s ease;
+  position: relative; /* важно: не absolute! */
+}
+
+.slide-right-enter-from {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.slide-right-enter-to {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.slide-right-leave-from {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.slide-right-leave-to {
+  opacity: 0;
+  transform: translateX(100%);
+}
+</style>

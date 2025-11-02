@@ -5,7 +5,7 @@
     <VueApexCharts
       type="bar"
       height="267"
-      width="580"
+      width="553"
       :options="chartOptions"
       :series="chartOptions.series"
     />

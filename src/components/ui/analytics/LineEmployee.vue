@@ -2,7 +2,7 @@
   <div
     class="flex justify-center max-w-2xl w-full bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6"
   >
-    <apex-chart type="line" :options="chartOptions" :series="series" width="550" height="300" />
+    <apex-chart type="line" :options="chartOptions" :series="series" width="550" height="250" />
   </div>
 </template>
 
@@ -64,7 +64,7 @@ const series = computed(() => [
 const chartOptions = computed(() => ({
   chart: {
     id: 'workers-by-month',
-    fontFamily: 'Roboto, Inter, Helvetica, Arial, sans-serif',
+    fontFamily: 'Roboto, sans-serif',
     toolbar: { show: false },
     zoom: { enabled: false },
     pan: { enabled: false },
@@ -76,7 +76,7 @@ const chartOptions = computed(() => ({
     offsetY: 0,
   },
   title: {
-    text: 'Общее количество кандидатов по месяцам',
+    text: 'Количество трудоустроенных по месяцам',
     align: 'center',
     style: {
       fontSize: '16px',

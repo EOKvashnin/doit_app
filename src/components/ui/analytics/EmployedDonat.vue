@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative not-even:flex justify-center max-w-2xl w-full bg-white rounded-lg shadow-sm dark:bg-gray-800 p-1 md:p-4"
+    class="relative not-even:flex justify-center max-w-[680px] w-full bg-white rounded-lg shadow-sm dark:bg-gray-800 p-1 md:p-4"
   >
     <!-- Диаграмма -->
     <apex-chart
