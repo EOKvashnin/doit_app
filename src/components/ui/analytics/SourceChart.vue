@@ -2,13 +2,16 @@
   <div
     class="flex justify-center max-w-2xl w-full bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6"
   >
-    <VueApexCharts
-      type="bar"
-      height="267"
-      width="553"
-      :options="chartOptions"
-      :series="chartOptions.series"
-    />
+    <AppLoader v-if="isLoading" class="pb-[130px]"></AppLoader>
+    <div v-else>
+      <VueApexCharts
+        type="bar"
+        height="267"
+        width="553"
+        :options="chartOptions"
+        :series="chartOptions.series"
+      />
+    </div>
   </div>
 </template>
 
@@ -16,6 +19,7 @@
 import { computed } from 'vue'
 import VueApexCharts from 'vue3-apexcharts'
 import { useStore } from 'vuex'
+import AppLoader from '../AppLoader.vue'
 
 // Карта перевода статусов
 const textMap = {
@@ -34,6 +38,9 @@ const textMap = {
 
 const store = useStore()
 const workers = computed(() => store.getters['workers/workers'] || [])
+//Получем флаг о том готовы ли данные
+
+const isLoading = computed(() => store.getters['workers/loading'])
 
 const chartOptions = computed(() => {
   const data = Array.isArray(workers.value) ? workers.value : []

@@ -4,9 +4,10 @@
       v-if="workerData"
       class="w-full border border-gray-500/30 rounded-xl p-4 mt-4 h-8/10 max-h-[550px]"
     >
-      <!--/*--------- ФИО ТЕЛЕФОН СТАТУС ----------*/ -->
+      <!--/*--------- БЛОК_ФИО ТЕЛЕФОН СТАТУС ----------*/ -->
 
       <div class="grid grid-cols-[8fr_0.5fr_3fr]">
+        <!--/*--------- ФИО ----------*/ -->
         <div class="flex flex-row items-center gap-2">
           <svg
             class="w-6 h-6 text-gray-800 dark:text-white"
@@ -23,19 +24,22 @@
               d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
             />
           </svg>
-
-          <p class="text-gray-300 text-2xl font-semibold">{{ workerData?.fio }}</p>
+          <input class="input-modal-edit w-sm" type="text" id="fio" v-model="fioEditable" />
         </div>
+        <!--/*--------- LOADER для изменения статуса ----------*/ -->
         <div class="flex items-center justify-center" style="min-width: 24px; min-height: 24px">
           <AppSmallLoader v-if="isLoadStatus" />
         </div>
 
+        <!--/*--------- СТАТУС ----------*/ -->
         <p class="flex items-center pt-1">
           <app-status :type="workerData.cur_status"></app-status>
         </p>
       </div>
       <div class="grid grid-cols-[5fr_2fr]">
+        <!--/*--------- БЛОК ТЕЛЕФОН / ДАТА_ТРУДОУСТРОЙСТВА ----------*/ -->
         <div class="flex flex-row items-center my-1 gap-2">
+          <!--/*---------ТЕЛЕФОН ----------*/ -->
           <svg
             class="w-6 h-6 text-gray-800 dark:text-gray-300"
             aria-hidden="true"
@@ -53,9 +57,17 @@
               d="M6 15h12M6 6h12m-6 12h.01M7 21h10a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1Z"
             />
           </svg>
-
-          <p class="text-gray-400 text-xl">{{ workerData?.phone }}</p>
+          <input
+            class="input-modal-edit w-sm"
+            type="text"
+            v-model="phoneEditable"
+            v-mask="'+7 (###) ###-##-##'"
+            @input="onPhoneInput"
+            placeholder="+7 (___) ___-__-__"
+          />
         </div>
+
+        <!--/*--------- ДАТА ТРУДОУСТРОЙСТВА ----------*/ -->
         <div
           v-if="workerData?.cur_status === 'employed'"
           class="flex flex-row items-center justify-center gap-2 my-1"
@@ -77,10 +89,11 @@
               d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z"
             />
           </svg>
+
           <p class="text-gray-400 text-lg">{{ formatDate(workerData?.employment_Date) }}</p>
         </div>
       </div>
-      <div class="w-1/4 flex flex-row items-center justify-center gap-2 my-1">
+      <div class="w-1/3 flex flex-row items-center justify-center gap-3.5 my-1">
         <svg
           class="w-6 h-6 text-gray-800 dark:text-white"
           aria-hidden="true"
@@ -105,93 +118,49 @@
     <!--/*------------------- БЛОК ДАТА ТРУДОУСТРОЙСТВА / СПЕЦИАЛЬНОСТЬ / РУКОВОДИТЕЛЬ -------------------*/ -->
 
     <div v-if="workerData" class="w-full border border-gray-500/30 rounded-xl p-4 mt-4">
-      <div class="grid grid-cols-[1fr_1fr] gap-2">
-        <div class="wrapper flex flex-col gap-2">
-          <span class="flex flex-row items-center gap-2">
-            <svg
-              class="w-6 h-6 text-gray-800 dark:text-gray-300"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z"
-              />
-            </svg>
-            <p class="text-gray-400 text-xl">{{ formatDate(workerData.int_date) }}</p>
-          </span>
-          <span class="flex flex-row items-center gap-2">
-            <svg
-              class="w-6 h-6 text-gray-800 dark:text-gray-300"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-              />
-            </svg>
+      <div class="flex flex-col gap-2">
+        <!--/*--- ДАТА/ВРЕМЯ СОБЕСЕДОВАНИЯ ---*/ -->
+        <div class="flex-col items-center gap-2">
+          <label class="label-modal-edit" for="int_dateEditable">Дата/время собеседования</label>
 
-            <p class="text-gray-400 text-xl">{{ workerData.int_time }}</p>
-          </span>
+          <div class="flex gap-4">
+            <!--/*--- ДАТА СОБЕСЕДОВАНИЯ ---*/ -->
+            <input
+              class="input-modal-edit"
+              type="date"
+              id="int_dateEditable"
+              v-model="int_dateEditable"
+            />
+            <!--/*--- ВРЕМЯ СОБЕСЕДОВАНИЯ ---*/ -->
+            <input
+              class="input-modal-edit"
+              type="time"
+              id="int_timeEditable"
+              v-model="int_timeEditable"
+            />
+          </div>
         </div>
-        <div class="wrapper flex flex-col gap-2">
-          <span class="flex flex-row items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-              <title>User-worker SVG Icon</title>
-              <path
-                fill="none"
-                stroke="#D1D5DB"
-                stroke-width="2"
-                d="M3 6h18zm7-4v2m4-2v2m2 8c2.374 1.183 4 3.65 4 7v4H4v-4c0-3.354 1.631-5.825 4-7m4 4.5V23m0-10a6 6 0 1 0 0-12a6 6 0 0 0 0 12Zm-4-1a4 4 0 1 0 8 0"
-              ></path>
-            </svg>
 
-            <p class="text-gray-400 text-xl">{{ workerData.position }}</p>
+        <!--/*--- ГРУППА ДОЛЖНОСТЬ/РУКОВОДИТЕЛЬ ---*/ -->
+        <div class="wrapper flex flex-row justify-between gap-4">
+          <!--/*--- ДОЛЖНОСТЬ ---*/ -->
+          <span class="flex flex-col w-1/2 justify-start">
+            <label class="label-modal-edit" for="position">Должность</label>
+            <input class="input-modal-edit" type="text" id="position" v-model="positionEditable" />
           </span>
-          <span class="flex flex-row items-center gap-2">
-            <svg
-              fill="#D1D5DB"
-              height="24px"
-              width="24px"
-              version="1.1"
-              id="Layer_1"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink"
-              viewBox="0 0 512 512"
-              xml:space="preserve"
-            >
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-              <g id="SVGRepo_iconCarrier">
-                <g>
-                  <g>
-                    <path
-                      d="M333.187,237.405c32.761-23.893,54.095-62.561,54.095-106.123C387.282,58.893,328.389,0,256,0 S124.718,58.893,124.718,131.282c0,43.562,21.333,82.23,54.095,106.123C97.373,268.57,39.385,347.531,39.385,439.795 c0,39.814,32.391,72.205,72.205,72.205H400.41c39.814,0,72.205-32.391,72.205-72.205 C472.615,347.531,414.627,268.57,333.187,237.405z M164.103,131.282c0-50.672,41.225-91.897,91.897-91.897 s91.897,41.225,91.897,91.897S306.672,223.18,256,223.18S164.103,181.954,164.103,131.282z M198.279,472.615h-86.69 c-18.097,0-32.82-14.723-32.82-32.821c0-77.342,49.803-143.262,119.02-167.399c-2.67,15.897,1.164,32.672,11.504,46.012 L198.279,472.615z M237.765,472.615l9.426-131.971c5.838,0.873,11.78,0.873,17.618,0l9.426,131.971H237.765z M269.925,296.18 c-7.679,7.679-20.172,7.679-27.849,0c-7.679-7.677-7.679-20.17,0-27.849c7.677-7.679,20.17-7.679,27.849,0 C277.604,276.01,277.604,288.503,269.925,296.18z M400.41,472.615h-86.689l-11.015-154.208 c10.34-13.341,14.174-30.115,11.504-46.012c69.216,24.138,119.02,90.057,119.02,167.399 C433.231,457.892,418.508,472.615,400.41,472.615z"
-                    ></path>
-                  </g>
-                </g>
-              </g>
-            </svg>
-            <p class="text-gray-400 text-xl">{{ workerData.fioRuc }}</p>
+
+          <!--/*--- РУКОВОДИТЕЛЬ ---*/ -->
+          <span class="flex flex-col w-1/2 justify-start">
+            <label class="label-modal-edit" for="fioRucEditable">ФИО Руководителя</label>
+            <input
+              class="input-modal-edit"
+              type="text"
+              id="fioRucEditable"
+              v-model="fioRucEditable"
+            />
           </span>
         </div>
       </div>
-      <div class="grid grid-cols-[3fr_2fr] gap-2"></div>
     </div>
 
     <!--/*------------------- БЛОК ОПИСАНИЕ -------------------*/ -->
@@ -272,6 +241,7 @@
       <div
         class="mt-2 py-3 px-3 rounded-xl flex justify-end items-center gap-3 bottom-0 z-10 bg-gray-800/80"
       >
+        <button class="btn-del w-3xs" @click="removeWithConfirm">Удалить кандидата</button>
         <div class="form-control w-full">
           <select
             class="select-modal"
@@ -303,45 +273,33 @@
             />
           </div>
         </transition>
-        <button
-          class="flex flex-row gap-2 px-4 py-2 my-auto border border-gray-500/30 text-white rounded hover:bg-pink-600 transition-colors"
-        >
-          <svg
-            class="w-6 h-6 text-gray-800 dark:text-white"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4"
-            />
-          </svg>
-
-          Обновить
-        </button>
+        <transition name="slide-fade">
+          <div v-if="hasChanges" class="inline-block">
+            <button @click="UpdateWorkerData" class="btn">Обновить</button>
+          </div>
+        </transition>
+        <button @click="onClose" class="btn">Закрыть</button>
       </div>
     </transition>
   </div>
 </template>
 
 <script>
-import { ref, watch } from 'vue'
-import AppStatus from '../ui/AppStatus.vue'
-import formatDate from '@/utils/formatDate'
+import { ref, computed, watch } from 'vue'
+import { mask } from 'vue-the-mask'
 import { useStore } from 'vuex'
 import { showToast } from '@/utils/toast'
 import { formatDateTime } from '@/utils/formatDate'
+import { phoneSchema } from '@/use/change-phone'
+import { normalizePhoneForServer } from '@/utils/phone'
+import { formatPhoneForInput } from '@/utils/phone'
+import AppStatus from '../ui/AppStatus.vue'
 import AppSmallLoader from '../ui/AppSmallLoader.vue'
 import AppSource from '../ui/AppSource.vue'
+import formatDate from '@/utils/formatDate'
 
 export default {
+  directives: { mask },
   name: 'WorkerOneModal',
   components: {
     AppStatus,
@@ -351,7 +309,7 @@ export default {
   props: {
     worker: Object,
   },
-  emits: ['openCard', 'workerUpdated'],
+  emits: ['openCard', 'workerUpdated', 'close'],
   setup(props, { emit }) {
     const store = useStore()
     const isLoadStatus = ref(false)
@@ -361,6 +319,12 @@ export default {
     // Локальная реактивная копия данных кандидата
     // Работаем с копией чтобы не мутировать props напрямую
     const workerData = ref(null)
+    const fioEditable = ref('')
+    const phoneEditable = ref('')
+    const int_dateEditable = ref('')
+    const int_timeEditable = ref('')
+    const positionEditable = ref('')
+    const fioRucEditable = ref('')
 
     // Состояние видимости формы комментария
     const isCommentShow = ref(false)
@@ -373,9 +337,25 @@ export default {
     watch(
       () => props.worker,
       (newWorker) => {
-        workerData.value = newWorker ? { ...newWorker } : null
+        if (newWorker) {
+          workerData.value = { ...newWorker }
+          fioEditable.value = newWorker.fio || ''
+          phoneEditable.value = formatPhoneForInput(newWorker.phone || '')
+          int_dateEditable.value = newWorker.int_date || ''
+          int_timeEditable.value = newWorker.int_time || ''
+          positionEditable.value = newWorker.position || ''
+          fioRucEditable.value = newWorker.fioRuc || ''
+        } else {
+          workerData.value = null
+          fioEditable.value = ''
+          phoneEditable.value = ''
+          int_dateEditable.value = ''
+          int_timeEditable.value = ''
+          positionEditable.value = ''
+          fioRucEditable.value = ''
+        }
       },
-      { immediate: true, deep: true },
+      { immediate: true },
     )
 
     // Переключение видимости формы комментария
@@ -466,7 +446,7 @@ export default {
           ...(employmentDate !== null && { employment_Date: employmentDate }),
         }
 
-        // Локально обновляем СРАЗУ (без таймаута!)
+        // Локально обновляем
         workerData.value = updatedWorker
 
         // Store и сервер
@@ -487,9 +467,119 @@ export default {
       }
     }
 
+    // ПРОВЕРЯЕМ НА НАЛИЧИЕ ИЗМЕНЕНИЙ
+    const hasChanges = computed(() => {
+      if (!props.worker) return false
+
+      return (
+        fioEditable.value.trim() !== (props.worker.fio || '') ||
+        phoneEditable.value !== formatPhoneForInput(props.worker.phone || '') ||
+        int_dateEditable.value !== (props.worker.int_date || '') ||
+        int_timeEditable.value !== (props.worker.int_time || '') ||
+        positionEditable.value.trim() !== (props.worker.position || '') ||
+        fioRucEditable.value.trim() !== (props.worker.fioRuc || '')
+      )
+    })
+
+    const onPhoneInput = (e) => {
+      const value = e.target.value
+      // Если пользователь удалил всё — сбрасываем в пусто
+      if (value === '' || value === '+7 (___) ___-__-__') {
+        phoneEditable.value = ''
+      }
+    }
+
+    // ОБНОВЛЯЕМ ДАННЫЕ ПО КНОПКЕ "ОБНОВИТЬ"
+    const UpdateWorkerData = async () => {
+      if (!workerData.value) return
+
+      // 1. Валидация номера телефона
+      try {
+        await phoneSchema.validate(phoneEditable.value)
+      } catch (validationError) {
+        showToast.warning(validationError.message)
+        return // ⬅️ прерываем выполнение, НЕ заходим в обновление
+      }
+
+      try {
+        // 1.Создаем пакет обновляемых данных перед отправкой
+        const updatedData = {
+          ...workerData.value,
+          fio: fioEditable.value.trim(),
+          phone: normalizePhoneForServer(phoneEditable.value),
+          int_date: int_dateEditable.value,
+          int_time: int_timeEditable.value,
+          position: positionEditable.value.trim(),
+          fioRuc: fioRucEditable.value.trim(),
+        }
+
+        // 2. Обновляем локально
+        workerData.value = { ...updatedData }
+
+        // 3. Обновляем в store
+        store.commit('workers/updateWorker', updatedData)
+
+        // 4. обновляем на сервере
+        store.dispatch('workers/update', {
+          id: props.worker.id,
+          data: updatedData,
+        })
+
+        // 5. Уведомляем HomePage
+        emit('workerUpdated', updatedData)
+
+        // 6. Успешное уведомление
+        showToast.success('Данные успешно обновлены')
+
+        // 7. Закрываем модалку
+        emit('close')
+      } catch (error) {
+        // 7. Откат при ошибке: восстанавливаем из props.worker (оригинал)
+        workerData.value = { ...props.worker }
+        fioEditable.value = props.worker.fio || ''
+        phoneEditable.value = props.worker.phone || ''
+        int_dateEditable.value = props.worker.int_date || ''
+        int_timeEditable.value = props.worker.int_time || ''
+        positionEditable.value = props.worker.position || ''
+        fioRucEditable.value = props.worker.fioRuc || ''
+
+        showToast.error('Не удалось сохранить изменения: ' + error.message)
+      }
+    }
+
+    const onClose = () => {
+      emit('close')
+    }
+
+    const removeWithConfirm = () => {
+      const confirmed = confirm('Вы уверены, что хотите удалить этого работника?')
+      if (confirmed) {
+        remove() // твой существующий async-метод
+      }
+    }
+
+    const remove = async () => {
+      try {
+        await store.dispatch('workers/remove', props.worker.id)
+        showToast.success('Кандидат удален', {
+          position: 'bottom-right',
+          duration: 3000,
+        })
+        emit('close')
+      } catch (error) {
+        showToast.error('Ошибка при удалении ', error)
+      }
+    }
+
     // Экспортируем реактивные данные и методы в template
     return {
       workerData,
+      fioEditable,
+      phoneEditable,
+      int_dateEditable,
+      int_timeEditable,
+      positionEditable,
+      fioRucEditable,
       isCommentShow,
       commentText,
       toggleShowComment,
@@ -501,6 +591,12 @@ export default {
       isNeedAddDateEmployment,
       new_employment_Date,
       onDateChange,
+      UpdateWorkerData,
+      hasChanges,
+      onPhoneInput,
+      onClose,
+      removeWithConfirm,
+      remove,
     }
   },
 }
@@ -604,6 +700,19 @@ export default {
 .input-width-enter-from,
 .input-width-leave-to {
   width: 0;
+  opacity: 0;
+}
+
+/*-------------- КНОПКА ОБНОВИТЬ ----------------------- */
+
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.6s ease;
+  transform: translateX(0);
+}
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  transform: translateX(30%);
   opacity: 0;
 }
 </style>

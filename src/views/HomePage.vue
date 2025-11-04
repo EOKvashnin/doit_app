@@ -39,7 +39,7 @@
         @close="isCardModalOpen = false"
       >
         <worker-one-modal
-          @open-card="isCardModalOpen = false"
+          @close="isCardModalOpen = false"
           :worker="selectedWorker"
         ></worker-one-modal>
       </app-modal>
@@ -153,12 +153,18 @@ export default {
       selectedWorker.value = updatedWorker
     }
 
+    const handleModalClose = () => {
+      isModalOpen.value = false
+      selectedWorker.value = null
+    }
+
     return {
       isModalOpen,
       isCardModalOpen,
       selectedWorker,
       handleOpenCard,
       handleWorkerUpdate,
+      handleModalClose,
       loading,
       workers,
       filter,

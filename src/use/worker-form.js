@@ -1,7 +1,9 @@
 import { useField, useForm } from 'vee-validate'
 import * as yup from 'yup'
+import { phoneSchema } from './change-phone'
+import { normalizePhoneForServer } from '@/utils/phone'
 
-export function useWorkerForm(fn) {
+export function useWorkerForm(submitCallback) {
   const { handleSubmit, isSubmitting } = useForm({
     initialValues: {
       cur_status: 'appointed',
@@ -32,22 +34,7 @@ export function useWorkerForm(fn) {
   } = useField('fio', yup.string().trim().required('Введите ФИО соискателя'))
 
   // Телефон соискателя
-  const {
-    value: phone,
-    errorMessage: phError,
-    handleBlur: phBlur,
-  } = useField(
-    'phone',
-    yup
-      .string()
-      .trim()
-      .required('Введите номер телефона')
-      .test('phone-format', 'Некорректный формат телефона', (value) => {
-        if (!value) return false
-        // Проверка, что все символы заполнены (нет подчеркиваний)
-        return !value.includes('_') && value.replace(/\D/g, '').length === 11
-      }),
-  )
+  const { value: phone, errorMessage: phError, handleBlur: phBlur } = useField('phone', phoneSchema)
 
   // ФИО руководителя
   const {
@@ -93,7 +80,14 @@ export function useWorkerForm(fn) {
     handleBlur: noteBlur,
   } = useField('note', yup.string().trim())
 
-  const onSubmit = handleSubmit(fn)
+  // 🔹 Оборачиваем callback, чтобы нормализовать телефон ПЕРЕД отправкой
+  const onSubmit = handleSubmit((values) => {
+    const normalizedValues = {
+      ...values,
+      phone: normalizePhoneForServer(values.phone),
+    }
+    return submitCallback(normalizedValues)
+  })
 
   return {
     // Форма

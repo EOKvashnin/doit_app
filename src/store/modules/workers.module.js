@@ -8,6 +8,7 @@ export default {
   state() {
     return {
       workers: [],
+      loading: false,
     }
   },
 
@@ -29,6 +30,10 @@ export default {
 
     removeWorker(state, id) {
       state.workers = state.workers.filter((worker) => worker.id !== id)
+    },
+
+    setLoading(state, isLoading) {
+      state.loading = isLoading
     },
   },
 
@@ -73,8 +78,8 @@ export default {
     },
 
     async load({ commit, rootGetters }) {
+      commit('setLoading', true) // начало загрузки
       try {
-        // Получаем токен из auth модуля
         const token = rootGetters['auth/token']
         if (!token) {
           throw new Error('Токен авторизации не найден')
@@ -85,12 +90,14 @@ export default {
 
         commit('setWorkers', workers)
       } catch (e) {
-        if (e.response && e.response.status === 401) {
+        if (e.response?.status === 401) {
           showToast.error('Ошибка авторизации')
         } else {
           showToast.warning(e.message || 'Что-то пошло не так')
         }
         console.error(e)
+      } finally {
+        commit('setLoading', false) // завершение загрузки — в любом случае
       }
     },
 
@@ -160,5 +167,6 @@ export default {
   getters: {
     workers: (state) => state.workers,
     getWorkerById: (state) => (id) => state.workers.find((worker) => worker.id === id),
+    loading: (state) => state.loading,
   },
 }

@@ -21,7 +21,7 @@
                 clip-rule="evenodd"
               />
             </svg>
-            <h1 class="text-xl text-pink-500 font-bold">Power Staff</h1>
+            <h1 class="text-xl text-pink-500 font-bold">Power <mark>staff</mark></h1>
           </div>
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">

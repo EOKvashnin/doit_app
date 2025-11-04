@@ -14,7 +14,7 @@ export default {
   components: { MainLayout, AuthLayout },
   setup() {
     const route = useRoute()
-    const store = useStore() // ← Вот чего не хватало!
+    const store = useStore()
 
     onMounted(() => {
       if (route.meta.layout !== 'auth') {

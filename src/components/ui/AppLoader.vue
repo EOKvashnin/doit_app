@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full flex justify-center">
+  <div class="w-full flex justify-center items-center">
     <div class="dot-spinner wx-auto mt-30">
       <div class="dot-spinner__dot"></div>
       <div class="dot-spinner__dot"></div>

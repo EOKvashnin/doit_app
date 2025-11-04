@@ -6,7 +6,7 @@ const formatterDate = new Intl.DateTimeFormat('ru-RU', {
 
 export default function formatDateTable(date) {
   if (!date || isNaN(Date.parse(date))) {
-    return 'Дата не указана' // Возвращаем fallback вместо ошибки
+    return '' // Возвращаем fallback вместо ошибки
   }
 
   const formattedDate = formatterDate.format(new Date(date))

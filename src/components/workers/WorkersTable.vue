@@ -72,7 +72,12 @@
             <!-- Комментарий -->
           </colgroup>
           <tbody>
-            <tr class="tr" @click="emitOpenCard(w)" v-for="(w, idx) in workers" :key="w.id">
+            <tr
+              class="tr"
+              @click="emitOpenCard(w)"
+              v-for="(w, idx) in sortedByDateTimeWorkers"
+              :key="w.id"
+            >
               <td class="h-10 p-4 align-middle">{{ idx + 1 }}</td>
               <td class="td">{{ formatDateTable(w.int_date) }}</td>
               <td class="td">{{ w.int_time }}</td>
@@ -82,7 +87,7 @@
               <td class="td">{{ w.fioRuc }}</td>
               <td class="td status-cell"><AppSource :source="w.source" /></td>
               <td class="td text-[10px] status-cell"><AppStatus :type="w.cur_status" /></td>
-              <td class="td text-center">{{ w.employment_Date }}</td>
+              <td class="td text-center">{{ formatDateTable(w.employment_Date) }}</td>
               <td class="td">{{ w.note }}</td>
             </tr>
           </tbody>
@@ -96,9 +101,31 @@
 import AppStatus from '../ui/AppStatus.vue'
 import AppSource from '../ui/AppSource.vue'
 import formatDateTable from '@/utils/formatDateTable'
+import { computed } from 'vue'
 
 const props = defineProps({ workers: Array })
 const emit = defineEmits(['open-card'])
+
+const sortedByDateTimeWorkers = computed(() => {
+  return [...props.workers].sort((a, b) => {
+    // 1. Сравниваем даты
+    const dateComparison = b.int_date.localeCompare(a.int_date)
+
+    // 2. Если даты разные сразу возвращаем результат
+    if (dateComparison !== 0) {
+      return dateComparison
+    }
+    // 3. Если даты одинаковые сравниваем по времени
+    // Но, так как даты записаны в формат "9:00", а не "09:00" надо привести их к числовому формату
+    const [hA, mA] = a.int_time.split(':').map(Number)
+    const minutesA = hA * 60 + mA
+
+    const [hB, mB] = b.int_time.split(':').map(Number)
+    const minutesB = hB * 60 + mB
+
+    return minutesA - minutesB
+  })
+})
 
 function emitOpenCard(worker) {
   emit('open-card', worker)
