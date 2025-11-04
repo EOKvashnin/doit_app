@@ -17,7 +17,7 @@ const routes = [
       auth: true,
     },
   },
-  ,
+
   {
     path: '/help',
     name: HelpPage,

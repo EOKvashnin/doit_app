@@ -32,7 +32,7 @@
         </div>
 
         <!--/*--------- СТАТУС ----------*/ -->
-        <p class="flex items-center pt-1">
+        <p class="flex items-center">
           <app-status :type="workerData.cur_status"></app-status>
         </p>
       </div>
@@ -146,15 +146,22 @@
           <!--/*--- ДОЛЖНОСТЬ ---*/ -->
           <span class="flex flex-col w-1/2 justify-start">
             <label class="label-modal-edit" for="position">Должность</label>
-            <input class="input-modal-edit" type="text" id="position" v-model="positionEditable" />
+            <textarea
+              class="input-modal-edit"
+              type="text"
+              rows="3"
+              id="positionEditable"
+              v-model="positionEditable"
+            />
           </span>
 
           <!--/*--- РУКОВОДИТЕЛЬ ---*/ -->
           <span class="flex flex-col w-1/2 justify-start">
             <label class="label-modal-edit" for="fioRucEditable">ФИО Руководителя</label>
-            <input
+            <textarea
               class="input-modal-edit"
               type="text"
+              rows="3"
               id="fioRucEditable"
               v-model="fioRucEditable"
             />
@@ -241,7 +248,26 @@
       <div
         class="mt-2 py-3 px-3 rounded-xl flex justify-end items-center gap-3 bottom-0 z-10 bg-gray-800/80"
       >
-        <button class="btn-del w-3xs" @click="removeWithConfirm">Удалить кандидата</button>
+        <button class="btn-del flex justify-start items-center gap-2" @click="removeWithConfirm">
+          <svg
+            class="w-6 h-6 text-gray-800 dark:text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M16 12h4M4 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+            />
+          </svg>
+          Удалить
+        </button>
         <div class="form-control w-full">
           <select
             class="select-modal"

@@ -101,7 +101,7 @@ export default {
       }
     },
 
-    async loadOne({ dispatch, rootGetters }, id) {
+    async loadOne({ rootGetters }, id) {
       try {
         // Получаем токен из auth модуля
         const token = rootGetters['auth/token']
@@ -123,7 +123,7 @@ export default {
       }
     },
 
-    async remove({ commit, dispatch, rootGetters }, id) {
+    async remove({ commit, rootGetters }, id) {
       try {
         // Получаем токен из auth модуля
         const token = rootGetters['auth/token']
@@ -134,13 +134,13 @@ export default {
 
         await workerAxios.delete(`/workers/${id}.json?auth=${token}`)
 
-        commit('removeWorker', id) // Исправлено на removeWorker
+        commit('removeWorker', id) //
       } catch (e) {
         showToast.warning(e.message)
       }
     },
 
-    async update({ dispatch, rootGetters }, payload) {
+    async update({ rootGetters }, payload) {
       try {
         // Получаем токен из auth модуля
         const token = rootGetters['auth/token']
