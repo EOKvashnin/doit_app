@@ -1,17 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import store from '../store'
-import HelpPage from '../views/HelpPage.vue'
-import AuthPage from '../views/AuthPage.vue'
-import HomePage from '@/views/HomePage.vue'
-
-import AnalyticsPage from '@/views/AnalyticsPage.vue'
 
 const routes = [
   {
     path: '/',
     name: 'HomePage',
-    component: HomePage,
+    component: () => import('../views/HomePage.vue'),
     meta: {
       layout: 'main',
       auth: true,
@@ -20,7 +15,7 @@ const routes = [
 
   {
     path: '/help',
-    name: HelpPage,
+    name: 'HelpPage',
     component: () => import('../views/HelpPage.vue'),
     meta: {
       layout: 'main',
@@ -29,7 +24,7 @@ const routes = [
   },
   {
     path: '/analytics',
-    name: AnalyticsPage,
+    name: 'AnalyticsPage',
     component: () => import('../views/AnalyticsPage.vue'),
     meta: {
       layout: 'main',
@@ -44,7 +39,7 @@ const routes = [
 
   {
     path: '/auth',
-    name: AuthPage,
+    name: 'AuthPage',
     component: () => import('../views/AuthPage.vue'),
     meta: {
       layout: 'auth',

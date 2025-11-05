@@ -1,8 +1,8 @@
 <template>
   <div
-    class="relative not-even:flex justify-center max-w-[332px] h-[330px] w-full bg-white rounded-lg shadow-sm dark:bg-gray-800 p-1 md:p-4"
+    class="relative not-even:flex justify-center bg-white rounded-lg shadow-sm dark:bg-gray-800 p-1 md:p-4 cursor-pointer"
   >
-    <app-loader v-if="isLoading" class="flex justify-center items-center"></app-loader>
+    <app-loader v-if="isLoading"></app-loader>
 
     <!-- Диаграмма -->
     <div v-else class="chart">

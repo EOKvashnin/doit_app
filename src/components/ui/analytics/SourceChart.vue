@@ -1,13 +1,13 @@
 <template>
   <div
-    class="flex justify-center max-w-2xl w-full bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6"
+    class="flex min-w-1/2 justify-center bg-white rounded-lg shadow-sm dark:bg-gray-800 md:p-6 cursor-pointer"
   >
     <AppLoader v-if="isLoading" class="pb-[130px]"></AppLoader>
     <div v-else>
       <VueApexCharts
         type="bar"
         height="267"
-        width="553"
+        width="593"
         :options="chartOptions"
         :series="chartOptions.series"
       />

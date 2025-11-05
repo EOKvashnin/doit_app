@@ -5,9 +5,9 @@
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
       <div class="relative flex h-16 items-center justify-between">
         <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-          <div class="flex shrink-0 items-center gap-3">
+          <div class="flex shrink-0 items-center gap-1">
             <svg
-              class="w-6 h-6 text-gray-800 dark:text-white fill-pink-500"
+              class="w-8 h-8 text-gray-800 dark:text-white fill-pink-500"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -21,7 +21,7 @@
                 clip-rule="evenodd"
               />
             </svg>
-            <h1 class="text-xl text-pink-500 font-bold">Power <mark>staff</mark></h1>
+            <h1 class="text-2xl text-pink-500 font-bold">Power <mark>staff</mark></h1>
           </div>
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">

@@ -1,94 +1,60 @@
 <template>
   <h4 v-if="workers.length === 0" class="text-center text-gray-400">Кандидатов пока нет</h4>
 
-  <div v-else class="w-full flex justify-center items-center">
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full my-2">
-      <table class="w-full text-sm text-gray-500 dark:text-gray-300 table-fixed">
-        <colgroup>
-          <col class="w-[3%]" />
-          <!-- # -->
-          <col class="w-[5%]" />
-          <!-- Дата -->
-          <col class="w-[3%]" />
-          <!-- Время -->
-          <col class="w-[13%]" />
-          <!-- Должность -->
-          <col class="w-[13%]" />
-          <!-- ФИО -->
-          <col class="w-[10%]" />
-          <!-- Телефон -->
-          <col class="w-[10%]" />
-          <!-- Руководитель -->
-          <col class="w-[8%]" />
-          <!-- Источник -->
-          <col class="w-[10%]" />
-          <!-- Статус -->
-          <col class="w-[8%]" />
-          <!-- Дата тр. -->
-          <col class="w-[22%]" />
-          <!-- Комментарий -->
-        </colgroup>
-        <thead class="text-xs text-gray-500 bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
-          <tr>
-            <th class="px-1 py-1 text-center">№</th>
-            <th class="px-1 py-1">Дата собес-я</th>
-            <th class="px-1 py-1">Время</th>
-            <th class="px-1 py-1">Должность</th>
-            <th class="px-1 py-1">ФИО соискателя</th>
-            <th class="px-1 py-1">Телефон соискателя</th>
-            <th class="px-1 py-1">ФИО Руководителя</th>
-            <th class="px-1 py-1">Площадка-источник</th>
-            <th class="px-1 py-1">Текущий статус</th>
-            <th class="px-1 py-1">Дата трудоустройства</th>
-            <th class="px-1 py-1">Комментарий</th>
-          </tr>
-        </thead>
-      </table>
-
-      <div class="tbody-scrollable max-h-[550px] overflow-y-auto">
+  <div v-else class="w-full overflow-hidden">
+    <!-- Обёртка с прокруткой по горизонтали на случай узких экранов -->
+    <div class="overflow-x-auto">
+      <!-- Основная таблица -->
+      <div class="max-h-screen overflow-y-auto">
         <table class="w-full text-sm text-gray-500 dark:text-gray-300 table-fixed">
           <colgroup>
-            <col class="w-[3%]" />
-            <!-- # -->
-            <col class="w-[5%]" />
-            <!-- Дата -->
-            <col class="w-[3%]" />
-            <!-- Время -->
-            <col class="w-[13%]" />
-            <!-- Должность -->
-            <col class="w-[13%]" />
-            <!-- ФИО -->
-            <col class="w-[10%]" />
-            <!-- Телефон -->
-            <col class="w-[10%]" />
-            <!-- Руководитель -->
-            <col class="w-[8%]" />
-            <!-- Источник -->
-            <col class="w-[10%]" />
-            <!-- Статус -->
-            <col class="w-[8%]" />
-            <!-- Дата тр. -->
-            <col class="w-[22%]" />
-            <!-- Комментарий -->
+            <col style="width: 3%" />
+            <col style="width: 6%" />
+            <col style="width: 3%" />
+            <col style="width: 10%" />
+            <col style="width: 13%" />
+            <col style="width: 7%" />
+            <col style="width: 15%" />
+            <col style="width: 9%" />
+            <col style="width: 10%" />
+            <col style="width: 7%" />
+            <col style="width: 23%" />
           </colgroup>
+          <thead
+            class="text-xs text-gray-500 bg-gray-50 dark:bg-gray-700 dark:text-gray-300 sticky top-0 z-10"
+          >
+            <tr>
+              <th class="px-1 py-1 text-center">№</th>
+              <th class="px-1 py-1 text-left">Дата собес-я</th>
+              <th class="px-1 py-1">Время</th>
+              <th class="px-1 py-1 text-left">Должность</th>
+              <th class="px-1 py-1 text-left">ФИО кандидата</th>
+              <th class="px-1 py-1 text-left">Телефон</th>
+              <th class="px-1 py-1 text-left">ФИО Руководителя</th>
+              <th class="px-1 py-1 text-left">Площадка-источник</th>
+              <th class="px-1 py-1 text-left">Текущий статус</th>
+              <th class="px-1 py-1 text-left">Дата трудоустройства</th>
+              <th class="px-1 py-1 text-left">Комментарий</th>
+            </tr>
+          </thead>
           <tbody>
             <tr
-              class="tr"
+              class="tr border-b hover:bg-gray-50"
               @click="emitOpenCard(w)"
               v-for="(w, idx) in sortedByDateTimeWorkers"
               :key="w.id"
             >
               <td class="h-10 p-4 align-middle">{{ idx + 1 }}</td>
-              <td class="td">{{ formatDateTable(w.int_date) }}</td>
-              <td class="td">{{ w.int_time }}</td>
-              <td class="td">{{ w.position }}</td>
-              <td class="td">{{ w.fio }}</td>
-              <td class="td">{{ w.phone }}</td>
-              <td class="td">{{ w.fioRuc }}</td>
-              <td class="td status-cell"><AppSource :source="w.source" /></td>
-              <td class="td text-[10px] status-cell"><AppStatus :type="w.cur_status" /></td>
-              <td class="td text-center">{{ formatDateTable(w.employment_Date) }}</td>
-              <td class="td">{{ w.note }}</td>
+              <td class="td p-1">{{ formatDateTable(w.int_date) }}</td>
+              <td class="td p-1">{{ w.int_time }}</td>
+              <td class="td p-1">{{ w.position }}</td>
+              <td class="td p-1">{{ w.fio }}</td>
+              <td class="td p-1">{{ w.phone }}</td>
+              <td class="td p-1">{{ w.fioRuc }}</td>
+              <td class="td p-1"><AppSource :source="w.source" /></td>
+              <td class="td p-1 text-[10px]"><AppStatus :type="w.cur_status" /></td>
+              <td class="td p-1 text-center">{{ formatDateTable(w.employment_Date) }}</td>
+              <td class="td p-1">{{ w.note }}</td>
             </tr>
           </tbody>
         </table>
@@ -129,7 +95,6 @@ const sortedByDateTimeWorkers = computed(() => {
 
 function emitOpenCard(worker) {
   emit('open-card', worker)
-  console.log('Worker:', worker)
 }
 
 // return { formatDate, emitOpenCard }

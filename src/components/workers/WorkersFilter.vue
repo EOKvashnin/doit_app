@@ -1,16 +1,16 @@
 <template>
-  <div class="flex flex-row gap-5 mb-3">
-    <div class="w-100">
+  <div class="flex flex-row justify-between gap-5 mb-3">
+    <div class="w-110">
       <input type="text" class="input-filter" placeholder="ФИО кандидата" v-model="fio" />
     </div>
-    <div class="w-100">
+    <div class="w-110">
       <input type="text" class="input-filter" placeholder="Должность" v-model="position" />
     </div>
-    <div class="w-100">
+    <div class="w-110">
       <input type="text" class="input-filter" placeholder="ФИО руководителя" v-model="boss" />
     </div>
 
-    <div class="form-control w-100">
+    <div class="form-control w-110">
       <select class="select-modal" id="status" v-model="status">
         <option value="">Выберите статус</option>
         <option value="appointed">Назначено собеседование</option>

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex justify-center max-w-2xl w-full bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6"
+    class="flex justify-center bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6 cursor-pointer"
   >
     <app-loader v-if="isLoading" class="pb-[130px]"></app-loader>
     <div v-else>

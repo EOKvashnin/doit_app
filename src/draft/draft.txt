@@ -53,3 +53,109 @@
             <option value="medical_failed">Не прошел медкомиссию</option>
             <option value="medical_referred">Направлен на медкомиссию</option>
           </select>
+
+
+
+
+
+
+
+
+          <template>
+  <h4 v-if="workers.length === 0" class="text-center text-gray-400">Кандидатов пока нет</h4>
+
+  <div v-else class="w-full flex justify-center items-center">
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full my-2">
+      <table class="w-full text-sm text-gray-500 dark:text-gray-300 table-fixed">
+        <colgroup>
+          <col class="w-[3%]" />
+          <!-- # -->
+          <col class="w-[5%]" />
+          <!-- Дата -->
+          <col class="w-[3%]" />
+          <!-- Время -->
+          <col class="w-[13%]" />
+          <!-- Должность -->
+          <col class="w-[13%]" />
+          <!-- ФИО -->
+          <col class="w-[10%]" />
+          <!-- Телефон -->
+          <col class="w-[10%]" />
+          <!-- Руководитель -->
+          <col class="w-[8%]" />
+          <!-- Источник -->
+          <col class="w-[10%]" />
+          <!-- Статус -->
+          <col class="w-[8%]" />
+          <!-- Дата тр. -->
+          <col class="w-[22%]" />
+          <!-- Комментарий -->
+        </colgroup>
+        <thead class="text-xs text-gray-500 bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
+          <tr>
+            <th class="px-1 py-1 text-center">№</th>
+            <th class="px-1 py-1">Дата собес-я</th>
+            <th class="px-1 py-1">Время</th>
+            <th class="px-1 py-1">Должность</th>
+            <th class="px-1 py-1">ФИО соискателя</th>
+            <th class="px-1 py-1">Телефон соискателя</th>
+            <th class="px-1 py-1">ФИО Руководителя</th>
+            <th class="px-1 py-1">Площадка-источник</th>
+            <th class="px-1 py-1">Текущий статус</th>
+            <th class="px-1 py-1">Дата трудоустройства</th>
+            <th class="px-1 py-1">Комментарий</th>
+          </tr>
+        </thead>
+      </table>
+
+      <div class="tbody-scrollable max-h-[550px] overflow-y-auto">
+        <table class="w-full text-sm text-gray-500 dark:text-gray-300 table-fixed">
+          <colgroup>
+            <col class="w-[3%]" />
+            <!-- # -->
+            <col class="w-[5%]" />
+            <!-- Дата -->
+            <col class="w-[3%]" />
+            <!-- Время -->
+            <col class="w-[13%]" />
+            <!-- Должность -->
+            <col class="w-[13%]" />
+            <!-- ФИО -->
+            <col class="w-[10%]" />
+            <!-- Телефон -->
+            <col class="w-[10%]" />
+            <!-- Руководитель -->
+            <col class="w-[8%]" />
+            <!-- Источник -->
+            <col class="w-[10%]" />
+            <!-- Статус -->
+            <col class="w-[8%]" />
+            <!-- Дата тр. -->
+            <col class="w-[22%]" />
+            <!-- Комментарий -->
+          </colgroup>
+          <tbody>
+            <tr
+              class="tr"
+              @click="emitOpenCard(w)"
+              v-for="(w, idx) in sortedByDateTimeWorkers"
+              :key="w.id"
+            >
+              <td class="h-10 p-4 align-middle">{{ idx + 1 }}</td>
+              <td class="td">{{ formatDateTable(w.int_date) }}</td>
+              <td class="td">{{ w.int_time }}</td>
+              <td class="td">{{ w.position }}</td>
+              <td class="td">{{ w.fio }}</td>
+              <td class="td">{{ w.phone }}</td>
+              <td class="td">{{ w.fioRuc }}</td>
+              <td class="td status-cell"><AppSource :source="w.source" /></td>
+              <td class="td text-[10px] status-cell"><AppStatus :type="w.cur_status" /></td>
+              <td class="td text-center">{{ formatDateTable(w.employment_Date) }}</td>
+              <td class="td">{{ w.note }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</template>

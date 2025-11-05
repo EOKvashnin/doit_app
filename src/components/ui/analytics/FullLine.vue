@@ -1,10 +1,10 @@
 <template>
   <div
-    class="flex justify-center items-center max-w-2xl min-w-[600px] min-h-[313px] max-h-[313px] bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6"
+    class="cursor-pointer flex justify-center items-center max-h-[313px] bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6"
   >
     <app-loader v-if="isLoading" class="pb-[130px]"></app-loader>
     <div v-else>
-      <apex-chart type="line" :options="chartOptions" :series="series" width="550" height="250" />
+      <apex-chart type="line" :options="chartOptions" :series="series" width="600" height="250" />
     </div>
   </div>
 </template>

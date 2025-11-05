@@ -1,12 +1,10 @@
 <template>
-  <div
-    class="flex flex-col justify-center items-center min-w-[251px] min-h-[330px] bg-white rounded-lg shadow-sm dark:bg-gray-800 p-6"
-  >
+  <div class="h-full bg-white rounded-lg shadow-sm dark:bg-gray-800 p-6 cursor-pointer">
     <AppLoader v-if="isLoading" />
-    <div v-else class="flex flex-col items-center w-full">
+    <div v-else class="flex-col items-center text-center justify-center w-full">
       <!-- Иконка -->
       <svg
-        class="w-16 h-16 text-gray-800 dark:text-gray-300 mb-4"
+        class="w-16 h-16 text-gray-800 dark:text-gray-300 mb-4 mx-auto"
         aria-hidden="true"
         xmlns="http://www.w3.org/2000/svg"
         width="24"
@@ -24,7 +22,11 @@
       <!-- Подпись -->
       <p class="text-md font-semibold text-gray-500 dark:text-gray-400 mb-2">Всего кандидатов</p>
       <!-- Число -->
-      <h5 class="text-6xl font-bold text-green-500 dark:text-gray-300">{{ length }}</h5>
+      <h5
+        class="text-6xl font-bold text-green-500 dark:text-gray-300 hover:text-pink-500 transition-all 0.4s ease"
+      >
+        {{ length }}
+      </h5>
     </div>
   </div>
 </template>

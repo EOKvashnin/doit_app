@@ -19,14 +19,14 @@
     <div class="flex gap-4">
       <!-- /* --------- ФИО СОИСКАТЕЛЯ ----------*/ -->
       <div class="form-control w-full" :class="{ invalid: fioError }">
-        <label class="label-modal" for="fio">ФИО соискателя</label>
+        <label class="label-modal" for="fio">ФИО кандидата</label>
         <input class="input-modal" type="text" id="fio" v-model="fio" @blur="fioBlur" />
         <small class="text-pink-500" v-if="fio"> {{ fioError }}</small>
       </div>
 
       <!-- /* --------- ТЕЛЕФОН СОИСКАТЕЛЯ ----------*/ -->
       <div class="form-control w-full" :class="{ invalid: phError }">
-        <label class="label-modal" for="phone">Телефон соискателя</label>
+        <label class="label-modal" for="phone">Телефон кандидата</label>
         <input
           class="input-modal"
           type="text"

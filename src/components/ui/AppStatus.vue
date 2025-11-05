@@ -31,7 +31,7 @@ export default {
 
   setup(props) {
     const classMap = {
-      appointed: 'neutral',
+      appointed: 'primary',
       employed: 'success',
       fired: 'end',
       refused: 'neutral',

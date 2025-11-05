@@ -172,8 +172,8 @@
 
     <!--/*------------------- БЛОК ОПИСАНИЕ -------------------*/ -->
 
-    <div v-if="worker" class="w-full border border-gray-500/30 rounded-xl p-4 my-4">
-      <h3 class="text-lg text-gray-300">{{ workerData?.note }}</h3>
+    <div v-if="worker" class="w-full border border-gray-500/30 rounded-xl py-1 px-2 my-4">
+      <h3 class="text-sm text-gray-300">{{ workerData?.note }}</h3>
     </div>
 
     <!-------------------- БЛОК КОММЕНТАРИЕВ ----------------------->

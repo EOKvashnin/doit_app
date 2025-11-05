@@ -1,22 +1,38 @@
 <template>
   <app-page title="Аналитика по кандидатам">
-    <!-- Верхние графики -->
+    <div class="w-full max-w-[1300px] mx-auto">
+      <div class="w-full h-[94vh] p-4">
+        <!-- Верхний ряд: 15% | 30% | 55% -->
+        <div class="w-full h-[45%] mb-4 flex gap-4">
+          <!-- 1-й график: 15% -->
+          <div class="w-[15%] h-full bg-gray-800 rounded-lg p-2">
+            <AllWorkersCard class="h-full" />
+          </div>
 
-    <div class="w-[1216px] mx-auto flex justify-between items-start gap-4">
-      <AllWorkersCard class="justify-start" />
+          <!-- 2-й график: 30% -->
+          <div class="w-[30%] h-full bg-gray-800 rounded-lg p-2">
+            <EmployedDonat class="h-full" />
+          </div>
 
-      <EmployedDonat class="justify-start"></EmployedDonat>
+          <!-- 3-й график: 55% -->
+          <div class="w-[55%] h-full bg-gray-800 rounded-lg p-2">
+            <source-chart class="h-full" />
+          </div>
+        </div>
 
-      <div class="flex flex-col gap-4 w-1/2">
-        <source-chart></source-chart>
+        <!-- Нижний ряд: 50% | 50% -->
+        <div class="w-full h-[40%] flex gap-4">
+          <!-- Левый график -->
+          <div class="w-1/2 h-full bg-gray-800 rounded-lg p-2">
+            <full-line class="h-full" />
+          </div>
+
+          <!-- Правый график -->
+          <div class="w-1/2 h-full bg-gray-800 rounded-lg p-2">
+            <line-employee class="h-full" />
+          </div>
+        </div>
       </div>
-    </div>
-
-    <!-- Нижние графики -->
-
-    <div class="w-[1216px] mx-auto flex justify-between items-start gap-4 mt-4">
-      <full-line class="justify-center"></full-line>
-      <line-employee class="justify-center"></line-employee>
     </div>
   </app-page>
 </template>

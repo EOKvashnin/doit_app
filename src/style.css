@@ -77,7 +77,7 @@ table {
 /*--------------- MODAL ---------------*/
 
 .modal {
-  @apply fixed top-[80px] left-1/2 -translate-x-1/2 w-[800px] p-4 z-[1000] rounded-[10px] shadow-[2px_3px_10px_rgba(255,255,255,0.2)]  backdrop-blur-[10px];
+  @apply fixed top-[80px] left-1/2 -translate-x-1/2 w-[800px] p-4 z-[1000] rounded-[10px] shadow-[2px_3px_10px_rgba(255,255,255,0.2)] backdrop-blur-[20px];
 }
 
 .modal-backdrop {
@@ -89,7 +89,7 @@ table {
 }
 
 .input-modal-edit {
-  @apply bg-gray-50  text-gray-900  text-lg rounded-lg focus:ring-pink-500 focus:border-pink-500 block p-2 dark:bg-gray-800/10 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-pink-500 dark:focus:border-pink-500 border border-gray-600;
+  @apply bg-gray-50  text-gray-900  text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block dark:bg-gray-800/10 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-pink-500 dark:focus:border-pink-500 border border-gray-600 py-1 px-2;
 }
 
 /* ---------- FORM ----------*/
@@ -119,7 +119,7 @@ table {
 }
 
 .primary {
-  @apply text-blue-600 border border-blue-600;
+  @apply text-gray-300 bg-blue-500;
 }
 
 .neutral {

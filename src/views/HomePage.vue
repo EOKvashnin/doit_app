@@ -144,8 +144,6 @@ export default {
     const handleOpenCard = (worker) => {
       selectedWorker.value = worker
       isCardModalOpen.value = true
-
-      console.log('fio', selectedWorker.fio)
     }
 
     const handleWorkerUpdate = (updatedWorker) => {
