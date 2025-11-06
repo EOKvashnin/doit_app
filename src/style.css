@@ -1,17 +1,35 @@
 @import 'tailwindcss';
 @source "../node_modules/flowbite-datepicker";
 
-body {
+/* body {
   background-color: oklch(20.8% 0.042 265.755);
 
   background-image:
     linear-gradient(to bottom, oklch(20.8% 0.042 265.755 / 0.9), oklch(40% 0.042 265.755 / 0.6)),
     url('./assets/wall.webp');
-  background-attachment: fixed; /* или scroll */
+  background-attachment: fixed; /* или scroll
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
   overflow: hidden;
+} */
+
+body {
+  @apply bg-[url(/wall-white.webp)] dark:bg-[url(/wall.webp)] bg-fixed bg-center bg-no-repeat bg-cover overflow-hidden;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: linear-gradient(to bottom, rgba(15, 23, 43, 0.9), rgba(61, 71, 95, 0.6));
+  pointer-events: none;
+}
+
+.dark body::before {
+  background-image: linear-gradient(to bottom, rgba(15, 23, 43, 0.9), rgba(92, 85, 130, 0.6));
 }
 
 .btn {
@@ -59,7 +77,7 @@ mark {
 
 /* -------------  TABLE  ------------- */
 .tr {
-  @apply h-4 bg-white border-b dark:bg-gray-800/50 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 leading-0.5;
+  @apply h-4 bg-gray-200/60 border-b dark:bg-gray-800/50 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 leading-0.5;
 }
 /* Применение эффекта к полю статуса при наведении на строку */
 .tr:hover .status-cell {
@@ -67,7 +85,7 @@ mark {
 }
 
 .td {
-  @apply h-5 px-1 text-sm text-gray-300 font-normal  align-middle truncate;
+  @apply h-5 px-1 text-sm  text-gray-800 dark:text-gray-300  font-normal  align-middle truncate;
 }
 
 table {
@@ -112,10 +130,17 @@ table {
   @apply inline-block w-full px-2 py-1 text-[11px] text-center font-medium rounded-lg overflow-hidden  shadow-[2px_2px_2px_rgba(96,96,96,0.5)] transition-all duration-1000 ease-in-out;
 }
 
+.badge-time {
+  @apply text-[11px] font-normal  align-middle;
+}
 .truncate-text {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.time {
+  @apply text-gray-300 bg-blue-500 inline-block w-full px-1 py-0.5  text-[13px] text-center font-medium align-middle rounded-lg overflow-hidden  shadow-[2px_2px_2px_rgba(96,96,96,0.5)] transition-all duration-1000 ease-in-out;
 }
 
 .primary {

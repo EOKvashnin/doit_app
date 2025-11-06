@@ -6,11 +6,11 @@
     <div class="overflow-x-auto">
       <!-- Основная таблица -->
       <div class="max-h-screen overflow-y-auto">
-        <table class="w-full text-sm text-gray-500 dark:text-gray-300 table-fixed">
+        <table class="w-full text-sm text-gray-700 dark:text-gray-300 table-fixed">
           <colgroup>
             <col style="width: 3%" />
-            <col style="width: 6%" />
-            <col style="width: 3%" />
+            <col style="width: 5%" />
+            <col style="width: 4%" />
             <col style="width: 10%" />
             <col style="width: 13%" />
             <col style="width: 7%" />
@@ -21,7 +21,7 @@
             <col style="width: 23%" />
           </colgroup>
           <thead
-            class="text-xs text-gray-500 bg-gray-50 dark:bg-gray-700 dark:text-gray-300 sticky top-0 z-10"
+            class="text-xs text-gray-700 bg-gray-100 dark:bg-gray-700 dark:text-gray-300 sticky top-0 z-10"
           >
             <tr>
               <th class="px-1 py-1 text-center">№</th>
@@ -46,13 +46,17 @@
             >
               <td class="h-10 p-4 align-middle">{{ idx + 1 }}</td>
               <td class="td p-1">{{ formatDateTable(w.int_date) }}</td>
-              <td class="td p-1">{{ w.int_time }}</td>
+              <td class="td p-1 text-center">
+                <AppTimeStatus :type="w.cur_status" :text="w.int_time" />
+              </td>
               <td class="td p-1">{{ w.position }}</td>
               <td class="td p-1">{{ w.fio }}</td>
               <td class="td p-1">{{ w.phone }}</td>
               <td class="td p-1">{{ w.fioRuc }}</td>
-              <td class="td p-1"><AppSource :source="w.source" /></td>
-              <td class="td p-1 text-[10px]"><AppStatus :type="w.cur_status" /></td>
+              <td class="td p-1 status-cell relative"><AppSource :source="w.source" /></td>
+              <td class="td p-1 status-cell relative not-odd:text-[10px]">
+                <AppStatus :type="w.cur_status" />
+              </td>
               <td class="td p-1 text-center">{{ formatDateTable(w.employment_Date) }}</td>
               <td class="td p-1">{{ w.note }}</td>
             </tr>
@@ -66,6 +70,7 @@
 <script setup>
 import AppStatus from '../ui/AppStatus.vue'
 import AppSource from '../ui/AppSource.vue'
+import AppTimeStatus from '../ui/AppTimeStatus.vue'
 import formatDateTable from '@/utils/formatDateTable'
 import { computed } from 'vue'
 
