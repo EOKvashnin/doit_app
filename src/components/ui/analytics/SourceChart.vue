@@ -57,6 +57,15 @@ const chartOptions = computed(() => {
     y,
   }))
 
+  const isDarkMode = computed(() => {
+    //логика определения темной темы
+    return (
+      document.documentElement.classList.contains('dark') ||
+      localStorage.theme === 'dark' ||
+      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    )
+  })
+
   seriesData.sort((a, b) => b.y - a.y)
 
   return {
@@ -73,7 +82,7 @@ const chartOptions = computed(() => {
       style: {
         fontSize: '16px',
         fontWeight: 'bold',
-        color: '#9CA3AF',
+        color: isDarkMode.value ? '#9CA3AF' : '#374151',
         fontFamily: 'inherit',
       },
     },
@@ -112,7 +121,8 @@ const chartOptions = computed(() => {
         fontSize: '14px',
         fontFamily: 'Roboto, sans-serif',
         fontWeight: 'bold',
-        colors: ['#9CA3AF'],
+        //colors: ['#9CA3AF'],
+        colors: isDarkMode.value ? ['#9CA3AF'] : ['#374151'],
       },
       background: {
         enabled: false,
@@ -136,7 +146,7 @@ const chartOptions = computed(() => {
     legend: { show: false },
     xaxis: {
       labels: {
-        style: { colors: '#D1D5DB', fontSize: '11px' },
+        style: { colors: isDarkMode.value ? '#9CA3AF' : '#374151', fontSize: '11px' },
         rotate: -90,
         offsetY: 0,
         // Убираем дополнительные отступы у меток

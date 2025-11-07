@@ -20,7 +20,7 @@
         />
       </svg>
       <!-- Подпись -->
-      <p class="text-md font-semibold text-gray-500 dark:text-gray-400 mb-2">Всего кандидатов</p>
+      <p class="text-md font-semibold text-gray-800 dark:text-gray-400 mb-2">Всего кандидатов</p>
       <!-- Число -->
       <h5
         class="text-6xl font-bold text-green-500 dark:text-gray-300 hover:text-pink-500 transition-all 0.4s ease"

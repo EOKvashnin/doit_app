@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="relative bg-gray-200/50 dark:bg-gray-800/50 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10"
+    class="relative bg-gray-400/30 dark:bg-gray-800/50 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10"
   >
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
       <div class="relative flex h-16 items-center justify-between">
@@ -25,27 +25,14 @@
           </div>
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">
-              <router-link
-                to="/"
-                class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white"
-                active-class="bg-gray-950/50 text-white"
-                exact
-              >
+              <router-link to="/" class="nav-title" active-class="nav-title-active" exact>
                 Главная
               </router-link>
-              <router-link
-                to="/analytics"
-                class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white"
-                active-class="bg-gray-950/50 text-white"
-              >
+              <router-link to="/analytics" class="nav-title" active-class="nav-title-active">
                 Аналитика
               </router-link>
 
-              <router-link
-                to="/help"
-                class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white"
-                active-class="bg-gray-950/50 text-white"
-              >
+              <router-link to="/help" class="nav-title" active-class="nav-title-active">
                 О программе
               </router-link>
             </div>
@@ -54,17 +41,29 @@
         <div
           class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0"
         >
-          <button
-            type="button"
-            class="relative rounded-full p-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500"
+          <div
+            class="btn flex flex-row gap-1 text-gray-400 hover:text-white focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 cursor-pointer"
+            @click.prevent="logout"
           >
-            <a
-              class="text-gray-300 dark:text-gray-500 font-bold hover:text-pink-500"
-              href="#"
-              @click.prevent="logout"
-              >Выход</a
+            <svg
+              class="w-5 h-5 text-gray-300 dark:text-gray-300"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              fill="none"
+              viewBox="0 0 24 24"
             >
-          </button>
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2"
+              />
+            </svg>
+            Выход
+          </div>
         </div>
       </div>
     </div>

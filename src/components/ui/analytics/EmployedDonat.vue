@@ -13,7 +13,7 @@
       >
         <!-- Информация о трудоустроенных -->
         <div class="flex flex-col items-center">
-          <p class="text-md font-semibold text-center text-gray-500 dark:text-gray-300">
+          <p class="text-md font-semibold text-center text-gray-800 dark:text-gray-300">
             Трудоустроено
           </p>
           <div class="flex items-baseline gap-2">
@@ -38,7 +38,7 @@
             <h5 class="leading-none text-3xl font-bold text-green-500 dark:text-[#84cc16] pb-1">
               {{ workersEmployedPercent }}%
             </h5>
-            <p class="text-sm font-normal text-gray-500/30 dark:text-gray-300/50">
+            <p class="text-sm font-normal text-gray-800 dark:text-gray-300/50">
               {{ employedWorkers }} чел.
             </p>
           </div>
@@ -46,7 +46,9 @@
         <!-- Информация об уволенных -->
         <div class="flex flex-col items-center">
           <!-- Исправлена ошибка: убрана неполная строка 'class=">' -->
-          <p class="text-md font-semibold text-center text-gray-500 dark:text-gray-300">Уволено</p>
+          <p class="text-md font-semibold text-center text-gray-800 dark:text-gray-300/50">
+            Уволено
+          </p>
           <div class="flex items-baseline gap-2">
             <svg
               class="w-6 h-6 text-gray-800 dark:text-pink-500"
@@ -67,10 +69,9 @@
             </svg>
 
             <h5 class="leading-none text-2xl font-bold text-pink-500 dark:text-[#E74694] pb-1">
-              <!-- Изменен цвет для соответствия диаграмме -->
               {{ firedPercent }}%
             </h5>
-            <p class="text-sm font-normal text-gray-500/30 dark:text-gray-300/50">
+            <p class="text-sm font-normal text-gray-800 dark:text-gray-300/50">
               {{ firedWorkers }} чел.
             </p>
           </div>
@@ -119,6 +120,15 @@ const firedPercent = computed(() => {
   return roundPercent
 })
 
+const isDarkMode = computed(() => {
+  //логика определения темной темы
+  return (
+    document.documentElement.classList.contains('dark') ||
+    localStorage.theme === 'dark' ||
+    (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  )
+})
+
 // Данные для диаграммы
 const series = computed(() => [workersEmployedPercent.value, firedPercent.value])
 
@@ -135,7 +145,7 @@ const chartOptions = {
   plotOptions: {
     radialBar: {
       track: {
-        background: '#374151',
+        background: isDarkMode.value ? '#374151' : '#f3f4f6', // темный фон для темной темы
       },
       dataLabels: {
         show: true,

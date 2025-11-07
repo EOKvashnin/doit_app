@@ -4,7 +4,7 @@
   >
     <app-loader v-if="isLoading" class="pb-[130px]"></app-loader>
     <div v-else>
-      <apex-chart type="line" :options="chartOptions" :series="series" width="550" height="250" />
+      <apex-chart type="line" :options="chartOptions" :series="series" width="600" height="250" />
     </div>
   </div>
 </template>
@@ -66,6 +66,15 @@ const series = computed(() => [
   },
 ])
 
+const isDarkMode = computed(() => {
+  //логика определения темной темы
+  return (
+    document.documentElement.classList.contains('dark') ||
+    localStorage.theme === 'dark' ||
+    (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  )
+})
+
 // Настройки графика
 const chartOptions = computed(() => ({
   chart: {
@@ -87,17 +96,17 @@ const chartOptions = computed(() => ({
     style: {
       fontSize: '16px',
       fontWeight: 'bold',
-      color: '#9CA3AF',
+      color: !isDarkMode.value ? '#374151' : '#f3f4f6',
       fontFamily: 'inherit',
     },
     // Уменьшаем отступ заголовка
-    offsetY: 10,
+    offsetY: -5,
     margin: 0,
   },
   xaxis: {
     categories: monthlyCounts.value.categories,
     labels: {
-      style: { colors: '#D1D5DB', fontSize: '10px' },
+      style: { colors: !isDarkMode.value ? '#374151' : '#f3f4f6', fontSize: '10px' },
       rotate: -30,
       offsetY: 0,
       // Убираем дополнительные отступы у меток
@@ -118,17 +127,17 @@ const chartOptions = computed(() => ({
   grid: {
     show: false,
     padding: {
+      bottom: 10,
       left: 0,
       right: 0,
       top: 0,
-      bottom: 0,
     },
   },
   // Добавляем общие отступы графика
   plotOptions: {
     bar: {
-      borderRadius: 0,
-      columnWidth: '70%',
+      borderRadius: 5,
+      columnWidth: '90%',
     },
   },
   colors: ['#E74694'],
@@ -140,7 +149,8 @@ const chartOptions = computed(() => ({
     style: {
       fontSize: '14px',
       fontWeight: 'bold',
-      colors: ['#9CA3AF'],
+      //colors: ['#9CA3AF'],
+      colors: !isDarkMode.value ? ['#374151'] : ['#f3f4f6'],
       fontFamily: 'inherit',
     },
     background: { enabled: false },

@@ -2,7 +2,7 @@
   <div class="adaptive-modal scroll-always">
     <div
       v-if="workerData"
-      class="w-full border border-gray-500/30 rounded-xl p-4 mt-4 h-8/10 max-h-[550px]"
+      class="w-full border border-gray-400 dark:border-gray-500/30 rounded-xl p-4 mt-4 h-8/10 max-h-[550px]"
     >
       <!--/*--------- БЛОК_ФИО ТЕЛЕФОН СТАТУС ----------*/ -->
 
@@ -117,7 +117,10 @@
 
     <!--/*------------------- БЛОК ДАТА ТРУДОУСТРОЙСТВА / СПЕЦИАЛЬНОСТЬ / РУКОВОДИТЕЛЬ -------------------*/ -->
 
-    <div v-if="workerData" class="w-full border border-gray-500/30 rounded-xl p-4 mt-4">
+    <div
+      v-if="workerData"
+      class="w-full border border-gray-400 dark:border-gray-500/30 rounded-xl p-4 mt-4"
+    >
       <div class="flex flex-col gap-2">
         <!--/*--- ДАТА/ВРЕМЯ СОБЕСЕДОВАНИЯ ---*/ -->
         <div class="flex-col items-center gap-2">
@@ -172,8 +175,11 @@
 
     <!--/*------------------- БЛОК ОПИСАНИЕ -------------------*/ -->
 
-    <div v-if="worker" class="w-full border border-gray-500/30 rounded-xl py-1 px-2 my-4">
-      <h3 class="text-sm text-gray-300">{{ workerData?.note }}</h3>
+    <div
+      v-if="worker"
+      class="w-full border border-gray-400 dark:border-gray-500/30 rounded-xl py-1 px-2 my-4"
+    >
+      <h3 class="text-sm text-gray-800 dark:text-gray-300">{{ workerData?.note }}</h3>
     </div>
 
     <!-------------------- БЛОК КОММЕНТАРИЕВ ----------------------->
@@ -182,11 +188,13 @@
       <div
         v-for="comment in workerData.comment"
         :key="comment.id"
-        class="bg-gray-700/30 rounded-xl py-2 px-3 w-fit ml-auto mb-3"
+        class="bg-gray-100/10 dark:bg-gray-700/30 border border-gray-400 dark:border-gray-400/10 rounded-xl py-2 px-3 w-fit ml-auto mb-3"
       >
         <li class="flex flex-col justify-center items-end">
           <span class="text-gray-500 text-xs mb-1">{{ formatDateTime(comment.date) }}</span>
-          <p class="text-gray-200 text-sm text-right">{{ comment.text }}</p>
+          <p class="text-gray-800 dark:text-gray-200 text-sm text-right">
+            {{ comment.text }}
+          </p>
         </li>
       </div>
     </transition-group>
@@ -205,13 +213,13 @@
         <div class="flex flex-col gap-2 justify-start">
           <button
             @click="toggleShowComment"
-            class="flex flex-row gap-2 px-4 py-1 border border-gray-500/30 text-white rounded hover:bg-gray-600 transition-colors"
+            class="flex flex-row gap-2 px-4 py-2 border text-sm font-medium border-gray-500/30 text-gray-800 dark:text-white rounded hover:text-white hover:bg-gray-600 transition-colors"
           >
             Отменить
           </button>
           <button
             @click="addComment"
-            class="flex flex-row gap-2 px-4 py-1.5 border border-gray-500/30 text-white rounded hover:bg-pink-600 transition-colors"
+            class="flex flex-row gap-2 px-4 py-1.5 text-sm font-medium border border-gray-500/30 text-gray-800 dark:text-white rounded hover:bg-pink-600 transition-colors"
           >
             Добавить
           </button>
@@ -246,11 +254,14 @@
 
     <transition name="footer" mode="out-in">
       <div
-        class="mt-2 py-3 px-3 rounded-xl flex justify-end items-center gap-3 bottom-0 z-10 bg-gray-800/80"
+        class="mt-2 py-3 px-3 rounded-xl flex justify-end items-center gap-3 bottom-0 z-10 bg-gray-400/30 dark:bg-gray-800/80"
       >
-        <button class="btn-del flex justify-start items-center gap-2" @click="removeWithConfirm">
+        <button
+          class="btn-del flex justify-start items-center gap-2 transition-colors duration-300"
+          @click="removeWithConfirm"
+        >
           <svg
-            class="w-6 h-6 text-gray-800 dark:text-white"
+            class="w-6 h-6text-white"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -304,7 +315,7 @@
             <button @click="UpdateWorkerData" class="btn">Обновить</button>
           </div>
         </transition>
-        <button @click="onClose" class="btn">Закрыть</button>
+        <button @click="onClose" class="btn transition-colors duration-300">Закрыть</button>
       </div>
     </transition>
   </div>

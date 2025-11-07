@@ -17,8 +17,7 @@
             <col style="width: 15%" />
             <col style="width: 9%" />
             <col style="width: 10%" />
-            <col style="width: 7%" />
-            <col style="width: 23%" />
+            <col style="width: 30%" />
           </colgroup>
           <thead
             class="text-xs text-gray-700 bg-gray-100 dark:bg-gray-700 dark:text-gray-300 sticky top-0 z-10"
@@ -33,8 +32,7 @@
               <th class="px-1 py-1 text-left">ФИО Руководителя</th>
               <th class="px-1 py-1 text-left">Площадка-источник</th>
               <th class="px-1 py-1 text-left">Текущий статус</th>
-              <th class="px-1 py-1 text-left">Дата трудоустройства</th>
-              <th class="px-1 py-1 text-left">Комментарий</th>
+              <th class="py-1 px-3 text-left">Комментарий</th>
             </tr>
           </thead>
           <tbody>
@@ -57,8 +55,8 @@
               <td class="td p-1 status-cell relative not-odd:text-[10px]">
                 <AppStatus :type="w.cur_status" />
               </td>
-              <td class="td p-1 text-center">{{ formatDateTable(w.employment_Date) }}</td>
-              <td class="td p-1">{{ w.note }}</td>
+
+              <td class="td-note py-1">{{ w.note }}</td>
             </tr>
           </tbody>
         </table>

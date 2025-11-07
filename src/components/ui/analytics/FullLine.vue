@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed } from 'vue'
 import ApexChart from 'vue3-apexcharts'
 import { useStore } from 'vuex'
 import AppLoader from '../AppLoader.vue'
@@ -55,6 +55,15 @@ const monthlyCounts = computed(() => {
   return { categories, data }
 })
 
+const isDarkMode = computed(() => {
+  //логика определения темной темы
+  return (
+    document.documentElement.classList.contains('dark') ||
+    localStorage.theme === 'dark' ||
+    (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  )
+})
+
 // Серия данных для графика
 const series = computed(() => [
   {
@@ -79,14 +88,14 @@ const chartOptions = computed(() => ({
     style: {
       fontSize: '16px',
       fontWeight: 'bold',
-      color: '#9CA3AF',
+      color: isDarkMode.value ? '#9CA3AF' : '#374151',
       fontFamily: 'inherit',
     },
   },
   xaxis: {
     categories: monthlyCounts.value.categories,
     labels: {
-      style: { colors: '#9CA3AF', fontSize: '10px' },
+      style: { colors: isDarkMode.value ? '#9CA3AF' : '#374151', fontSize: '10px' },
       rotate: -30,
       offsetY: 0,
     },
@@ -96,7 +105,10 @@ const chartOptions = computed(() => ({
   grid: {
     show: false,
     padding: {
-      bottom: 0,
+      bottom: 40, // ← фиксируем одинаковый нижний отступ для всех графиков
+      left: 0,
+      right: 0,
+      top: 0,
     },
   },
   yaxis: { labels: { show: false } }, // Скрываем значения по оси Y
@@ -110,7 +122,7 @@ const chartOptions = computed(() => ({
     style: {
       fontSize: '14px',
       fontWeight: 'bold',
-      colors: ['#9CA3AF'],
+      colors: isDarkMode.value ? ['#9CA3AF'] : ['#374151'],
       fontFamily: 'inherit',
     },
     background: { enabled: false }, // Без фона у меток

@@ -4,7 +4,7 @@
     <template #header>
       <button @click="isModalOpen = true">
         <svg
-          class="w-[38px] h-[38px] text-gray-800 dark:text-white hover:text-pink-500 transition-colors duration-200"
+          class="w-[38px] h-[38px] text-gray-600 dark:text-white hover:text-pink-500 transition-colors duration-200"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           width="24"
@@ -29,7 +29,7 @@
     ></workers-table>
 
     <teleport to="body">
-      <app-modal v-if="isModalOpen" title="Добавить соискателя" @close="isModalOpen = false">
+      <app-modal v-if="isModalOpen" title="Добавить кандидата" @close="isModalOpen = false">
         <workers-modal @created="isModalOpen = false"></workers-modal>
       </app-modal>
 
