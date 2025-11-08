@@ -1,6 +1,6 @@
 <template>
   <app-page title="Аналитика по кандидатам">
-    <div class="w-full max-w-[1350px] mx-auto">
+    <div class="w-full max-w-[1420px] mx-auto">
       <!-- ГРАФИКИ -->
       <div class="w-full h-[94vh] py-4">
         <!-- Верхний ряд: Фильтр | AllWorkers | Donat | Source -->
@@ -43,13 +43,18 @@
           </div>
         </div>
 
-        <!-- Нижний ряд остаётся без изменений -->
-        <div class="w-full h-[40%] flex gap-4">
-          <div class="w-1/2 h-full">
+        <!-- Нижний ряд -->
+        <div class="w-full h-[40%] flex gap-3">
+          <!-- 5. FullLine -->
+          <div class="w-1/3 h-full">
             <FullLine :workers="filteredWorkers" class="h-full" />
           </div>
-          <div class="w-1/2 h-full">
+          <!-- 6. LineEmployee -->
+          <div class="w-1/3 h-full">
             <LineEmployee :workers="filteredWorkers" class="h-full" />
+          </div>
+          <div class="w-1/3 h-full">
+            <SourceGraph :workers="filteredWorkers" class="h-full" />
           </div>
         </div>
       </div>
@@ -65,6 +70,7 @@ import FullLine from '@/components/ui/analytics/FullLine.vue'
 import LineEmployee from '@/components/ui/analytics/LineEmployee.vue'
 import SourceChart from '@/components/ui/analytics/SourceChart.vue'
 import AllWorkersCard from '@/components/ui/analytics/AllWorkersCard.vue'
+import SourceGraph from '@/components/ui/analytics/SourceGraph.vue'
 import { useStore } from 'vuex'
 import { computed, ref } from 'vue'
 import { watch, nextTick } from 'vue'

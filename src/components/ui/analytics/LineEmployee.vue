@@ -4,7 +4,7 @@
   >
     <app-loader v-if="isLoading" class="pb-[130px]"></app-loader>
     <div v-else>
-      <apex-chart type="line" :options="chartOptions" :series="series" width="600" height="250" />
+      <apex-chart type="line" :options="chartOptions" :series="series" width="410" height="250" />
     </div>
   </div>
 </template>
@@ -103,7 +103,7 @@ const chartOptions = computed(() => ({
     style: {
       fontSize: '16px',
       fontWeight: 'bold',
-      color: !isDarkMode.value ? '#374151' : '#f3f4f6',
+      color: isDarkMode.value ? '#9CA3AF' : '#374151',
       fontFamily: 'inherit',
     },
     // Уменьшаем отступ заголовка

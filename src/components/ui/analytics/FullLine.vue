@@ -4,7 +4,7 @@
   >
     <app-loader v-if="isLoading" class="pb-[130px]"></app-loader>
     <div v-else>
-      <apex-chart type="line" :options="chartOptions" :series="series" width="600" height="250" />
+      <apex-chart type="line" :options="chartOptions" :series="series" width="430" height="250" />
     </div>
   </div>
 </template>
