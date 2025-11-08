@@ -9,7 +9,7 @@
         <table class="w-full text-sm text-gray-700 dark:text-gray-300 table-fixed">
           <colgroup>
             <col style="width: 3%" />
-            <col style="width: 5%" />
+            <col style="width: 7%" />
             <col style="width: 4%" />
             <col style="width: 10%" />
             <col style="width: 13%" />
@@ -17,12 +17,12 @@
             <col style="width: 15%" />
             <col style="width: 9%" />
             <col style="width: 10%" />
-            <col style="width: 30%" />
+            <col style="width: 28%" />
           </colgroup>
           <thead
             class="text-xs text-gray-700 bg-gray-100 dark:bg-gray-700 dark:text-gray-300 sticky top-0 z-10"
           >
-            <tr>
+            <tr class="tr-head">
               <th class="px-1 py-1 text-center">№</th>
               <th class="px-1 py-1 text-left">Дата собес-я</th>
               <th class="px-1 py-1">Время</th>

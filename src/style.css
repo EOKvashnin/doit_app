@@ -20,7 +20,7 @@ body {
 }
 
 .btn {
-  @apply text-white bg-gray-400 hover:bg-pink-700 focus:ring-1 focus:outline-none focus:ring-pink-300 font-medium rounded-lg text-sm px-3 py-2.5 text-center dark:bg-gray-400/20 dark:hover:bg-pink-700 dark:focus:ring-pink-800;
+  @apply text-white bg-gray-400/60 hover:bg-pink-700 focus:ring-1 focus:outline-none focus:ring-pink-300 font-medium rounded-lg text-sm px-3 py-2.5 text-center dark:bg-gray-400/20 dark:hover:bg-pink-700 dark:focus:ring-pink-800;
 }
 
 .btn-del {
@@ -73,6 +73,9 @@ mark {
 }
 
 /* -------------  TABLE  ------------- */
+.tr-head {
+  @apply h-12 bg-gray-200/60 border-b dark:bg-gray-800/50 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 leading-0.5;
+}
 .tr {
   @apply h-10 bg-gray-200/60 border-b dark:bg-gray-800/50 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 leading-0.5;
 }

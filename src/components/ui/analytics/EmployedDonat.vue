@@ -112,7 +112,7 @@ const workersEmployedPercent = computed(() => {
   const percent = (employedWorkers.value / workers.value.length) * 100
   const roundedPercent = parseInt(percent.toFixed(1))
 
-  return roundedPercent
+  return roundedPercent || '0'
 })
 
 //Считаем количество уволенных
