@@ -2,7 +2,7 @@
   <app-loader v-if="loading"></app-loader>
   <app-page title="Список кандидатов" v-else>
     <template #header>
-      <button @click="isModalOpen = true">
+      <button @click="isModalOpen = true" class="cursor-pointer">
         <svg
           class="w-[38px] h-[38px] text-gray-600 dark:text-white hover:text-pink-500 transition-colors duration-200"
           aria-hidden="true"
