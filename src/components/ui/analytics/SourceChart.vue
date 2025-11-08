@@ -21,6 +21,13 @@ import VueApexCharts from 'vue3-apexcharts'
 import { useStore } from 'vuex'
 import AppLoader from '../AppLoader.vue'
 
+const props = defineProps({
+  workers: {
+    type: Array,
+    required: true,
+  },
+})
+
 // Карта перевода статусов
 const textMap = {
   appointed: 'Назначено собеседование',
@@ -37,7 +44,7 @@ const textMap = {
 }
 
 const store = useStore()
-const workers = computed(() => store.getters['workers/workers'] || [])
+const workers = computed(() => props.workers || [])
 //Получем флаг о том готовы ли данные
 
 const isLoading = computed(() => store.getters['workers/loading'])

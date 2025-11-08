@@ -90,7 +90,9 @@
             />
           </svg>
 
-          <p class="text-gray-400 text-lg">{{ formatDate(workerData?.employment_Date) }}</p>
+          <p class="text-gray-800 dark:text-gray-400 text-lg">
+            {{ formatDate(workerData?.employment_Date) }}
+          </p>
         </div>
       </div>
       <div class="w-1/3 flex flex-row items-center justify-center gap-3.5 my-1">

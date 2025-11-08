@@ -1,171 +1,55 @@
-<template>
-  <div class="w-[80%]  max-w-full mx-auto flex flex-row flex-wrap gap-6 items-stretch py-5">
-    <!-- Карточка 1: всегда видна -->
-    <div
-      class="flex-1 min-w-[300px] max-w-3xl p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
-    >
-      <div class="content">
-        <h2 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-          Power staff
-        </h2>
-        <p class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-          Приложение объединяет три ключевые возможности для HR:
-        </p>
-        <ul class="max-w-xl space-y-3 text-gray-500 list-inside dark:text-gray-400">
-          <li class="flex items-start">
-            <svg
-              class="mt-0.5 w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 shrink-0"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 20 20"
+<tbody>
+            <tr
+              class="tr border-b hover:bg-gray-50"
+              @click="emitOpenCard(w)"
+              v-for="(w, idx) in sortedByDateTimeWorkers"
+              :key="w.id"
             >
-              <path
-                d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"
-              />
-            </svg>
-            Полный реестр кандидатов с гибкой фильтрацией по полям
-          </li>
-          <li class="flex items-start">
-            <svg
-              class="mt-0.5 w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 shrink-0"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 20 20"
+              <td class="p-4 align-middle">{{ idx + 1 }}</td>
+              <td class="td p-1">{{ formatDateTable(w.int_date) }}</td>
+              <td class="td p-1 text-center">
+                <AppTimeStatus :type="w.cur_status" :text="w.int_time" />
+              </td>
+              <td class="td p-1">{{ w.position }}</td>
+              <td class="td p-1">{{ w.fio }}</td>
+              <td class="td p-1">{{ w.phone }}</td>
+              <td class="td p-1">{{ w.fioRuc }}</td>
+              <td class="td p-1 status-cell relative"><AppSource :source="w.source" /></td>
+              <td class="td p-1 status-cell relative not-odd:text-[10px]">
+                <AppStatus :type="w.cur_status" />
+              </td>
+
+              <td class="td-note py-1">{{ w.note }}</td>
+            </tr>
+          </tbody>
+
+
+
+           <RecycleScroller
+              class="scroller"
+              style="height: calc(100vh - 220px)"
+              :items="sortedByDateTimeWorkers"
+              :item-size="40"
+              key-field="id"
+              v-slot="{ item, index }"
             >
-              <path
-                d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"
-              />
-            </svg>
-            Аналитическая панель для просмотра статистики по трудоустройству и увольнениям
-          </li>
-          <li class="flex items-start">
-            <svg
-              class="mt-0.5 w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 shrink-0"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"
-              />
-            </svg>
-            Комментарии по каждому кандидату — чтобы сохранять всю историю взаимодействий в одном
-            месте
-          </li>
-          <li class="flex items-start">
-            <svg
-              class="mt-0.5 w-3.5 h-3.5 me-2 text-green-500 dark:text-green-400 shrink-0"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"
-              />
-            </svg>
-            Интерфейс минималистичный, но функциональный: всё необходимое — под рукой, без лишних
-            кликов
-          </li>
-        </ul>
-      </div>
-
-      <button
-        @click="toggleShowCard"
-        class="mt-8 inline-flex items-center px-3 py-2 border border-gray-400 text-sm font-medium text-center text-white bg-transparent rounded-lg hover:bg-pink-500 hover:border-transparent focus:outline-none dark:hover:bg-pink-500 transition-colors duration-250"
-      >
-        {{ isShowCard ? 'Скрыть' : 'Показать больше' }}
-        <svg
-          class="rtl:rotate-180 w-3.5 h-3.5 ms-2 transition-transform duration-300"
-          :class="{ 'rotate-180': isShowCard }"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 14 10"
-        >
-          <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M1 5h12m0 0L9 1m4 4L9 9"
-          />
-        </svg>
-      </button>
-    </div>
-
-    <!-- Карточка 2: анимированное появление с одинаковой высотой -->
-    <Transition name="slide-height">
-      <div
-        v-show="isShowCard"
-        class="flex-1 min-w-[280px] max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 pt-8 overflow-hidden"
-      >
-        <div class="flex flex-col items-center pb-10 px-4">
-          <img
-            class="w-40 h-40 mb-3 rounded-full shadow-lg"
-            src="@/assets/avatar.png"
-            alt="Фотография Евгения Квашнина"
-          />
-          <h3 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">Квашнин Евгений</h3>
-          <span class="text-sm text-gray-500 dark:text-gray-400">Frontend-разработчик</span>
-          <span class="mt-6 text-sm text-gray-500 dark:text-gray-400 text-center">
-            По всем вопросам, связанным с работой приложения, писать на почту
-          </span>
-
-          <div class="mt-4">
-            <a
-              href="mailto:eo_kvashnin@bk.ru"
-              class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-400 rounded-lg hover:bg-pink-500 hover:text-white dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-pink-600 transition-colors duration-250"
-            >
-              Написать
-              <svg
-                class="w-5 h-5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M16 10.5h.01m-4.01 0h.01M8 10.5h.01M5 5h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-6.6a1 1 0 0 0-.69.275l-2.866 2.723A.5.5 0 0 1 8 18.635V17a1 1 0 0 0-1-1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"
-                />
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-    </Transition>
-  </div>
-</template>
-
-<script setup>
-import { ref } from 'vue'
-
-const isShowCard = ref(false)
-
-const toggleShowCard = () => {
-  isShowCard.value = !isShowCard.value
-}
-</script>
-
-<style scoped>
-/* Анимация появления с высотой и прозрачностью */
-.slide-height-enter-active,
-.slide-height-leave-active {
-  transition: all 0.35s ease;
-  overflow: hidden;
-}
-
-.slide-height-enter-from,
-.slide-height-leave-to {
-  opacity: 0;
-  transform: translateX(20px);
-  /* height анимируется автоматически, если не фиксировать */
-}
-</style>
+              <tr class="tr border-b hover:bg-gray-50" @click="emitOpenCard(item)">
+                <!-- ⬅️ item, не w -->
+                <td class="p-4 align-middle">{{ index + 1 }}</td>
+                <td class="td p-1">{{ formatDateTable(item.int_date) }}</td>
+                <td class="td p-1 text-center">
+                  <AppTimeStatus :type="item.cur_status" :text="item.int_time" />
+                </td>
+                <td class="td p-1">{{ item.position }}</td>
+                <td class="td p-1">{{ item.fio }}</td>
+                <td class="td p-1">{{ item.phone }}</td>
+                <td class="td p-1">{{ item.fioRuc }}</td>
+                <td class="td p-1 status-cell relative">
+                  <AppSource :source="item.source" />
+                </td>
+                <td class="td p-1 status-cell relative not-odd:text-[10px]">
+                  <AppStatus :type="item.cur_status" />
+                </td>
+                <td class="td-note py-1">{{ item.note }}</td>
+              </tr>
+            </RecycleScroller>

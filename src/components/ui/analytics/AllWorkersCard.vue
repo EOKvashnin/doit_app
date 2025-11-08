@@ -36,13 +36,21 @@ import { computed } from 'vue'
 import AppLoader from '../AppLoader.vue'
 import { useStore } from 'vuex'
 
+const props = defineProps({
+  workers: {
+    type: Array,
+    required: true,
+  },
+})
+
 const store = useStore()
 
 //Получем флаг о том готовы ли данные
 const isLoading = computed(() => store.getters['workers/loading'])
 
 // Получаем список всех работников из Vuex
-const workers = computed(() => store.getters['workers/workers'] || [])
+// const workers = computed(() => store.getters['workers/workers'] || [])
+const workers = computed(() => props.workers)
 
 const length = computed(() => workers.value.length || '')
 </script>

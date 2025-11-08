@@ -42,7 +42,7 @@
               v-for="(w, idx) in sortedByDateTimeWorkers"
               :key="w.id"
             >
-              <td class="h-10 p-4 align-middle">{{ idx + 1 }}</td>
+              <td class="p-4 align-middle">{{ idx + 1 }}</td>
               <td class="td p-1">{{ formatDateTable(w.int_date) }}</td>
               <td class="td p-1 text-center">
                 <AppTimeStatus :type="w.cur_status" :text="w.int_time" />
@@ -102,3 +102,9 @@ function emitOpenCard(worker) {
 
 // return { formatDate, emitOpenCard }
 </script>
+
+<style scoped>
+.scroller {
+  height: 100%;
+}
+</style>

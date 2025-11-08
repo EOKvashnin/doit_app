@@ -86,11 +86,19 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 import ApexChart from 'vue3-apexcharts'
 import AppLoader from '../AppLoader.vue'
+
+const props = defineProps({
+  workers: {
+    type: Array,
+    required: true,
+  },
+})
+
 const store = useStore()
 
-// Получаем список всех работников из Vuex
+// Получаем список всех работников из props
 
-const workers = computed(() => store.getters['workers/workers'] || [])
+const workers = computed(() => props.workers || [])
 
 //Получем флаг о том готовы ли данные
 const isLoading = computed(() => store.getters['workers/loading'])
