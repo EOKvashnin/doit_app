@@ -3,7 +3,10 @@
     <!-- Добавлен корневой элемент -->
     <div class="modal-backdrop" @click.self="close"></div>
     <div class="modal">
-      <h3 class="text-center text-2xl font-medium text-gray-800 dark:text-gray-400" v-if="title">
+      <h3
+        class="text-center text-2xl mb-2 font-medium text-gray-500 dark:text-gray-300"
+        v-if="title"
+      >
         {{ title }}
       </h3>
       <slot></slot>

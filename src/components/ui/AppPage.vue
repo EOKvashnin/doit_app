@@ -4,9 +4,9 @@
   </div> -->
   <div class="h-screen flex flex-col items-center justify-start py-3">
     <div class="w-full max-w-[1800px] px-4">
-      <div class="w-full max-w-[1216px] mx-auto">
+      <div class="w-full max-w-[90%] mx-auto">
         <h1
-          class="text-2xl font-medium text-gray-600 dark:text-gray-400 font-light flex items-center justify-between w-full mb-3 all-sm-caps"
+          class="flex justify-between items-center text-2xl font-medium text-gray-500 dark:text-gray-300 w-full mb-3 all-sm-caps"
         >
           {{ title }}
           <slot name="header"></slot>
@@ -31,7 +31,7 @@ export default {
   },
 
   setup(props) {
-    document.title = `${props.title} | Power Staff`
+    document.title = `Do it | ${props.title}`
   },
 }
 </script>

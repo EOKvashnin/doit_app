@@ -6,7 +6,7 @@
 
 <script>
 import TheNavbar from '../components/TheNavbar.vue'
-import { useRoute } from 'vue-router'
+
 export default {
   components: { TheNavbar },
   setup() {},

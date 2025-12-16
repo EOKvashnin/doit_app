@@ -1,7 +1,7 @@
-import axios from 'axios'
-import error from '@/utils/error'
 import { firebaseConfig } from '@/firebase'
+import error from '@/utils/error'
 import { showToast } from '@/utils/toast'
+import axios from 'axios'
 
 const TOKEN_KEY = 'jwt-token'
 
@@ -34,8 +34,6 @@ export default {
         }
 
         const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${firebaseConfig.apiKey}`
-
-        console.log('URL', url)
 
         const { data } = await axios.post(url, {
           ...payload,

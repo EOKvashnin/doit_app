@@ -1,0 +1,6 @@
+  <div v-if="tasks.length === 0" class="flex flex-col justify-center items-center gap-4">
+    <h4 class="text-center text-gray-400 font-medium">Задач пока нет</h4>
+    <Icon icon="streamline-plump:empty-clipboard-remix" class="w-15 h-15 text-gray-300/50" />
+  </div>
+
+  <!-- ООСНОВНАЯ ТАБЛИЦА -->

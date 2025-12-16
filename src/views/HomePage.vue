@@ -1,172 +1,134 @@
 <template>
   <app-loader v-if="loading"></app-loader>
-  <app-page title="Список кандидатов" v-else>
+  <app-page title="Список задач" v-else>
     <template #header>
-      <button @click="isModalOpen = true" class="cursor-pointer">
-        <svg
-          class="w-[38px] h-[38px] text-gray-600 dark:text-white hover:text-pink-500 transition-colors duration-200"
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M9 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4H7Zm8-1a1 1 0 0 1 1-1h1v-1a1 1 0 1 1 2 0v1h1a1 1 0 1 1 0 2h-1v1a1 1 0 1 1-2 0v-1h-1a1 1 0 0 1-1-1Z"
-            clip-rule="evenodd"
-          />
-        </svg>
+      <!-- Добавляем кнопку управления фильтрами -->
+      <button
+        @click="toggleFilters"
+        class="flex items-center gap-2 text-sm font-medium text-gray-400 hover:text-indigo-500 transition-colors duration-200"
+        :class="{ ' text-indigo-500 font-bold': showFilters }"
+      >
+        <Icon
+          icon="lucide:settings-2"
+          class="w-5 h-5 transition-all duration-150"
+          :class="{ 'w-6 h-6 text-indigo-500': showFilters }"
+        />
+        Фильтр
       </button>
     </template>
-    <workers-filter v-model="filter"></workers-filter>
-
-    <workers-table
-      :workers="workers"
+    <transition name="slide-top">
+      <TaskFilter v-if="showFilters" v-model="filter" />
+    </transition>
+    <TasksTable
+      :tasks="tasks"
+      :showFilters="showFilters"
+      @openModal="handleOpenModal"
       @open-card="handleOpenCard"
-      @workerUpdated="handleWorkerUpdate"
-    ></workers-table>
+    />
 
     <teleport to="body">
-      <app-modal v-if="isModalOpen" title="Добавить кандидата" @close="isModalOpen = false">
-        <workers-modal @created="isModalOpen = false"></workers-modal>
+      <app-modal v-if="isModalOpen" title="Создать задачу" @close="close">
+        <AddTaskModal @created="isModalOpen = false" :initial-status="modalDefaultStatus" />
       </app-modal>
-
-      <app-modal
-        v-if="isCardModalOpen"
-        title="Информация о кандидате"
-        @close="isCardModalOpen = false"
-      >
-        <worker-one-modal
-          @close="isCardModalOpen = false"
-          :worker="selectedWorker"
-        ></worker-one-modal>
+      <app-modal v-if="isCardModalOpen" :title="titleSelectedTask" @close="close">
+        <TaskOneModal @close="isCardModalOpen = false" :task="selectedTask" />
       </app-modal>
     </teleport>
   </app-page>
 </template>
 
-<script>
+<script setup>
+import AddTaskModal from '@/components/tasks/AddTaskModal.vue'
+import TaskFilter from '@/components/tasks/TaskFilter.vue'
+import TaskOneModal from '@/components/tasks/TaskOneModal.vue'
+import TasksTable from '@/components/tasks/TasksTable.vue'
 import AppLoader from '@/components/ui/AppLoader.vue'
 import AppModal from '@/components/ui/AppModal.vue'
 import AppPage from '@/components/ui/AppPage.vue'
-import WorkerOneModal from '@/components/workers/WorkerOneModal.vue'
-import WorkersFilter from '@/components/workers/WorkersFilter.vue'
-import WorkersModal from '@/components/workers/WorkersModal.vue'
-import WorkersTable from '@/components/workers/WorkersTable.vue'
-
-import { ref, computed, onMounted, watch } from 'vue'
+import { Icon } from '@iconify/vue'
+import { computed, onMounted, ref } from 'vue'
 import { useStore } from 'vuex'
 
-export default {
-  name: 'HomePage',
-  components: {
-    AppPage,
-    AppLoader,
-    AppModal,
-    WorkersTable,
-    WorkersModal,
-    WorkersFilter,
-    WorkerOneModal,
-  },
+const store = useStore()
+const loading = ref(false)
+const filter = ref({})
 
-  setup() {
-    const store = useStore()
-    const isModalOpen = ref(false)
-    const isCardModalOpen = ref(false)
-    const selectedWorker = ref(null)
-    const loading = ref(false)
+const isModalOpen = ref(false)
+const modalDefaultStatus = ref('todo')
+const isCardModalOpen = ref(false)
+const selectedTask = ref(null)
+const titleSelectedTask = ref('')
 
-    const filter = ref({
-      fio: '',
-      position: '',
-      boss: '',
-      status: '',
-    })
+const tasks = computed(() => {
+  const f = filter.value
+  let res = store.getters['tasks/tasks']
+  if (f.title) res = res.filter((t) => t.title?.toLowerCase().includes(f.title.toLowerCase()))
+  if (f.authorFio)
+    res = res.filter((t) => t.authorFio?.toLowerCase().includes(f.authorFio.toLowerCase()))
+  if (f.assigneeFio)
+    res = res.filter((t) => t.assigneeFio?.toLowerCase().includes(f.assigneeFio.toLowerCase()))
+  if (f.priority) res = res.filter((t) => t.priority === f.priority)
+  return res
+})
 
-    watch(
-      filter,
-      (newValue) => {
-        console.log('Filter changed:', newValue)
-      },
-      { deep: true },
-    )
-
-    onMounted(async () => {
-      loading.value = true
-      try {
-        await store.dispatch('workers/load')
-      } catch (e) {
-        console.error('Ошибка загрузки:', e)
-      } finally {
-        loading.value = false
-      }
-    })
-
-    const workers = computed(() => {
-      try {
-        const allWorkers = store.state.workers.workers || []
-
-        return allWorkers.filter((worker) => {
-          // Безопасный доступ к свойствам worker с учетом реальной структуры данных
-          const workerFio = worker.fio || ''
-          const workerPosition = worker.position || ''
-          const workerBoss = worker.fioRuc || ''
-          const workerStatus = worker.cur_status || '' // Исправлено: cur_status вместо status
-
-          // Фильтр по ФИО кандидата
-          const fioMatch = filter.value.fio
-            ? workerFio.toLowerCase().includes(filter.value.fio.toLowerCase())
-            : true
-
-          // Фильтр по должности
-          const positionMatch = filter.value.position
-            ? workerPosition.toLowerCase().includes(filter.value.position.toLowerCase())
-            : true
-
-          // Фильтр по руководителю
-          const bossMatch = filter.value.boss
-            ? workerBoss.toLowerCase().includes(filter.value.boss.toLowerCase())
-            : true
-
-          // Фильтр по статусу - используем cur_status
-          const statusMatch = filter.value.status ? filter.value.status === workerStatus : true
-
-          return fioMatch && positionMatch && bossMatch && statusMatch
-        })
-      } catch (error) {
-        console.error('Error in workers computed:', error)
-        return []
-      }
-    })
-
-    const handleOpenCard = (worker) => {
-      selectedWorker.value = worker
-      isCardModalOpen.value = true
-    }
-
-    const handleWorkerUpdate = (updatedWorker) => {
-      // Обновляем локальное состояние
-      selectedWorker.value = updatedWorker
-    }
-
-    const handleModalClose = () => {
-      isModalOpen.value = false
-      selectedWorker.value = null
-    }
-
-    return {
-      isModalOpen,
-      isCardModalOpen,
-      selectedWorker,
-      handleOpenCard,
-      handleWorkerUpdate,
-      handleModalClose,
-      loading,
-      workers,
-      filter,
-    }
-  },
+const handleOpenModal = (status) => {
+  modalDefaultStatus.value = status || 'todo'
+  isModalOpen.value = true
 }
+
+const handleOpenCard = (task) => {
+  selectedTask.value = task
+  titleSelectedTask.value = task.title
+  isCardModalOpen.value = true
+}
+
+const close = () => {
+  isModalOpen.value = false
+  isCardModalOpen.value = false
+}
+
+const showFilters = ref(false)
+
+const toggleFilters = () => {
+  showFilters.value = !showFilters.value
+}
+
+onMounted(async () => {
+  loading.value = true
+  await store.dispatch('tasks/load')
+  loading.value = false
+})
 </script>
+
+<style scoped>
+/* Активные состояния определяют продолжительность и easing */
+.slide-top-enter-active,
+.slide-top-leave-active {
+  transition: all 0.4s ease;
+  /* position: relative; - не обязательно, если контекст позволяет */
+}
+
+/* Начальное состояние входа (перед появлением) */
+.slide-top-enter-from {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+
+/* Конечное состояние входа (после появления) */
+.slide-top-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Начальное состояние выхода (перед исчезновением) */
+.slide-top-leave-from {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Конечное состояние выхода (после исчезновения) */
+.slide-top-leave-to {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+</style>

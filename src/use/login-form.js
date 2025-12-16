@@ -7,19 +7,15 @@ import * as yup from 'yup'
 export function useLoginForm() {
   const store = useStore()
   const router = useRouter()
-
   const { handleSubmit, isSubmitting, submitCount } = useForm()
-
   const {
     value: email,
     errorMessage: eError,
     handleBlur: eBlur,
   } = useField(
     'email',
-    yup.string().trim().required('Введите email').email('Введите корректный email адрес через @'),
+    yup.string().trim().required('Введите email').email('Введите корректный email'),
   )
-
-  const PASS_MIN_LENGTH = 5
 
   const {
     value: password,
@@ -27,41 +23,31 @@ export function useLoginForm() {
     handleBlur: pBlur,
   } = useField(
     'password',
-    yup
-      .string()
-      .trim()
-      .required('Введите пароль')
-      .min(PASS_MIN_LENGTH, `пароль не может быть меньше ${PASS_MIN_LENGTH} символов`),
+    yup.string().trim().required('Введите пароль').min(6, 'Пароль не может быть меньше 6 символов'),
   )
 
-  const onSubmit = handleSubmit(async (values) => {
-    try {
-      console.log('Form:', values)
-      await store.dispatch('auth/login', values)
-      router.push('/')
-    } catch (e) {
-      console.log(e)
+  const isTooManyAttempts = computed(() => submitCount.value > 3)
+  watch(isTooManyAttempts, (val) => {
+    if (val) {
+      setTimeout(() => (submitCount.value = 0), 7000)
     }
   })
 
-  const isTooManyAttempts = computed(() => submitCount.value >= 3)
-
-  watch(isTooManyAttempts, (val) => {
-    if (val) {
-      setTimeout(() => (submitCount.value = 0), 20000) // Обнуляем количество попыток входа
-    }
+  const onSubmit = handleSubmit(async (values) => {
+    await store.dispatch('auth/login', values)
+    router.push('/')
+    console.log('Form:', values)
   })
 
   return {
     email,
-    password,
     eError,
     eBlur,
+    password,
     pError,
     pBlur,
     onSubmit,
     isSubmitting,
-    submitCount,
     isTooManyAttempts,
   }
 }

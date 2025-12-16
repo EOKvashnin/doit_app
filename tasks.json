@@ -1,0 +1,218 @@
+{
+  "tasks": {
+    "-OeW1aBcDeFgHiJkLmN0": {
+      "id": "-OeW1aBcDeFgHiJkLmN0",
+      "title": "Настроить авторизацию через Firebase Auth",
+      "description": "Реализовать вход/регистрацию с email и паролем, защитить роуты.",
+      "direction": "Фронтенд",
+      "projectId": "HR-Portal",
+      "assigneeFio": "Квашнин Евгений Валерьевич",
+      "authorFio": "Смирнова Ольга Петровна",
+      "leadFio": "Смирнова Ольга Петровна",
+      "status": "in_progress",
+      "statusUpdatedAt": "2025-11-25T10:30:00.000Z",
+      "createdAt": "2025-11-24T09:00:00.000Z",
+      "deadline": "2025-12-05",
+      "priority": "high",
+      "comments": [
+        {
+          "id": 1769461200000,
+          "author": "Смирнова Ольга Петровна",
+          "date": "2025-11-24T09:05:00.000Z",
+          "text": "Начали работу, Евгений взял в проработку"
+        },
+        {
+          "id": 1769547600000,
+          "author": "Квашнин Евгений Валерьевич",
+          "date": "2025-11-25T10:30:00.000Z",
+          "text": "Базовая авторизация готова, тестирую защиту роутов"
+        }
+      ]
+    },
+    "-OeW1aBcDeFgHiJkLmN1": {
+      "id": "-OeW1aBcDeFgHiJkLmN1",
+      "title": "Исправить сортировку по дате в списке кандидатов",
+      "description": "Сейчас сортирует как строки, а нужно как даты (хронологически).",
+      "direction": "Фронтенд",
+      "projectId": "HR-Portal",
+      "assigneeFio": "Квашнин Евгений Валерьевич",
+      "authorFio": "Кононов Александр Александрович",
+      "leadFio": "Кононов Александр Александрович",
+      "status": "done",
+      "statusUpdatedAt": "2025-11-26T04:15:00.000Z",
+      "createdAt": "2025-11-25T14:20:00.000Z",
+      "deadline": "2025-11-26",
+      "priority": "urgent",
+      "comments": [
+        {
+          "id": 1769598900000,
+          "author": "Квашнин Евгений Валерьевич",
+          "date": "2025-11-26T04:15:00.000Z",
+          "text": "Исправлено: теперь используем Date.parse() перед сортировкой"
+        }
+      ]
+    },
+    "-OeW1aBcDeFgHiJkLmN2": {
+      "id": "-OeW1aBcDeFgHiJkLmN2",
+      "title": "Подготовить презентацию для заказчика по аналитике",
+      "description": "Собрать метрики по трудоустройству за 2025 год, визуализировать в Power BI.",
+      "direction": "Аналитика",
+      "projectId": "",
+      "assigneeFio": "Иванова Мария Сергеевна",
+      "authorFio": "Мазитова Ольга Сергеевна",
+      "leadFio": "Мазитова Ольга Сергеевна",
+      "status": "todo",
+      "statusUpdatedAt": "2025-11-26T05:00:00.000Z",
+      "createdAt": "2025-11-26T05:00:00.000Z",
+      "deadline": "2025-12-10",
+      "priority": "medium",
+      "comments": []
+    },
+    "-OeW1aBcDeFgHiJkLmN3": {
+      "id": "-OeW1aBcDeFgHiJkLmN3",
+      "title": "Настроить ленивую загрузку таблицы с 900+ записями",
+      "description": "Внедрить virtual scrolling или пагинацию для улучшения производительности.",
+      "direction": "Фронтенд",
+      "projectId": "HR-Portal",
+      "assigneeFio": "Квашнин Евгений Валерьевич",
+      "authorFio": "Смирнова Ольга Петровна",
+      "leadFio": "Смирнова Ольга Петровна",
+      "status": "review",
+      "statusUpdatedAt": "2025-11-26T06:45:00.000Z",
+      "createdAt": "2025-11-20T11:30:00.000Z",
+      "deadline": "2025-11-28",
+      "priority": "high",
+      "comments": [
+        {
+          "id": 1769399400000,
+          "author": "Квашнин Евгений Валерьевич",
+          "date": "2025-11-23T10:30:00.000Z",
+          "text": "Пробую vue-virtual-scroller — выглядит многообещающе"
+        },
+        {
+          "id": 1769598300000,
+          "author": "Смирнова Ольга Петровна",
+          "date": "2025-11-26T06:45:00.000Z",
+          "text": "Проверила — работает плавно, можно мержить"
+        }
+      ]
+    },
+    "-OeW1aBcDeFgHiJkLmN4": {
+      "id": "-OeW1aBcDeFgHiJkLmN4",
+      "title": "Обновить цветовую схему графиков в аналитике",
+      "description": "Согласовать с дизайнером и применить новые цвета в ApexCharts.",
+      "direction": "Фронтенд",
+      "projectId": "HR-Portal",
+      "assigneeFio": "Квашнин Евгений Валерьевич",
+      "authorFio": "Мазитова Ольга Сергеевна",
+      "leadFio": "Мазитова Ольга Сергеевна",
+      "status": "todo",
+      "statusUpdatedAt": "2025-11-26T07:00:00.000Z",
+      "createdAt": "2025-11-26T07:00:00.000Z",
+      "deadline": "2025-12-02",
+      "priority": "low",
+      "comments": []
+    },
+    "-OeW1aBcDeFgHiJkLmN5": {
+      "id": "-OeW1aBcDeFgHiJkLmN5",
+      "title": "Провести аудит безопасности API",
+      "description": "Проверить все эндпоинты на уязвимости, включая CORS и rate limiting.",
+      "direction": "Бэкенд",
+      "projectId": "HR-Portal",
+      "assigneeFio": "Петров Дмитрий Андреевич",
+      "authorFio": "Кононов Александр Александрович",
+      "leadFio": "Кононов Александр Александрович",
+      "status": "in_progress",
+      "statusUpdatedAt": "2025-11-25T16:20:00.000Z",
+      "createdAt": "2025-11-22T10:00:00.000Z",
+      "deadline": "2025-12-01",
+      "priority": "high",
+      "comments": [
+        {
+          "id": 1769482800000,
+          "author": "Петров Дмитрий Андреевич",
+          "date": "2025-11-25T16:20:00.000Z",
+          "text": "Нашёл 2 уязвимости в auth-роутах, исправляю"
+        }
+      ]
+    },
+    "-OeW1aBcDeFgHiJkLmN6": {
+      "id": "-OeW1aBcDeFgHiJkLmN6",
+      "title": "Создать шаблон уведомлений для кандидатов",
+      "description": "Разработать email- и in-app шаблоны для разных статусов (приглашение, отказ и т.д.)",
+      "direction": "UX/UI",
+      "projectId": "",
+      "assigneeFio": "Соколова Анна Викторовна",
+      "authorFio": "Мазитова Ольга Сергеевна",
+      "leadFio": "Мазитова Ольга Сергеевна",
+      "status": "todo",
+      "statusUpdatedAt": "2025-11-26T08:10:00.000Z",
+      "createdAt": "2025-11-26T08:10:00.000Z",
+      "deadline": "2025-12-05",
+      "priority": "medium",
+      "comments": []
+    },
+    "-OeW1aBcDeFgHiJkLmN7": {
+      "id": "-OeW1aBcDeFgHiJkLmN7",
+      "title": "Интегрировать загрузку аватаров через Firebase Storage",
+      "description": "Разрешить пользователям загружать фото, сохранять в Storage, отображать в профиле.",
+      "direction": "Фронтенд",
+      "projectId": "HR-Portal",
+      "assigneeFio": "Квашнин Евгений Валерьевич",
+      "authorFio": "Смирнова Ольга Петровна",
+      "leadFio": "Смирнова Ольга Петровна",
+      "status": "in_progress",
+      "statusUpdatedAt": "2025-11-25T18:00:00.000Z",
+      "createdAt": "2025-11-24T13:00:00.000Z",
+      "deadline": "2025-11-29",
+      "priority": "medium",
+      "comments": [
+        {
+          "id": 1769482800001,
+          "author": "Квашнин Евгений Валерьевич",
+          "date": "2025-11-25T18:00:00.000Z",
+          "text": "Загрузка работает, тестирую сжатие и ограничение размера"
+        }
+      ]
+    },
+    "-OeW1aBcDeFgHiJkLmN8": {
+      "id": "-OeW1aBcDeFgHiJkLmN8",
+      "title": "Подготовить документацию по API для фронтенда",
+      "description": "Описать все эндпоинты, параметры, примеры ответов в Swagger.",
+      "direction": "Бэкенд",
+      "projectId": "HR-Portal",
+      "assigneeFio": "Петров Дмитрий Андреевич",
+      "authorFio": "Квашнин Евгений Валерьевич",
+      "leadFio": "Кононов Александр Александрович",
+      "status": "review",
+      "statusUpdatedAt": "2025-11-26T04:00:00.000Z",
+      "createdAt": "2025-11-20T09:30:00.000Z",
+      "deadline": "2025-11-25",
+      "priority": "medium",
+      "comments": [
+        {
+          "id": 1769596800000,
+          "author": "Квашнин Евгений Валерьевич",
+          "date": "2025-11-26T04:00:00.000Z",
+          "text": "Проверил — всё понятно, можно публиковать"
+        }
+      ]
+    },
+    "-OeW1aBcDeFgHiJkLmN9": {
+      "id": "-OeW1aBcDeFgHiJkLmN9",
+      "title": "Настроить ежедневную выгрузку данных в Excel",
+      "description": "Создать скрипт, который раз в сутки формирует XLSX-файл со списком всех кандидатов.",
+      "direction": "Автоматизация",
+      "projectId": "",
+      "assigneeFio": "Квашнин Евгений Валерьевич",
+      "authorFio": "Кононов Александр Александрович",
+      "leadFio": "Кононов Александр Александрович",
+      "status": "todo",
+      "statusUpdatedAt": "2025-11-26T08:30:00.000Z",
+      "createdAt": "2025-11-26T08:30:00.000Z",
+      "deadline": "2025-12-03",
+      "priority": "low",
+      "comments": []
+    }
+  }
+}

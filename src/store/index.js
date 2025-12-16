@@ -1,10 +1,10 @@
-import { createStore, createLogger } from 'vuex'
-import auth from './modules/auth.module'
-import workers from './modules/workers.module'
+import { createLogger, createStore } from 'vuex'
+import auth from './modules/auth'
+import tasks from './modules/tasks'
 
 const plugins = []
 
-if (process.env.NODE_ENV === 'development') {
+if (import.meta.env.DEV) {
   plugins.push(createLogger())
 }
 
@@ -27,6 +27,6 @@ export default createStore({
 
   modules: {
     auth,
-    workers,
+    tasks,
   },
 })

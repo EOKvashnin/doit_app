@@ -1,13 +1,13 @@
-import axios from 'axios'
 import { firebaseConfig } from '@/firebase'
+import axios from 'axios'
 import router from '../router'
 
-const workerAxios = axios.create({
+const taskAxios = axios.create({
   baseURL: firebaseConfig.databaseURL,
 })
 
 // Add a response interceptor
-workerAxios.interceptors.response.use(
+taskAxios.interceptors.response.use(
   null,
   (error) => {
     if (error.response.status === 401) {
@@ -23,4 +23,4 @@ workerAxios.interceptors.response.use(
   },
 )
 
-export default workerAxios
+export default taskAxios
