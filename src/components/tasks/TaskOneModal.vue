@@ -1,7 +1,7 @@
 <template>
   <div class="task-modal-content p-4 min-h-[60vh] max-h-[65vh] overflow-y-auto scrollable-column">
     <!-- Заголовок -->
-    <div class="mb-4">
+    <div class="mb-4 relative">
       <input
         v-model="localTask.title"
         type="text"
@@ -165,6 +165,7 @@
 
 <script setup>
 import { Icon } from '@iconify/vue'
+
 import { ref, watch } from 'vue'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
@@ -183,6 +184,8 @@ const props = defineProps({
 /*---------------------  EMIT  -----------------------*/
 
 const emit = defineEmits(['close', 'update'])
+
+/*-------------------  АНИМАЦИЯ  ---------------------*/
 
 /*----------------  УПРАВЛЕНИЕ MODAL  ----------------*/
 

@@ -3,29 +3,38 @@
     <!-- Добавлен корневой элемент -->
     <div class="modal-backdrop" @click.self="close"></div>
     <div class="modal">
-      <h3
-        class="text-center text-2xl mb-2 font-medium text-gray-500 dark:text-gray-300"
+      <div
+        class="flex flex-row gap-3 justify-center items-center text-2xl px-1 font-medium text-gray-500 dark:text-gray-300"
         v-if="title"
       >
-        {{ title }}
-      </h3>
+        <app-priority :priority="priority" />
+        <h3 class="text-center">{{ title }}</h3>
+      </div>
       <slot></slot>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    title: {
-      type: String,
+<script setup>
+import AppPriority from './AppPriority.vue'
+
+defineProps({
+  title: {
+    type: String,
+    default: '',
+  },
+  priority: {
+    type: String,
+    default: 'new',
+    validator: (value) => {
+      return ['low', 'medium', 'high', 'urgent', 'new'].includes(value)
     },
   },
-  emits: ['close'],
-  methods: {
-    close() {
-      this.$emit('close')
-    },
-  },
+})
+
+const emit = defineEmits(['close'])
+
+const close = () => {
+  emit('close')
 }
 </script>

@@ -30,7 +30,12 @@
       <app-modal v-if="isModalOpen" title="Создать задачу" @close="close">
         <AddTaskModal @created="isModalOpen = false" :initial-status="modalDefaultStatus" />
       </app-modal>
-      <app-modal v-if="isCardModalOpen" :title="titleSelectedTask" @close="close">
+      <app-modal
+        v-if="isCardModalOpen"
+        :title="titleSelectedTask"
+        :priority="prioritySelectedTask"
+        @close="close"
+      >
         <TaskOneModal @close="isCardModalOpen = false" :task="selectedTask" />
       </app-modal>
     </teleport>
@@ -57,6 +62,7 @@ const isModalOpen = ref(false)
 const modalDefaultStatus = ref('todo')
 const isCardModalOpen = ref(false)
 const selectedTask = ref(null)
+const prioritySelectedTask = ref(null)
 const titleSelectedTask = ref('')
 
 const tasks = computed(() => {
@@ -79,6 +85,7 @@ const handleOpenModal = (status) => {
 const handleOpenCard = (task) => {
   selectedTask.value = task
   titleSelectedTask.value = task.title
+  prioritySelectedTask.value = task?.priority || 'new'
   isCardModalOpen.value = true
 }
 
