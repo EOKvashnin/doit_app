@@ -36,7 +36,11 @@
         :priority="prioritySelectedTask"
         @close="close"
       >
-        <TaskOneModal @close="isCardModalOpen = false" :task="selectedTask" />
+        <TaskOneModal
+          @close="isCardModalOpen = false"
+          :task="selectedTask"
+          @update="handleTaskUpdate"
+        />
       </app-modal>
     </teleport>
   </app-page>
@@ -87,6 +91,14 @@ const handleOpenCard = (task) => {
   titleSelectedTask.value = task.title
   prioritySelectedTask.value = task?.priority || 'new'
   isCardModalOpen.value = true
+}
+
+const handleTaskUpdate = (updatedTask) => {
+  selectedTask.value = updatedTask
+  // title и priority обновятся автоматически через computed в handleOpenCard,
+  // но если хочешь — можно обновить и их вручную:
+  titleSelectedTask.value = updatedTask.title
+  prioritySelectedTask.value = updatedTask.priority
 }
 
 const close = () => {

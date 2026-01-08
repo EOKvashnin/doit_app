@@ -1,5 +1,6 @@
 import { createLogger, createStore } from 'vuex'
 import auth from './modules/auth'
+import profile from './modules/profile'
 import tasks from './modules/tasks'
 
 const plugins = []
@@ -28,5 +29,6 @@ export default createStore({
   modules: {
     auth,
     tasks,
+    profile,
   },
 })

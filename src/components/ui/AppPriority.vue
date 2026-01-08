@@ -31,7 +31,7 @@ const iconMap = {
   medium: 'line-md:cog-loop',
   high: 'line-md:lightbulb-filled',
   //urgent: 'majesticons:fire',
-  urgent: 'line-md:alert-circle-loop',
+  urgent: 'line-md:hazard-lights-filled-loop',
 }
 
 const className = computed(() => classMap[props.priority] || classMap.low)

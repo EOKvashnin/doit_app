@@ -22,6 +22,15 @@ const routes = [
       auth: false,
     },
   },
+  {
+    path: '/person',
+    name: 'personPage',
+    component: () => import('../views/personPage.vue'),
+    meta: {
+      layout: 'main',
+      auth: true,
+    },
+  },
 ]
 
 const router = createRouter({

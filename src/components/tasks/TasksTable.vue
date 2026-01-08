@@ -26,7 +26,7 @@
 
       <!-- Контейнер с задачами и скроллом -->
       <div
-        class="flex-1 overflow-y-auto py-2 scrollable-column pr-3"
+        class="flex-1 flex-wrap overflow-y-auto py-2 scrollable-column pr-3"
         :style="{ maxHeight: `calc(100vh - ${hScrollBlock}px)` }"
       >
         <div v-if="plannedTasks.length === 0" class="m-auto flex flex-col items-center gap-1">
@@ -90,7 +90,7 @@
           <span class="text-gray-700 font-bold px-1">{{ doneTasksCount }}</span>
         </div>
         <Icon
-          icon="lets-icons:chat-plus"
+          icon="line-md:document-add"
           class="w-6 h-6 text-gray-300 dark:text-gray-700 hover:text-indigo-600 cursor-pointer"
           @click="openModal('done')"
         />

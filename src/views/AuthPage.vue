@@ -1,16 +1,15 @@
 <template>
   <section class="bg-gray-50 dark:bg-gray-900">
-    <div class="flex flex-col items-center justify-center py-8 mx-auto md:h-screen lg:py-0">
-      <div class="relative not-last:flex shrink-0 justify-center items-start gap-3 z-110">
-        <Icon icon="streamline-ultimate:space-rocket-earth" class="text-white w-15 h-15 z-110" />
-        <header class="z-555">Do it</header>
-        <div
-          class="absolute -bottom-20 left-1/2 transform -translate-x-1/2 custom-shape w-64 h-64 z-0"
-        ></div>
+    <div
+      class="relative flex flex-col items-center justify-center py-8 mx-auto md:h-screen lg:py-0"
+    >
+      <div id="title" class="absolute top-17 text-[170px]">
+        <h1 class="text-gradient font-bold uppercase">Do it</h1>
       </div>
 
       <div
-        class="w-full rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:border-gray-700 z-999 backdrop-blur-[20px]"
+        id="form"
+        class="w-full rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:border-gray-700 z-999 backdrop-blur-[10px]"
       >
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h1
@@ -82,25 +81,25 @@
 <script>
 import { useLoginForm } from '@/use/login-form'
 import error from '@/utils/error'
-import { Icon } from '@iconify/vue'
 import { useRoute } from 'vue-router'
 
-// import { useRoute } from 'vue-router'
-import { toast } from 'vue3-toastify'
-
-import 'vue3-toastify/dist/index.css'
-
 export default {
-  components: {
-    Icon,
-  },
+  components: {},
   setup() {
     const route = useRoute()
     if (route.query.message) {
-      toast.warning(error(route.query.message))
+      console.log(error(route.query.message))
     }
 
     return { ...useLoginForm() }
   },
 }
 </script>
+<style scoped>
+.text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-image: linear-gradient(to right, rgba(16, 24, 40, 0.1), rgba(255, 255, 255, 0.4));
+}
+</style>

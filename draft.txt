@@ -4,3 +4,13 @@
   </div>
 
   <!-- ООСНОВНАЯ ТАБЛИЦА -->
+
+   titleEditable.value = ''
+      descriptionEditable.value = ''
+      priorityEditable.value = 'medium'
+      deadlineEditable.value = ''
+      directionEditable.value = ''
+      projectIdEditable.value = ''
+      authorFioEditable.value = ''
+      assigneeFioEditable.value = ''
+      leadFioEditable.value = ''

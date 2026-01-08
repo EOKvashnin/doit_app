@@ -4,13 +4,13 @@
     :class="['card', 'priority', getPriorityColor(task.priority), $attrs.class]"
   >
     <!-- Заголовок -->
-    <h5 class="mb-2 text-m font-medium tracking-tight text-gray-900 dark:text-white">
+    <h5 class="mb-2 text-sm font-medium tracking-tight text-gray-900 dark:text-white">
       {{ task.title }}
     </h5>
 
     <!-- Нижний блок: ФИО и комментарии -->
     <div class="flex justify-between items-end mt-auto">
-      <p class="text-sm font-thin text-gray-700 dark:text-gray-400">
+      <p class="text-xs font-thin text-gray-700 dark:text-gray-400">
         {{ task.assigneeFio }}
       </p>
       <!-- Количество комментариев -->
