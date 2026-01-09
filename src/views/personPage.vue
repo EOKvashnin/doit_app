@@ -86,12 +86,20 @@ const handleAvatarUpdate = (url) => {
 }
 
 const saveProfile = async () => {
-  await store.dispatch('profile/save', {
+  console.log('🚀 Перед сохранением:', {
     displayName: displayNameLocal.value,
     avatarUrl: avatarUrlLocal.value,
+    length: avatarUrlLocal.value?.length || 0,
   })
-  // После сохранения можно обновить данные
-  store.dispatch('profile/load')
+
+  try {
+    await store.dispatch('profile/save', {
+      displayName: displayNameLocal.value,
+      avatarUrl: avatarUrlLocal.value,
+    })
+  } catch (err) {
+    console.error('Ошибка при сохранении:', err)
+  }
 }
 
 const close = () => router.push('/')

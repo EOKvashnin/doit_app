@@ -81,6 +81,9 @@ const tasks = computed(() => {
   return res
 })
 
+//Загружаем всех пользователей
+store.dispatch('users/loadAll')
+
 const handleOpenModal = (status) => {
   modalDefaultStatus.value = status || 'todo'
   isModalOpen.value = true

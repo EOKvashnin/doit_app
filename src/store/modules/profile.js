@@ -1,69 +1,60 @@
-import taskAxios from '@/axios/tasks'
 import { showToast } from '@/utils/toast'
 
 export default {
   namespaced: true,
-  state() {
-    return {
-      profile: null,
-    }
-  },
-  mutations: {
-    setProfile(state, profile) {
-      state.profile = profile
+
+  getters: {
+    displayName(state, getters, rootState, rootGetters) {
+      const email = rootGetters['auth/userEmail']
+      return rootGetters['users/getDisplayNameByEmail'](email)
+    },
+    avatarUrl(state, getters, rootState, rootGetters) {
+      const email = rootGetters['auth/userEmail']
+      return rootGetters['users/getAvatarByEmail'](email)
     },
   },
+
   actions: {
-    async load({ commit, rootGetters }) {
-      const user = rootGetters['auth/user']
-      if (!user?.id) return
-
-      const token = rootGetters['auth/token']
-      if (!token) return
-
-      const isAuthPage = () => {
-        return window.location.pathname === '/main' || window.location.pathname.includes('/main/')
-      }
-
-      try {
-        const res = await taskAxios.get(`/users/${user.id}.json?auth=${token}`)
-        const profile = res.data || { displayName: '', avatarUrl: '' }
-        commit('setProfile', { ...profile, id: user.id })
-      } catch (e) {
-        if (!isAuthPage) {
-          console.error('Ошибка загрузки профиля:', e)
-          showToast.error('Не удалось загрузить профиль')
-        }
-      }
+    async load({ dispatch, rootGetters }) {
+      //Загружаем всех пользователей
+      await dispatch('users/loadAll', null, { root: true })
     },
 
-    async save({ rootGetters }, { displayName, avatarUrl }) {
-      const user = rootGetters['auth/user']
-      const token = rootGetters['auth/token']
+    async save({ dispatch, rootGetters }, { displayName, avatarUrl }) {
+      const userAuth = rootGetters['auth/user']
+      const email = rootGetters['auth/userEmail']
 
-      if (!user?.id || !token) {
-        showToast.error('Вы не авторизованы')
+      if (!userAuth?.id) {
+        showToast.error('Не удалось определить пользователя')
         return
       }
 
-      const profileData = {
-        displayName: displayName.trim() || '',
-        avatarUrl: avatarUrl || '',
-        email: rootGetters['auth/userEmail'] || '',
+      // Получаем текущий объект пользователя из store
+      const currentUser = rootGetters['users/getUserByEmail'](email)
+      if (!currentUser) {
+        return
+      }
+
+      // Создаём новый объект с обновлёнными полями
+      const updatedData = {
+        ...currentUser, // копируем все поля
+        displayName: (displayName || '').trim(),
+        avatarUrl: avatarUrl || '', // если пустой — оставляем как есть
+        email: email || '', // обязательно
       }
 
       try {
-        await taskAxios.put(`/users/${user.id}.json?auth=${token}`, profileData)
-        showToast.success('Профиль обновлён')
-      } catch (e) {
-        console.error('Ошибка сохранения:', e)
+        await dispatch(
+          'users/saveUser',
+          {
+            id: userAuth.id,
+            data: updatedData,
+          },
+          { root: true },
+        )
+      } catch (err) {
         showToast.error('Не удалось сохранить профиль')
       }
     },
-  },
-  getters: {
-    profile: (state) => state.profile,
-    displayName: (state) => state.profile?.displayName || null,
-    avatarUrl: (state) => state.profile?.avatarUrl || null,
   },
 }

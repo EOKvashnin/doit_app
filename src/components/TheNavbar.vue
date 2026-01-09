@@ -57,15 +57,14 @@ export default {
       store.commit('auth/logout')
       router.push('/auth')
     }
-    const toPerson = () => {
-      router.push('/person')
-    }
 
-    const avatarUrl = computed(() => store.getters['profile/avatarUrl'])
+    const userEmail = computed(() => store.getters['auth/userEmail'])
+    const avatarUrl = computed(() => {
+      return store.getters['users/getAvatarByEmail'](userEmail.value) || ''
+    })
 
     return {
       logout,
-      toPerson,
       avatarUrl,
     }
   },

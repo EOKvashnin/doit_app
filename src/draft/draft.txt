@@ -1,55 +1,85 @@
-<tbody>
-            <tr
-              class="tr border-b hover:bg-gray-50"
-              @click="emitOpenCard(w)"
-              v-for="(w, idx) in sortedByDateTimeWorkers"
-              :key="w.id"
-            >
-              <td class="p-4 align-middle">{{ idx + 1 }}</td>
-              <td class="td p-1">{{ formatDateTable(w.int_date) }}</td>
-              <td class="td p-1 text-center">
-                <AppTimeStatus :type="w.cur_status" :text="w.int_time" />
-              </td>
-              <td class="td p-1">{{ w.position }}</td>
-              <td class="td p-1">{{ w.fio }}</td>
-              <td class="td p-1">{{ w.phone }}</td>
-              <td class="td p-1">{{ w.fioRuc }}</td>
-              <td class="td p-1 status-cell relative"><AppSource :source="w.source" /></td>
-              <td class="td p-1 status-cell relative not-odd:text-[10px]">
-                <AppStatus :type="w.cur_status" />
-              </td>
+<template>
+  <div
+    className="cursor-pointer select-none p-2 hover:bg-accent rounded-md transition-colors duration-200 flex items-center justify-center"
+    @mouseenter="mouseEnterHandler"
+    @mouseleave="mouseLeaveHandler"
+    role="button"
+    tabindex="0"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="m3 16 4 4 4-4" />
+      <path d="M7 20V4" />
+      <Motion is="path" :ref="targetList[0]" d="M15 4h5l-5 6h5" />
+      <Motion is="g" :ref="targetList[1]">
+        <path d="M20 18h-5" />
+        <path d="M15 20v-3.5a2.5 2.5 0 0 1 5 0V20" />
+      </Motion>
+    </svg>
+  </div>
+</template>
 
-              <td class="td-note py-1">{{ w.note }}</td>
-            </tr>
-          </tbody>
+<script>
+export default {
+  name: 'ArrowDownZAIcon',
+};
+</script>
 
+<script setup>
+import { MotionComponent as Motion, useMotion } from '@vueuse/motion';
 
+const defaultTransition = {
+  transition: {
+    type: 'spring',
+    stiffness: 240,
+    damping: 24,
+  },
+};
 
-           <RecycleScroller
-              class="scroller"
-              style="height: calc(100vh - 220px)"
-              :items="sortedByDateTimeWorkers"
-              :item-size="40"
-              key-field="id"
-              v-slot="{ item, index }"
-            >
-              <tr class="tr border-b hover:bg-gray-50" @click="emitOpenCard(item)">
-                <!-- ⬅️ item, не w -->
-                <td class="p-4 align-middle">{{ index + 1 }}</td>
-                <td class="td p-1">{{ formatDateTable(item.int_date) }}</td>
-                <td class="td p-1 text-center">
-                  <AppTimeStatus :type="item.cur_status" :text="item.int_time" />
-                </td>
-                <td class="td p-1">{{ item.position }}</td>
-                <td class="td p-1">{{ item.fio }}</td>
-                <td class="td p-1">{{ item.phone }}</td>
-                <td class="td p-1">{{ item.fioRuc }}</td>
-                <td class="td p-1 status-cell relative">
-                  <AppSource :source="item.source" />
-                </td>
-                <td class="td p-1 status-cell relative not-odd:text-[10px]">
-                  <AppStatus :type="item.cur_status" />
-                </td>
-                <td class="td-note py-1">{{ item.note }}</td>
-              </tr>
-            </RecycleScroller>
+const variants = {
+  normal: {
+    translateY: 0,
+    ...defaultTransition,
+  },
+  animate: i => ({
+    translateY: i * 10,
+    ...defaultTransition,
+  }),
+};
+
+const len = 2;
+const targetList = ref(new Array(len).fill(0).map(() => ref()));
+const targetInstanceList = reactive([]);
+
+for (let i = 0; i < len; i++) {
+  targetInstanceList[i] = useMotion(targetList.value[i], {
+    initial: variants.normal,
+    enter: variants.normal,
+  });
+}
+
+const hoverFn = type => {
+  for (let i = 0; i < len; i++) {
+    const variant = type === 'animate' ? variants.animate(i === 0 ? 1 : -1) : variants.normal;
+    const instance = targetInstanceList[i];
+    instance.apply(variant);
+  }
+};
+
+function mouseEnterHandler() {
+  hoverFn('animate');
+}
+
+function mouseLeaveHandler() {
+  hoverFn('normal');
+}
+</script>

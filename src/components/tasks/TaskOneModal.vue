@@ -136,17 +136,17 @@
               <div class="flex flex-row items-center justify-between gap-5 mb-1 pr-4">
                 <div class="relative group inline-flex">
                   <UserAvatar
-                    :avatar-url="comment.authorAvatar"
-                    :display-name="comment.author"
+                    :avatar-url="getAvatarByEmail(comment.authorEmail)"
+                    :display-name="getDisplayNameByEmail(comment.authorEmail)"
                     :editable="false"
                     :size="24"
                   />
                   <!-- Tooltip -->
                   <div
-                    v-if="comment.author"
+                    v-if="authorDisplayName(comment)"
                     class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 px-2 py-1 bg-indigo-600 text-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10 whitespace-nowrap pointer-events-none"
                   >
-                    {{ comment.author }}
+                    {{ authorDisplayName(comment) }}
                   </div>
                 </div>
 
@@ -484,9 +484,16 @@ const confirmRemove = async () => {
 // ==================================================
 
 // Получаем email текущего пользователя из Vuex
-const currentUserEmail = computed(() => store.getters['profile/displayName'])
-const currentAvatarUrl = computed(() => store.getters['profile/avatarUrl'])
+const currentUserEmail = computed(() => store.getters['auth/userEmail'])
+// Геттеры
+const getAvatarByEmail = (email) => store.getters['users/getAvatarByEmail'](email)
+const getDisplayNameByEmail = (email) => store.getters['users/getDisplayNameByEmail'](email)
 const newCommentText = ref('')
+
+const authorDisplayName = (comment) => {
+  if (!comment.authorEmail) return ''
+  return getDisplayNameByEmail(comment.authorEmail) || comment.authorEmail
+}
 
 const addComment = async () => {
   const text = newCommentText.value.trim()
@@ -494,8 +501,7 @@ const addComment = async () => {
 
   const newComment = {
     id: Date.now().toString(),
-    author: currentUserEmail.value, // для fallback/инициалов
-    authorAvatar: currentAvatarUrl.value, // URL аватара
+    authorEmail: currentUserEmail.value,
     date: new Date().toISOString(),
     text,
   }
