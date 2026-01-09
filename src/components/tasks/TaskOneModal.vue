@@ -144,8 +144,14 @@
                   <!-- Tooltip -->
                   <div
                     v-if="authorDisplayName(comment)"
-                    class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 px-2 py-1 bg-indigo-600 text-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10 whitespace-nowrap pointer-events-none"
+                    class="flex flex-col items-center gap-2 absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 px-2 py-1 bg-indigo-600 text-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10 whitespace-nowrap pointer-events-none"
                   >
+                    <UserAvatar
+                      :avatar-url="getAvatarByEmail(comment.authorEmail)"
+                      :display-name="getDisplayNameByEmail(comment.authorEmail)"
+                      :editable="false"
+                      :size="80"
+                    />
                     {{ authorDisplayName(comment) }}
                   </div>
                 </div>

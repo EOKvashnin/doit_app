@@ -24,6 +24,25 @@ body {
   }
 }
 
+@layer utilities {
+  .text-gradient {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    background-image: linear-gradient(to right, rgba(79, 57, 246, 0.986), rgba(84, 91, 227, 0.224));
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .text-gradient {
+    background-image: linear-gradient(
+      to right,
+      rgba(79, 57, 246, 0.467),
+      rgba(80, 78, 78, 0.288)
+    ) !important;
+  }
+}
+
 /* -------------  BUTTON -------------------*/
 
 .btn {

@@ -21,7 +21,7 @@
           class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0 gap-6"
         >
           <router-link to="/person" class="cursor-pointer">
-            <UserAvatar :avatar-url="avatarUrl" :size="35" />
+            <UserAvatar class="mt-2" :avatar-url="avatarUrl" :size="35" />
           </router-link>
           <div class="text-gray-600 hover:text-indigo-500 cursor-pointer" @click.prevent="logout">
             <Icon icon="lucide:log-out" class="w-7 h-7" />

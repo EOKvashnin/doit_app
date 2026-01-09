@@ -155,17 +155,61 @@ function openModal(defaultStatus) {
   emit('openModal', defaultStatus) // ← передаём статус как payload
 }
 
-const plannedTasks = computed(() => props.tasks.filter((t) => t.status === 'todo').reverse())
-const inProgressTasks = computed(() =>
-  props.tasks.filter((t) => ['in_progress', 'review'].includes(t.status)).reverse(),
-)
-const doneTasks = computed(() => props.tasks.filter((t) => t.status === 'done').reverse())
-
 /*---- СЧИТАЕМ КОЛИЧЕСТВО ЗАДАЧ ПО СТАТУСАМ --------------------*/
 
 const plannedTasksCount = computed(() => plannedTasks.value.length)
 const inProgressTasksCount = computed(() => inProgressTasks.value.length)
 const doneTasksCount = computed(() => doneTasks.value.length)
+
+//Создаем карту весов для приоритетов, будем использовать при сортировке по проиотритету
+const PRIORITY_ORDER = {
+  urgent: 0,
+  high: 1,
+  medium: 2,
+  low: 3,
+}
+
+//Функция для получения даты последнего комментария
+function getLastCommentDate(comments) {
+  if (!comments || comments.length === 0) return null
+
+  const latest = comments.reduce((prev, curr) => {
+    const prevDate = new Date(prev.date)
+    const currDate = new Date(curr.date)
+    return currDate > prevDate ? curr : prev
+  })
+
+  return new Date(latest.date)
+}
+
+// Функция сортировки задач
+function sortTasks(tasks) {
+  return [...tasks].sort((a, b) => {
+    // 1. Приоритет
+    const prioA = PRIORITY_ORDER[a.priority] ?? 999
+    const prioB = PRIORITY_ORDER[b.priority] ?? 999
+    if (prioA !== prioB) return prioA - prioB
+
+    // 2. Дата последнего комментария
+    const dateA = getLastCommentDate(a.comments)
+    const dateB = getLastCommentDate(b.comments)
+
+    if (dateA && dateB) return dateB - dateA // новые наверх
+    if (dateA) return -1 // a выше
+    if (dateB) return 1 // b выше
+    return 0 // равны
+  })
+}
+
+// --- ПРИМЕНЯЕМ В COMPUTED ---
+
+const plannedTasks = computed(() => sortTasks(props.tasks.filter((t) => t.status === 'todo')))
+
+const inProgressTasks = computed(() =>
+  sortTasks(props.tasks.filter((t) => ['in_progress', 'review'].includes(t.status))),
+)
+
+const doneTasks = computed(() => sortTasks(props.tasks.filter((t) => t.status === 'done')))
 </script>
 
 <style scoped>

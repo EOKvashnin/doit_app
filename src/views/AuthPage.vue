@@ -4,16 +4,16 @@
       class="relative flex flex-col items-center justify-center py-8 mx-auto md:h-screen lg:py-0"
     >
       <div id="title" class="absolute top-17 text-[170px]">
-        <h1 class="text-gradient font-bold uppercase">Do it</h1>
+        <h1 class="text-gradient dark:text-gradient-dark font-bold uppercase">Do it</h1>
       </div>
 
       <div
         id="form"
-        class="w-full rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:border-gray-700 z-999 backdrop-blur-[10px]"
+        class="w-full rounded-lg shadow-lg dark:border md:mt-0 sm:max-w-md xl:p-0 dark:border-gray-700 z-999 backdrop-blur-[10px]"
       >
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h1
-            class="text-xl font-bold tracking-tight text-gray-400 text-shadow-xs md:text-2xl dark:text-white text-center"
+            class="text-xl font-bold tracking-tight text-gray-500 text-shadow-xs md:text-2xl dark:text-white text-center"
           >
             Войдите в учетную запись
           </h1>
@@ -96,10 +96,10 @@ export default {
 }
 </script>
 <style scoped>
-.text-gradient {
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  background-image: linear-gradient(to right, rgba(16, 24, 40, 0.1), rgba(255, 255, 255, 0.4));
+.login-bg {
+  background-image: url('/LightWall.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 </style>
