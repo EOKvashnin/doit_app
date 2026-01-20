@@ -73,28 +73,14 @@
     </div>
 
     <!-- Ответственные -->
+
     <div class="border-t my-4 border-gray-400/20">
       <h3 class="label-modal">Участники</h3>
-      <div class="grid grid-cols-3 gap-3">
-        <input
-          v-model="authorFioEditable"
-          type="text"
-          class="input-modal"
-          placeholder="Инициатор"
-        />
-        <input
-          v-model="assigneeFioEditable"
-          type="text"
-          class="input-modal"
-          placeholder="Исполнитель"
-        />
-        <input
-          v-model="leadFioEditable"
-          type="text"
-          class="input-modal"
-          placeholder="Руководитель"
-        />
-      </div>
+      <TaskParticipants
+        :lead-email="localTask.leadEmail"
+        :assignee-email="localTask.assigneeEmail"
+        :author-email="localTask.authorEmail"
+      />
     </div>
 
     <!-- Комментарии -->
@@ -219,6 +205,7 @@ import { computed, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import AppStatus from '../ui/AppStatus.vue'
 import ConfirmModal from '../ui/ConfirmModal.vue'
+import TaskParticipants from '../ui/TaskParticipants.vue'
 import UserAvatar from '../ui/UserAvatar.vue'
 
 // ==================================================

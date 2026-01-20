@@ -9,28 +9,45 @@ export function useTasksForm(fn, initialStatus) {
     },
   })
 
+  // === Название задачи ===
   const {
     value: title,
     errorMessage: ttlError,
     handleBlur: ttlBlur,
   } = useField('title', yup.string().trim().required('Введите название задачи'))
+
+  // === Инициатор (email) ===
   const {
-    value: leadFio,
+    value: leadEmail,
     errorMessage: leadError,
     handleBlur: leadBlur,
-  } = useField('leadFio', yup.string().trim().required('Введите инициатора'))
+  } = useField(
+    'leadEmail',
+    yup.string().required('Выберите инициатора').email('Некорректный email'),
+  )
+
+  // === Исполнитель (email) ===
   const {
-    value: assigneeFio,
+    value: assigneeEmail,
     errorMessage: asignError,
     handleBlur: asignBlur,
-  } = useField('assigneeFio', yup.string().trim().required('Введите исполнителя'))
+  } = useField(
+    'assigneeEmail',
+    yup.string().required('Выберите исполнителя').email('Некорректный email'),
+  )
+
+  // === Приоритет и статус ===
   const { value: priority } = useField('priority')
   const { value: status } = useField('status')
+
+  // === Дедлайн ===
   const {
     value: deadline,
     errorMessage: dedlError,
     handleBlur: dedlBlur,
-  } = useField('deadline', yup.string().trim().required('Введите дедлайн'))
+  } = useField('deadline', yup.string().required('Введите дедлайн'))
+
+  // === Описание ===
   const {
     value: description,
     errorMessage: dscError,
@@ -42,15 +59,20 @@ export function useTasksForm(fn, initialStatus) {
   return {
     isSubmitting,
     onSubmit,
+
+    // Основные поля
     title,
     ttlError,
     ttlBlur,
-    leadFio,
+
+    leadEmail,
     leadError,
     leadBlur,
-    assigneeFio,
+
+    assigneeEmail,
     asignError,
     asignBlur,
+
     priority,
     status,
     deadline,

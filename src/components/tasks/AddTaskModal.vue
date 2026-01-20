@@ -9,22 +9,27 @@
 
     <div class="flex flex-row gap-4">
       <!-- /* --------- ИНИЦИАТОР ----------*/ -->
+      <!-- ИНИЦИАТОР -->
       <div class="form-control w-full" :class="{ invalid: leadError }">
-        <label class="label-modal" for="leadFio">Инициатор</label>
-        <input class="input-modal" type="text" id="leadFio" v-model="leadFio" @blur="leadBlur" />
+        <label class="label-modal" for="leadEmail">Инициатор</label>
+        <select class="select-modal" id="leadEmail" v-model="leadEmail" @blur="leadBlur">
+          <option value="" disabled selected>Выберите инициатора...</option>
+          <option v-for="user in availableUsers" :key="user.email" :value="user.email">
+            {{ user.displayName }}
+          </option>
+        </select>
         <small class="text-pink-500" v-if="leadError"> {{ leadError }}</small>
       </div>
 
-      <!-- /* --------- ИСПОЛНИТЕЛЬ ----------*/ -->
+      <!-- ИСПОЛНИТЕЛЬ -->
       <div class="form-control w-full" :class="{ invalid: asignError }">
-        <label class="label-modal" for="assigneeFio">Исполнитель</label>
-        <input
-          class="input-modal"
-          type="text"
-          id="assigneeFio"
-          v-model="assigneeFio"
-          @blur="asignBlur"
-        />
+        <label class="label-modal" for="assigneeEmail">Исполнитель</label>
+        <select class="select-modal" id="assigneeEmail" v-model="assigneeEmail" @blur="asignBlur">
+          <option value="" disabled selected>Выберите исполнителя...</option>
+          <option v-for="user in availableUsers" :key="user.email" :value="user.email">
+            {{ user.displayName }}
+          </option>
+        </select>
         <small class="text-pink-500" v-if="asignError"> {{ asignError }}</small>
       </div>
     </div>
@@ -82,6 +87,7 @@
 
 <script>
 import { useTasksForm } from '@/use/tasks-form'
+import { computed } from 'vue'
 import { useStore } from 'vuex'
 
 export default {
@@ -93,15 +99,74 @@ export default {
   },
 
   emits: ['created'],
+
   setup(props, { emit }) {
     const store = useStore()
+
+    // Получаем список пользователей
+    const availableUsers = computed(() => {
+      return store.state.users.allUsers || []
+    })
+
+    // Функция отправки
     const submit = async (values) => {
+      console.log('Отправка задачи:', values)
       await store.dispatch('tasks/create', values)
       emit('created')
     }
 
+    // Получаем все поля из useTasksForm (включая leadEmail и assigneeEmail!)
+    const {
+      title,
+      description,
+      priority,
+      status,
+      deadline,
+      isSubmitting,
+      ttlError,
+      dscError,
+      dedlError,
+      ttlBlur,
+      dscBlur,
+      dedlBlur,
+
+      // 🔥 Вот они — email-поля из vee-validate!
+      leadEmail,
+      leadError,
+      leadBlur,
+
+      assigneeEmail,
+      asignError,
+      asignBlur,
+
+      onSubmit,
+    } = useTasksForm(submit, props.initialStatus)
+
     return {
-      ...useTasksForm(submit, props.initialStatus),
+      title,
+      description,
+      priority,
+      status,
+      deadline,
+      isSubmitting,
+      ttlError,
+      dscError,
+      dedlError,
+      ttlBlur,
+      dscBlur,
+      dedlBlur,
+
+      // Возвращаем email-поля
+      leadEmail,
+      leadError,
+      leadBlur,
+
+      assigneeEmail,
+      asignError,
+      asignBlur,
+
+      onSubmit,
+      availableUsers,
     }
   },
 }
