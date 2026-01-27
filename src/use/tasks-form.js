@@ -6,6 +6,7 @@ export function useTasksForm(fn, initialStatus) {
     initialValues: {
       status: initialStatus,
       priority: 'low',
+      executors: [],
     },
   })
 
@@ -18,22 +19,26 @@ export function useTasksForm(fn, initialStatus) {
 
   // === Инициатор (email) ===
   const {
-    value: leadEmail,
-    errorMessage: leadError,
-    handleBlur: leadBlur,
+    value: initiatorEmail,
+    errorMessage: initiatorError,
+    handleBlur: initiatorBlur,
   } = useField(
-    'leadEmail',
+    'initiatorEmail',
     yup.string().required('Выберите инициатора').email('Некорректный email'),
   )
 
-  // === Исполнитель (email) ===
+  // === Исполнители (массив email'ов) ===
   const {
-    value: assigneeEmail,
-    errorMessage: asignError,
-    handleBlur: asignBlur,
+    value: executors,
+    errorMessage: executorsError,
+    handleBlur: executorsBlur,
   } = useField(
-    'assigneeEmail',
-    yup.string().required('Выберите исполнителя').email('Некорректный email'),
+    'executors',
+    yup
+      .array()
+      .of(yup.string().email('Некорректный email'))
+      .min(1, 'Выберите хотя бы одного исполнителя')
+      .required('Выберите исполнителя'),
   )
 
   // === Приоритет и статус ===
@@ -54,6 +59,7 @@ export function useTasksForm(fn, initialStatus) {
     handleBlur: dscBlur,
   } = useField('description', yup.string().trim())
 
+  // ✅ Теперь onSubmit не нуждается в преобразовании!
   const onSubmit = handleSubmit(fn)
 
   return {
@@ -65,13 +71,14 @@ export function useTasksForm(fn, initialStatus) {
     ttlError,
     ttlBlur,
 
-    leadEmail,
-    leadError,
-    leadBlur,
+    // ✅ НОВЫЕ ИМЕНА
+    initiatorEmail,
+    initiatorError,
+    initiatorBlur,
 
-    assigneeEmail,
-    asignError,
-    asignBlur,
+    executors,
+    executorsError,
+    executorsBlur,
 
     priority,
     status,

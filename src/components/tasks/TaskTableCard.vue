@@ -8,11 +8,32 @@
       {{ task.title }}
     </h5>
 
-    <!-- Нижний блок: ФИО и комментарии -->
-    <div class="flex justify-between items-end mt-auto">
-      <p class="text-xs font-thin text-gray-700 dark:text-gray-400">
-        {{ task.assigneeFio }}
-      </p>
+    <!-- Исполнители + количество комментариев -->
+    <div class="flex flex-row justify-between pl-2">
+      <!-- Исполнители (новый блок) -->
+      <div v-if="task.executors && task.executors.length > 0" class="mb-2">
+        <div class="flex items-center gap-2 flex-wrap">
+          <!-- Показываем максимум 3 исполнителя -->
+          <UserAvatar
+            v-for="(executorEmail, index) in visibleExecutors"
+            :key="index"
+            :avatar-url="avatarUrl(executorEmail)"
+            :display-name="displayName(executorEmail)"
+            :tooltip="true"
+            :editable="false"
+            :size="28"
+            class="cursor-pointer"
+          />
+          <!-- Многоточие если исполнителей больше 3 -->
+          <span
+            v-if="task.executors.length > 3"
+            class="text-xs text-gray-500 dark:text-gray-400 font-medium"
+          >
+            +{{ task.executors.length - 3 }}
+          </span>
+        </div>
+      </div>
+
       <!-- Количество комментариев -->
       <div v-if="task.comments" class="flex gap-1 items-center">
         <span class="text-sm text-gray-500">{{ task.comments?.length || 0 }}</span>
@@ -25,15 +46,42 @@
 <script setup>
 import getPriorityColor from '@/utils/priorityColor'
 import { Icon } from '@iconify/vue'
+import { computed } from 'vue'
+import UserAvatar from '../ui/UserAvatar.vue'
 
 const props = defineProps({
   task: {
     type: Object,
     required: true,
   },
+  // Геттеры из стора
+  getAvatarByEmail: {
+    type: Function,
+    required: true,
+  },
+  getDisplayNameByEmail: {
+    type: Function,
+    required: true,
+  },
 })
 
-const emit = defineEmits(['openModal', 'open-card'])
+const emit = defineEmits(['open-card'])
+
+// Вычисляем видимых исполнителей (максимум 3)
+const visibleExecutors = computed(() => {
+  if (!props.task.executors) return []
+  return props.task.executors.slice(0, 3)
+})
+
+// Вспомогательные функции для удобства использования
+const avatarUrl = (email) => {
+  return props.getAvatarByEmail(email) || '/defaultUser.png'
+}
+
+const displayName = (email) => {
+  return props.getDisplayNameByEmail(email) || email.split('@')[0]
+}
+
 const openCard = () => {
   emit('open-card', props.task)
 }

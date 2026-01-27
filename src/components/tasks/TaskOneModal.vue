@@ -76,10 +76,11 @@
 
     <div class="border-t my-4 border-gray-400/20">
       <h3 class="label-modal">Участники</h3>
-      <TaskParticipants
-        :lead-email="localTask.leadEmail"
-        :assignee-email="localTask.assigneeEmail"
-        :author-email="localTask.authorEmail"
+      <TaskParticipantsSplit
+        :initiator-email="localTask.initiatorEmail"
+        :executor-emails="localTask.executors"
+        :get-avatar-by-email="getAvatarByEmail"
+        :get-display-name-by-email="getDisplayNameByEmail"
       />
     </div>
 
@@ -120,27 +121,14 @@
 
             <div class="flex flex-col justify-center items-end">
               <div class="flex flex-row items-center justify-between gap-5 mb-1 pr-4">
-                <div class="relative group inline-flex">
-                  <UserAvatar
-                    :avatar-url="getAvatarByEmail(comment.authorEmail)"
-                    :display-name="getDisplayNameByEmail(comment.authorEmail)"
-                    :editable="false"
-                    :size="24"
-                  />
-                  <!-- Tooltip -->
-                  <div
-                    v-if="authorDisplayName(comment)"
-                    class="flex flex-col items-center gap-2 absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1 px-2 py-1 bg-indigo-600 text-white text-xs rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity z-10 whitespace-nowrap pointer-events-none"
-                  >
-                    <UserAvatar
-                      :avatar-url="getAvatarByEmail(comment.authorEmail)"
-                      :display-name="getDisplayNameByEmail(comment.authorEmail)"
-                      :editable="false"
-                      :size="80"
-                    />
-                    {{ authorDisplayName(comment) }}
-                  </div>
-                </div>
+                <UserAvatar
+                  :avatar-url="getAvatarByEmail(comment.authorEmail)"
+                  :display-name="getDisplayNameByEmail(comment.authorEmail)"
+                  :tooltip="true"
+                  :tooltip-name="authorDisplayName(comment)"
+                  :editable="false"
+                  :size="24"
+                />
 
                 <!-- Дата -->
                 <span class="text-gray-500 text-xs">{{
@@ -205,7 +193,7 @@ import { computed, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import AppStatus from '../ui/AppStatus.vue'
 import ConfirmModal from '../ui/ConfirmModal.vue'
-import TaskParticipants from '../ui/TaskParticipants.vue'
+import TaskParticipantsSplit from '../ui/TaskParticipantsSplit.vue'
 import UserAvatar from '../ui/UserAvatar.vue'
 
 // ==================================================
@@ -251,8 +239,7 @@ const deadlineEditable = ref('')
 const directionEditable = ref('')
 const projectIdEditable = ref('')
 const authorFioEditable = ref('')
-const assigneeFioEditable = ref('')
-const leadFioEditable = ref('')
+const initiatorFioEditable = ref('')
 
 // Локальный массив комментариев (для optimistic UI)
 const localComments = ref([])
@@ -266,7 +253,6 @@ watch(
   () => props.task,
   (newTask) => {
     if (newTask) {
-      // Синхронизируем редактируемые поля с новой задачей
       titleEditable.value = newTask.title || ''
       descriptionEditable.value = newTask.description || ''
       priorityEditable.value = newTask.priority || 'medium'
@@ -274,12 +260,18 @@ watch(
       directionEditable.value = newTask.direction || ''
       projectIdEditable.value = newTask.projectId || ''
       authorFioEditable.value = newTask.authorFio || ''
-      assigneeFioEditable.value = newTask.assigneeFio || ''
-      leadFioEditable.value = newTask.leadFio || ''
-      // Инициализируем локальные комментарии
+      initiatorFioEditable.value = newTask.initiatorFio || '' // ✅ новое поле
+
+      // ✅ НОВАЯ СТРУКТУРА
+      localTask.value = {
+        ...newTask,
+        initiatorEmail: newTask.initiatorEmail || null,
+        executors: Array.isArray(newTask.executors) ? [...newTask.executors] : [],
+      }
+
       localComments.value = Array.isArray(newTask.comments) ? [...newTask.comments] : []
     } else {
-      // Сброс состояния при закрытии или отсутствии задачи
+      // Сброс
       titleEditable.value = ''
       descriptionEditable.value = ''
       priorityEditable.value = 'medium'
@@ -287,8 +279,13 @@ watch(
       directionEditable.value = ''
       projectIdEditable.value = ''
       authorFioEditable.value = ''
-      assigneeFioEditable.value = ''
-      leadFioEditable.value = ''
+      initiatorFioEditable.value = ''
+
+      localTask.value = {
+        ...props.task,
+        initiatorEmail: null,
+        executors: [],
+      }
     }
   },
   { immediate: true },
@@ -301,6 +298,12 @@ watch(
 const hasChanges = computed(() => {
   if (!props.task) return false
 
+  const currentInitiator = localTask.value.initiatorEmail || ''
+  const originalInitiator = props.task.initiatorEmail || ''
+
+  const currentExecutors = JSON.stringify([...localTask.value.executors].sort())
+  const originalExecutors = JSON.stringify([...(props.task.executors || [])].sort())
+
   return (
     titleEditable.value.trim() !== (props.task.title || '') ||
     descriptionEditable.value.trim() !== (props.task.description || '') ||
@@ -309,8 +312,9 @@ const hasChanges = computed(() => {
     directionEditable.value.trim() !== (props.task.direction || '') ||
     projectIdEditable.value.trim() !== (props.task.projectId || '') ||
     authorFioEditable.value.trim() !== (props.task.authorFio || '') ||
-    assigneeFioEditable.value.trim() !== (props.task.assigneeFio || '') ||
-    leadFioEditable.value.trim() !== (props.task.leadFio || '')
+    initiatorFioEditable.value.trim() !== (props.task.initiatorFio || '') ||
+    currentInitiator !== originalInitiator ||
+    currentExecutors !== originalExecutors
   )
 })
 
@@ -333,25 +337,27 @@ const UpdateWorkerData = async () => {
       direction: directionEditable.value.trim(),
       projectId: projectIdEditable.value.trim(),
       authorFio: authorFioEditable.value.trim(),
-      assigneeFio: assigneeFioEditable.value.trim(),
-      leadFio: leadFioEditable.value.trim(),
+      initiatorFio: initiatorFioEditable.value.trim(), // ✅
+
+      // ✅ Ключевые поля ролей
+      authorEmail: props.task.authorEmail, // неизменяемый автор
+      initiatorEmail: localTask.value.initiatorEmail,
+      executors: [...localTask.value.executors],
+
       comments: localTask.value.comments || props.task.comments,
       editedAt: now,
     }
 
-    // Сохраняем в Vuex и на сервере
     store.commit('tasks/updateTask', updatedData)
     await store.dispatch('tasks/update', {
       id: props.task.id,
       data: updatedData,
     })
 
-    // Обновляем локальное состояние
     localTask.value = updatedData
     originalStatus.value = updatedData.status
     originalPriority.value = updatedData.priority
 
-    // Уведомляем родителя
     emit('update', updatedData)
     showToast.success('Данные успешно обновлены')
   } catch (error) {
@@ -368,8 +374,6 @@ const UpdateWorkerData = async () => {
     directionEditable.value = props.task.direction || ''
     projectIdEditable.value = props.task.projectId || ''
     authorFioEditable.value = props.task.authorFio || ''
-    assigneeFioEditable.value = props.task.assigneeFio || ''
-    leadFioEditable.value = props.task.leadFio || ''
 
     showToast.error('Не удалось сохранить изменения: ' + (error.message || 'неизвестная ошибка'))
   }

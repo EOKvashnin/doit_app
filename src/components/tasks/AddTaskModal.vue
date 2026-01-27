@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="onSubmit" class="overflow-y-auto p-3">
+  <form @submit.prevent="onSubmit" class="overflow-y-hidden p-3">
     <!-- /* --------- НАЗВАНИЕ ЗАДАЧИ ----------*/ -->
     <div class="form-control" :class="{ invalid: ttlError }">
       <label class="label-modal" for="title">Название задачи</label>
@@ -10,27 +10,27 @@
     <div class="flex flex-row gap-4">
       <!-- /* --------- ИНИЦИАТОР ----------*/ -->
       <!-- ИНИЦИАТОР -->
-      <div class="form-control w-full" :class="{ invalid: leadError }">
-        <label class="label-modal" for="leadEmail">Инициатор</label>
-        <select class="select-modal" id="leadEmail" v-model="leadEmail" @blur="leadBlur">
-          <option value="" disabled selected>Выберите инициатора...</option>
-          <option v-for="user in availableUsers" :key="user.email" :value="user.email">
-            {{ user.displayName }}
-          </option>
-        </select>
-        <small class="text-pink-500" v-if="leadError"> {{ leadError }}</small>
+      <div class="form-control w-full" :class="{ invalid: initiatorError }">
+        <label class="label-modal">Инициатор</label>
+        <UserSelect
+          :model-value="initiatorEmail"
+          @update:model-value="initiatorEmail = $event"
+          :users="availableUsers"
+          placeholder="Выберите инициатора..."
+        />
+        <small class="text-pink-500" v-if="initiatorError">{{ initiatorError }}</small>
       </div>
 
       <!-- ИСПОЛНИТЕЛЬ -->
-      <div class="form-control w-full" :class="{ invalid: asignError }">
-        <label class="label-modal" for="assigneeEmail">Исполнитель</label>
-        <select class="select-modal" id="assigneeEmail" v-model="assigneeEmail" @blur="asignBlur">
-          <option value="" disabled selected>Выберите исполнителя...</option>
-          <option v-for="user in availableUsers" :key="user.email" :value="user.email">
-            {{ user.displayName }}
-          </option>
-        </select>
-        <small class="text-pink-500" v-if="asignError"> {{ asignError }}</small>
+      <div class="form-control w-full" :class="{ invalid: executorsError }">
+        <label class="label-modal">Исполнитель</label>
+        <MultiUserSelect
+          :model-value="executors"
+          @update:model-value="executors = $event"
+          :users="availableUsers"
+          placeholder="Выберите исполнителей..."
+        />
+        <small class="text-pink-500" v-if="executorsError">{{ executorsError }}</small>
       </div>
     </div>
 
@@ -89,6 +89,8 @@
 import { useTasksForm } from '@/use/tasks-form'
 import { computed } from 'vue'
 import { useStore } from 'vuex'
+import MultiUserSelect from '../ui/MultiUserSelect.vue'
+import UserSelect from '../ui/UserSelect.vue'
 
 export default {
   props: {
@@ -97,13 +99,16 @@ export default {
       default: 'todo',
     },
   },
+  components: {
+    UserSelect,
+    MultiUserSelect,
+  },
 
   emits: ['created'],
 
   setup(props, { emit }) {
     const store = useStore()
 
-    // Получаем список пользователей
     const availableUsers = computed(() => {
       return store.state.users.allUsers || []
     })
@@ -115,7 +120,7 @@ export default {
       emit('created')
     }
 
-    // Получаем все поля из useTasksForm (включая leadEmail и assigneeEmail!)
+    // Получаем все поля из useTasksForm — с НОВЫМИ ИМЕНАМИ!
     const {
       title,
       description,
@@ -130,14 +135,14 @@ export default {
       dscBlur,
       dedlBlur,
 
-      // 🔥 Вот они — email-поля из vee-validate!
-      leadEmail,
-      leadError,
-      leadBlur,
+      // 🔥 НОВЫЕ ИМЕНА вместо leadEmail / assigneeEmails
+      initiatorEmail,
+      initiatorError,
+      initiatorBlur,
 
-      assigneeEmail,
-      asignError,
-      asignBlur,
+      executors,
+      executorsError,
+      executorsBlur,
 
       onSubmit,
     } = useTasksForm(submit, props.initialStatus)
@@ -156,14 +161,13 @@ export default {
       dscBlur,
       dedlBlur,
 
-      // Возвращаем email-поля
-      leadEmail,
-      leadError,
-      leadBlur,
+      initiatorEmail,
+      initiatorError,
+      initiatorBlur,
 
-      assigneeEmail,
-      asignError,
-      asignBlur,
+      executors,
+      executorsError,
+      executorsBlur,
 
       onSubmit,
       availableUsers,

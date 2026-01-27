@@ -52,9 +52,10 @@ export default {
           throw new Error('Токен авторизации не найден')
         }
         const fullTasks = {
-          // Здесь будум обогащать payload неявными полями
           ...payload,
-          createdAt: new Date().toISOString(), // ISO-строка: "2025-12-04T10:30:00.000Z"
+          authorEmail: rootGetters['auth/userEmail'], // фиксируем автора
+          createdAt: new Date().toISOString(),
+          // payload должен содержать: initiatorEmail, executors
         }
 
         const { data } = await taskAxios.post(`/tasks.json?auth=${token}`, fullTasks)

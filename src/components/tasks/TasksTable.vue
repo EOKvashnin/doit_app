@@ -5,7 +5,7 @@
     <Icon icon="streamline-plump:empty-clipboard-remix" class="w-15 h-15 text-gray-300/50" />
   </div>
 
-  <!-- ООСНОВНАЯ ТАБЛИЦА -->
+  <!-- ОСНОВНАЯ ТАБЛИЦА -->
 
   <div v-else class="w-[90%] mx-auto overflow-hidden grid grid-cols-[1fr_2fr_1fr] gap-4">
     <!-- Колонка 1: Планируются -->
@@ -38,6 +38,8 @@
             v-for="t in plannedTasks"
             :key="t.id"
             :task="t"
+            :get-avatar-by-email="getAvatarByEmail"
+            :get-display-name-by-email="getDisplayNameByEmail"
             @open-card="emit('open-card', $event)"
             class="mb-3"
           />
@@ -75,13 +77,15 @@
           v-for="t in inProgressTasks"
           :key="t.id"
           :task="t"
+          :get-avatar-by-email="getAvatarByEmail"
+          :get-display-name-by-email="getDisplayNameByEmail"
           @open-card="emit('open-card', $event)"
           class="flex-1 min-w-[250px]"
         />
       </div>
     </div>
 
-    <!-- Колонка 3:ВЫПОЛНЕНО -->
+    <!-- Колонка 3: ВЫПОЛНЕНО -->
     <div class="flex flex-col">
       <div class="flex justify-between py-2">
         <div class="flex items-center gap-2">
@@ -109,6 +113,8 @@
             v-for="t in doneTasks"
             :key="t.id"
             :task="t"
+            :get-avatar-by-email="getAvatarByEmail"
+            :get-display-name-by-email="getDisplayNameByEmail"
             @open-card="emit('open-card', $event)"
             class="mb-3"
           />
@@ -119,12 +125,12 @@
 </template>
 
 <script setup>
+import { Icon } from '@iconify/vue'
+import { computed, onMounted, ref } from 'vue'
+import { useStore } from 'vuex'
 import TaskTableCard from './TaskTableCard.vue'
 
-import { Icon } from '@iconify/vue'
-import { computed, ref } from 'vue'
-import { boolean } from 'yup'
-
+const store = useStore()
 const emit = defineEmits(['openModal', 'open-card'])
 
 const props = defineProps({
@@ -134,12 +140,19 @@ const props = defineProps({
     default: () => [],
   },
   showFilters: {
-    type: boolean,
+    type: Boolean,
     required: true,
   },
 })
 
-/*---- ВЫСОТА СТОЛБЦА В ЗАВВИСИМОСТИ ОТ ОТОБРАЖЕНИЯ ФИЛЬТРА ----*/
+/*---- ПОЛУЧАЕМ ГЕТТЕРЫ ИЗ СТОРА ----*/
+
+// Геттеры из стора пользователей
+const getAvatarByEmail = computed(() => store.getters['users/getAvatarByEmail'])
+const getDisplayNameByEmail = computed(() => store.getters['users/getDisplayNameByEmail'])
+const getUserByEmail = computed(() => store.getters['users/getUserByEmail'])
+
+/*---- ВЫСОТА СТОЛБЦА В ЗАВИСИМОСТИ ОТ ОТОБРАЖЕНИЯ ФИЛЬТРА ----*/
 
 const hScrollBlock = ref('190')
 
@@ -152,7 +165,7 @@ if (props.showFilters) {
 /*---- УПРАВЛЕНИЕ МОДАЛЬНЫМ ОКНОМ ------------------------------*/
 
 function openModal(defaultStatus) {
-  emit('openModal', defaultStatus) // ← передаём статус как payload
+  emit('openModal', defaultStatus)
 }
 
 /*---- СЧИТАЕМ КОЛИЧЕСТВО ЗАДАЧ ПО СТАТУСАМ --------------------*/
@@ -161,7 +174,7 @@ const plannedTasksCount = computed(() => plannedTasks.value.length)
 const inProgressTasksCount = computed(() => inProgressTasks.value.length)
 const doneTasksCount = computed(() => doneTasks.value.length)
 
-//Создаем карту весов для приоритетов, будем использовать при сортировке по проиотритету
+// Создаем карту весов для приоритетов
 const PRIORITY_ORDER = {
   urgent: 0,
   high: 1,
@@ -169,7 +182,7 @@ const PRIORITY_ORDER = {
   low: 3,
 }
 
-//Функция для получения даты последнего комментария
+// Функция для получения даты последнего комментария
 function getLastCommentDate(comments) {
   if (!comments || comments.length === 0) return null
 
@@ -210,6 +223,15 @@ const inProgressTasks = computed(() =>
 )
 
 const doneTasks = computed(() => sortTasks(props.tasks.filter((t) => t.status === 'done')))
+
+/*---- ЗАГРУЗКА ПОЛЬЗОВАТЕЛЕЙ ПРИ МОНТИРОВАНИИ (опционально) ----*/
+
+onMounted(() => {
+  // Если пользователи еще не загружены, загружаем их
+  if (store.state.users.allUsers.length === 0) {
+    store.dispatch('users/loadAll')
+  }
+})
 </script>
 
 <style scoped>

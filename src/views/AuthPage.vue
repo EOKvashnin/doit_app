@@ -3,13 +3,23 @@
     <div
       class="relative flex flex-col items-center justify-center py-8 mx-auto md:h-screen lg:py-0"
     >
-      <div id="title" class="absolute top-17 text-[170px]">
-        <h1 class="text-gradient dark:text-gradient-dark font-bold uppercase">Do it</h1>
+      <!-- Фоновый заголовок: всегда за формой и не "прыгает" от разрешения -->
+      <div
+        id="title"
+        class="pointer-events-none absolute inset-0 z-0 flex items-center justify-center select-none"
+        aria-hidden="true"
+      >
+        <h1
+          class="text-gradient font-bold uppercase leading-none opacity-80 transform -translate-y-[105%]"
+          style="font-size: clamp(64px, 14vw, 180px)"
+        >
+          Do it
+        </h1>
       </div>
 
       <div
         id="form"
-        class="w-full rounded-lg shadow-lg dark:border md:mt-0 sm:max-w-md xl:p-0 dark:border-gray-700 z-999 backdrop-blur-[10px]"
+        class="relative z-10 w-full rounded-lg shadow-lg dark:border md:mt-0 sm:max-w-md xl:p-0 dark:border-gray-700 backdrop-blur-[10px]"
       >
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h1

@@ -62,7 +62,7 @@ export default {
       } catch (e) {
         const errorCode = e.response?.data?.error?.message
         const errorMessage = error(errorCode) || 'Произошла неизвестная ошибка'
-        console.log(errorMessage)
+        showToast.error(errorMessage)
         throw new Error(errorMessage) // Передаем сообщение об ошибке
       }
     },

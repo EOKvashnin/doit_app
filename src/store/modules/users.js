@@ -45,7 +45,17 @@ export default {
         }))
         commit('setAllUsers', users)
       } catch (e) {
-        showToast.error('Не удалось загрузить аватары пользователей')
+        const isAuthPage = () => {
+          return window.location.pathname === '/main' || window.location.pathname.includes('/main/')
+        }
+        if (!isAuthPage) {
+          if (e.response?.status === 401) {
+            showToast.error('Ошибка авторизации')
+          } else {
+            showToast.error(e.message || 'Не удалось загрузить аватары пользователей')
+          }
+          console.error('Не удалось загрузить аватары пользователей', e)
+        }
       }
     },
 
