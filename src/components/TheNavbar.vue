@@ -12,10 +12,14 @@
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">
               <router-link to="/" class="nav-title" active-class="nav-title-active" exact>
-                Все задачи
+                <div class="flex flex-row gap-2 items-center">
+                  <Icon icon="lucide:briefcase-business" class="w-6 h-6" />Все задачи
+                </div>
               </router-link>
               <router-link to="/mytask" class="nav-title" active-class="nav-title-active" exact>
-                Мои задачи
+                <div class="flex flex-row gap-2 items-center">
+                  <Icon icon="lucide:user-lock" class="w-6 h-6" />Мои задачи
+                </div>
               </router-link>
             </div>
           </div>
