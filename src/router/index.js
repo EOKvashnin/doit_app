@@ -31,6 +31,15 @@ const routes = [
       auth: true,
     },
   },
+  {
+    path: '/mytask',
+    name: 'myTask',
+    component: () => import('../views/MyTask.vue'),
+    meta: {
+      layout: 'main',
+      auth: true,
+    },
+  },
 ]
 
 const router = createRouter({

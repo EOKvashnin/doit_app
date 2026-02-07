@@ -12,7 +12,10 @@
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">
               <router-link to="/" class="nav-title" active-class="nav-title-active" exact>
-                Главная
+                Все задачи
+              </router-link>
+              <router-link to="/mytask" class="nav-title" active-class="nav-title-active" exact>
+                Мои задачи
               </router-link>
             </div>
           </div>
