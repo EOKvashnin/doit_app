@@ -1,49 +1,66 @@
 <template>
-  <div
+  <Motion
+    :initial="{ opacity: 0, scale: 0.95 }"
+    :animate="{ opacity: 1, scale: 1 }"
+    :exit="{ opacity: 0, scale: 0.95 }"
+    :transition="{ duration: 0.3 }"
     class="task-modal-content px-4 pb-4 pt-2 min-h-[60vh] max-h-[65vh] overflow-y-auto scrollable-column"
   >
-    <div class="flex flex-row gap-3 justify-between items-baseline mb-2">
-      <AppStatus :status="localTask.status" />
-      <div class="flex flex-col text-right text-xs text-gray-500 mx-2 mb-1">
-        <div v-if="localTask.statusUpdatedAt">
-          Статус:
-          {{
-            new Intl.DateTimeFormat('ru-RU', { dateStyle: 'short', timeStyle: 'short' }).format(
-              new Date(localTask.statusUpdatedAt),
-            )
-          }}
-        </div>
-        <div v-if="localTask.editedAt && localTask.editedAt !== localTask.statusUpdatedAt">
-          Изменено:
-          {{
-            new Intl.DateTimeFormat('ru-RU', { dateStyle: 'short', timeStyle: 'short' }).format(
-              new Date(localTask.editedAt),
-            )
-          }}
+    <!-- Header Section -->
+    <Motion
+      :initial="{ opacity: 0, y: -20 }"
+      :animate="{ opacity: 1, y: 0 }"
+      :transition="{ delay: 0.1 }"
+    >
+      <div class="flex flex-row gap-3 justify-between items-baseline mb-2">
+        <AppStatus :status="localTask.status" />
+        <div class="flex flex-col text-right text-xs text-gray-500 mx-2 mb-1">
+          <div v-if="localTask.statusUpdatedAt">
+            Статус: {{ formatDateTime(localTask.statusUpdatedAt) }}
+          </div>
+          <div v-if="localTask.editedAt && localTask.editedAt !== localTask.statusUpdatedAt">
+            Изменено: {{ formatDateTime(localTask.editedAt) }}
+          </div>
         </div>
       </div>
-    </div>
-    <!-- Заголовок -->
-    <div class="mb-4 relative">
+    </Motion>
+
+    <!-- Title Input -->
+    <Motion
+      :initial="{ opacity: 0, x: -20 }"
+      :animate="{ opacity: 1, x: 0 }"
+      :transition="{ delay: 0.2 }"
+      class="mb-4 relative"
+    >
       <input
         v-model="titleEditable"
         type="text"
         class="input-modal"
         placeholder="Название задачи"
       />
-    </div>
+    </Motion>
 
-    <!-- Статус и приоритет -->
-    <div>
+    <!-- Description -->
+    <Motion
+      :initial="{ opacity: 0, x: -20 }"
+      :animate="{ opacity: 1, x: 0 }"
+      :transition="{ delay: 0.3 }"
+    >
       <label class="label-modal">Описание</label>
       <textarea
         v-model="descriptionEditable"
         class="area-modal"
         placeholder="Описание задачи"
       ></textarea>
-    </div>
+    </Motion>
 
-    <div class="grid grid-cols-4 gap-4 my-3">
+    <!-- Priority & Deadline Grid -->
+    <Motion
+      :initial="{ opacity: 0, y: 20 }"
+      :animate="{ opacity: 1, y: 0 }"
+      :transition="{ delay: 0.4 }"
+      class="grid grid-cols-4 gap-4 my-3"
+    >
       <div>
         <label class="label-modal">Приоритет</label>
         <select
@@ -57,10 +74,12 @@
           <option value="low">⚫ Низкий</option>
         </select>
       </div>
+
       <div>
         <label class="label-modal">Дедлайн</label>
         <input v-model="deadlineEditable" type="date" class="input-modal" />
       </div>
+
       <div>
         <label class="label-modal">Направление</label>
         <input v-model="directionEditable" type="text" class="input-modal" placeholder="..." />
@@ -70,11 +89,15 @@
         <label class="label-modal">Проект (ID)</label>
         <input v-model="projectIdEditable" type="text" class="input-modal" placeholder="..." />
       </div>
-    </div>
+    </Motion>
 
-    <!-- Ответственные -->
-
-    <div class="border-t my-4 border-gray-400/20">
+    <!-- Participants Section -->
+    <Motion
+      :initial="{ opacity: 0 }"
+      :animate="{ opacity: 1 }"
+      :transition="{ delay: 0.5 }"
+      class="border-t my-4 border-gray-400/20"
+    >
       <h3 class="label-modal">Участники</h3>
       <TaskParticipantsSplit
         :initiator-email="localTask.initiatorEmail"
@@ -82,10 +105,15 @@
         :get-avatar-by-email="getAvatarByEmail"
         :get-display-name-by-email="getDisplayNameByEmail"
       />
-    </div>
+    </Motion>
 
-    <!-- Комментарии -->
-    <div class="border-t pt-4 border-gray-400/20">
+    <!-- Comments Section -->
+    <Motion
+      :initial="{ opacity: 0 }"
+      :animate="{ opacity: 1 }"
+      :transition="{ delay: 0.6 }"
+      class="border-t pt-4 border-gray-400/20"
+    >
       <h3 class="font-medium mb-2 text-gray-400">Комментарии ({{ localComments.length }})</h3>
 
       <!-- Новый комментарий -->
@@ -104,51 +132,50 @@
 
       <!-- Список комментариев -->
       <div class="space-y-3 max-h-60 pr-2">
-        <TransitionGroup name="comment" tag="div" class="space-y-3 max-h-60 pr-2">
-          <div
-            v-for="comment in localComments"
-            :key="comment.id"
-            class="relative bg-gray-100/10 dark:bg-gray-700/30 border border-gray-400 dark:border-gray-400/10 rounded-xl py-2 px-3 w-fit ml-auto mb-3"
+        <Motion
+          v-for="comment in localComments"
+          :key="comment.id"
+          :initial="{ opacity: 0, scale: 0.9, y: 20 }"
+          :animate="{ opacity: 1, scale: 1, y: 0 }"
+          :exit="{ opacity: 0, scale: 0.9, y: -20 }"
+          :transition="{ duration: 0.3 }"
+          class="relative bg-gray-100/10 dark:bg-gray-700/30 border border-gray-400 dark:border-gray-400/10 rounded-xl py-2 px-3 w-fit ml-auto mb-3"
+        >
+          <!-- Кнопка удаления -->
+          <button
+            @click="removeComment(comment.id)"
+            class="absolute top-2 right-1 w-5 h-5 flex items-center justify-center rounded-full text-gray-600 hover:text-red-500 transition-colors"
+            title="Удалить комментарий"
           >
-            <!-- Кнопка удаления в правом верхнем углу -->
-            <button
-              @click="removeComment(comment.id)"
-              class="absolute top-2 right-1 w-5 h-5 flex items-center justify-center rounded-full text-gray-600 hover:text-red-500 transition-colors"
-              title="Удалить комментарий"
-            >
-              <Icon icon="lucide:trash-2" class="w-3 h-3" />
-            </button>
+            <Icon icon="lucide:trash-2" class="w-3 h-3" />
+          </button>
 
-            <div class="flex flex-col justify-center items-end">
-              <div class="flex flex-row items-center justify-between gap-5 mb-1 pr-4">
-                <UserAvatar
-                  :avatar-url="getAvatarByEmail(comment.authorEmail)"
-                  :display-name="getDisplayNameByEmail(comment.authorEmail)"
-                  :tooltip="true"
-                  :tooltip-name="authorDisplayName(comment)"
-                  :editable="false"
-                  :size="24"
-                />
-
-                <!-- Дата -->
-                <span class="text-gray-500 text-xs">{{
-                  new Intl.DateTimeFormat('ru-RU', {
-                    dateStyle: 'short',
-                    timeStyle: 'short',
-                  }).format(new Date(comment.date))
-                }}</span>
-              </div>
-              <p class="text-gray-800 dark:text-gray-200 text-sm text-right">
-                {{ comment.text }}
-              </p>
+          <div class="flex flex-col justify-center items-end">
+            <div class="flex flex-row items-center justify-between gap-5 mb-1 pr-4">
+              <UserAvatar
+                :avatar-url="getAvatarByEmail(comment.authorEmail)"
+                :display-name="getDisplayNameByEmail(comment.authorEmail)"
+                :tooltip="true"
+                :tooltip-name="getDisplayNameByEmail(comment.authorEmail)"
+                :editable="false"
+                :size="24"
+              />
+              <span class="text-gray-500 text-xs">{{ formatDateTime(comment.date) }}</span>
             </div>
+            <p class="text-gray-800 dark:text-gray-200 text-sm text-right">
+              {{ comment.text }}
+            </p>
           </div>
-        </TransitionGroup>
+        </Motion>
       </div>
-    </div>
-  </div>
-  <!-- ----------------- FOOTER  ------------------- -->
-  <div
+    </Motion>
+  </Motion>
+
+  <!-- Footer with Animation -->
+  <Motion
+    :initial="{ opacity: 0, y: 20 }"
+    :animate="{ opacity: 1, y: 0 }"
+    :transition="{ delay: 0.7 }"
     class="mt-2 py-3 px-3 rounded-xl flex justify-end items-center gap-3 bg-gray-400/30 dark:bg-gray-800/50 backdrop-blur-[20px] border-t border-gray-400/20"
   >
     <button class="btn-del flex justify-start items-center gap-2" @click="removeWithConfirm">
@@ -160,8 +187,7 @@
       <select
         class="select-modal"
         v-model="localTask.status"
-        id="cur_status"
-        @change="handleSelectChange($event.target.value)"
+        @change="handleStatusChange($event.target.value)"
       >
         <option value="" disabled selected hidden>Обновить статус</option>
         <option value="todo">📋 Планируется</option>
@@ -171,13 +197,20 @@
       </select>
     </div>
 
-    <transition name="slide-fade">
-      <div v-if="hasChanges" class="inline-block">
-        <button @click="UpdateWorkerData" class="btn">Обновить</button>
-      </div>
-    </transition>
+    <Motion
+      v-if="hasChanges"
+      :initial="{ opacity: 0, x: 30 }"
+      :animate="{ opacity: 1, x: 0 }"
+      :exit="{ opacity: 0, x: 30 }"
+      :transition="{ duration: 0.3 }"
+      class="inline-block"
+    >
+      <button @click="updateTask" class="btn">Обновить</button>
+    </Motion>
+
     <button @click="closeModal" class="btn transition-colors duration-300">Закрыть</button>
-  </div>
+  </Motion>
+
   <ConfirmModal
     :visible="showConfirmModal"
     message="Вы уверены, что хотите удалить задачу?"
@@ -187,10 +220,16 @@
 </template>
 
 <script setup>
+import { CommentService } from '@/services/commentService'
+import { TaskService } from '@/services/taskService'
+import { dateFormatter } from '@/utils/dateFormatter'
 import { showToast } from '@/utils/toast'
-import { Icon } from '@iconify/vue'
-import { computed, ref, watch } from 'vue'
+import { Motion } from 'motion-v'
+import { computed, ref, shallowRef, watch } from 'vue'
 import { useStore } from 'vuex'
+
+// Components - ИМПОРТИРУЕМ ВСЕ НЕОБХОДИМЫЕ КОМПОНЕНТЫ
+import { Icon } from '@iconify/vue'
 import AppStatus from '../ui/AppStatus.vue'
 import ConfirmModal from '../ui/ConfirmModal.vue'
 import TaskParticipantsSplit from '../ui/TaskParticipantsSplit.vue'
@@ -201,6 +240,7 @@ import UserAvatar from '../ui/UserAvatar.vue'
 // ==================================================
 
 const store = useStore()
+const taskService = new TaskService(store)
 
 const props = defineProps({
   task: {
@@ -220,89 +260,75 @@ const showConfirmModal = ref(false)
 
 // ==================================================
 // 🧠 ЛОКАЛЬНОЕ СОСТОЯНИЕ КОМПОНЕНТА
-// — копии полей задачи для редактирования
-// — локальное хранилище комментариев (для мгновенного отображения)
 // ==================================================
 
-// Создаём локальную копию задачи для редактирования
-const localTask = ref({ ...props.task })
-
-// Исходные значения для сравнения (чтобы не отправлять лишние обновления)
+const localTask = shallowRef({ ...props.task })
 const originalStatus = ref(props.task.status || '')
 const originalPriority = ref(props.task.priority || '')
 
-// Редактируемые текстовые поля
+// Редактируемые поля
 const titleEditable = ref('')
 const descriptionEditable = ref('')
 const priorityEditable = ref('medium')
 const deadlineEditable = ref('')
 const directionEditable = ref('')
 const projectIdEditable = ref('')
-const authorFioEditable = ref('')
-const initiatorFioEditable = ref('')
 
-// Локальный массив комментариев (для optimistic UI)
 const localComments = ref([])
+const newCommentText = ref('')
 
 // ==================================================
-// 🔄 СИНХРОНИЗАЦИЯ С ВНЕШНИМИ ИЗМЕНЕНИЯМИ (props.task)
-// — обновление локального состояния при изменении входной задачи
+// 🔄 СИНХРОНИЗАЦИЯ С ВНЕШНИМИ ИЗМЕНЕНИЯМИ
 // ==================================================
 
 watch(
   () => props.task,
   (newTask) => {
-    if (newTask) {
-      titleEditable.value = newTask.title || ''
-      descriptionEditable.value = newTask.description || ''
-      priorityEditable.value = newTask.priority || 'medium'
-      deadlineEditable.value = newTask.deadline || ''
-      directionEditable.value = newTask.direction || ''
-      projectIdEditable.value = newTask.projectId || ''
-      authorFioEditable.value = newTask.authorFio || ''
-      initiatorFioEditable.value = newTask.initiatorFio || '' // ✅ новое поле
+    if (!newTask) return
 
-      // ✅ НОВАЯ СТРУКТУРА
-      localTask.value = {
-        ...newTask,
-        initiatorEmail: newTask.initiatorEmail || null,
-        executors: Array.isArray(newTask.executors) ? [...newTask.executors] : [],
-      }
+    titleEditable.value = newTask.title || ''
+    descriptionEditable.value = newTask.description || ''
+    priorityEditable.value = newTask.priority || 'medium'
+    deadlineEditable.value = newTask.deadline || ''
+    directionEditable.value = newTask.direction || ''
+    projectIdEditable.value = newTask.projectId || ''
 
-      localComments.value = Array.isArray(newTask.comments) ? [...newTask.comments] : []
-    } else {
-      // Сброс
-      titleEditable.value = ''
-      descriptionEditable.value = ''
-      priorityEditable.value = 'medium'
-      deadlineEditable.value = ''
-      directionEditable.value = ''
-      projectIdEditable.value = ''
-      authorFioEditable.value = ''
-      initiatorFioEditable.value = ''
-
-      localTask.value = {
-        ...props.task,
-        initiatorEmail: null,
-        executors: [],
-      }
+    localTask.value = {
+      ...newTask,
+      initiatorEmail: newTask.initiatorEmail || null,
+      executors: Array.isArray(newTask.executors) ? [...newTask.executors] : [],
     }
+
+    localComments.value = Array.isArray(newTask.comments) ? [...newTask.comments] : []
   },
-  { immediate: true },
+  { immediate: true, deep: false },
 )
 
 // ==================================================
-// 🔍 ПРОВЕРКА НАЛИЧИЯ ИЗМЕНЕНИЙ (для отображения кнопки "Обновить")
+// 📅 ФОРМАТИРОВАНИЕ ДАТ
+// ==================================================
+
+const formatDateTime = (date) => {
+  if (!date) return ''
+  return dateFormatter.formatDateTime(date)
+}
+
+// ==================================================
+// 👤 ГЕТТЕРЫ ДЛЯ ПОЛЬЗОВАТЕЛЕЙ
+// ==================================================
+
+const currentUserEmail = computed(() => store.getters['auth/userEmail'])
+const getAvatarByEmail = (email) => store.getters['users/getAvatarByEmail'](email)
+const getDisplayNameByEmail = (email) => store.getters['users/getDisplayNameByEmail'](email)
+
+// ==================================================
+// 🔍 ПРОВЕРКА НАЛИЧИЯ ИЗМЕНЕНИЙ
 // ==================================================
 
 const hasChanges = computed(() => {
   if (!props.task) return false
 
-  const currentInitiator = localTask.value.initiatorEmail || ''
-  const originalInitiator = props.task.initiatorEmail || ''
-
-  const currentExecutors = JSON.stringify([...localTask.value.executors].sort())
-  const originalExecutors = JSON.stringify([...(props.task.executors || [])].sort())
+  const executorsChanged = !arraysEqual(localTask.value.executors || [], props.task.executors || [])
 
   return (
     titleEditable.value.trim() !== (props.task.title || '') ||
@@ -311,47 +337,33 @@ const hasChanges = computed(() => {
     deadlineEditable.value !== (props.task.deadline || '') ||
     directionEditable.value.trim() !== (props.task.direction || '') ||
     projectIdEditable.value.trim() !== (props.task.projectId || '') ||
-    authorFioEditable.value.trim() !== (props.task.authorFio || '') ||
-    initiatorFioEditable.value.trim() !== (props.task.initiatorFio || '') ||
-    currentInitiator !== originalInitiator ||
-    currentExecutors !== originalExecutors
+    (localTask.value.initiatorEmail || '') !== (props.task.initiatorEmail || '') ||
+    executorsChanged
   )
 })
 
+function arraysEqual(arr1, arr2) {
+  if (arr1.length !== arr2.length) return false
+  return arr1.every((item, index) => item === arr2[index])
+}
+
 // ==================================================
-// 📤 ОБНОВЛЕНИЕ ДАННЫХ ЗАДАЧИ (массовое)
-// — вызывается по кнопке "Обновить"
+// 📤 ОБНОВЛЕНИЕ ДАННЫХ ЗАДАЧИ
 // ==================================================
 
-const UpdateWorkerData = async () => {
-  if (!props.task?.id) return
+const updateTask = async () => {
+  if (!props.task?.id || !hasChanges.value) return
 
   try {
-    const now = new Date().toISOString()
-    const updatedData = {
-      ...props.task,
+    const updatedData = await taskService.updateTask(props.task.id, {
       title: titleEditable.value.trim(),
       description: descriptionEditable.value.trim(),
       priority: priorityEditable.value,
       deadline: deadlineEditable.value,
       direction: directionEditable.value.trim(),
       projectId: projectIdEditable.value.trim(),
-      authorFio: authorFioEditable.value.trim(),
-      initiatorFio: initiatorFioEditable.value.trim(), // ✅
-
-      // ✅ Ключевые поля ролей
-      authorEmail: props.task.authorEmail, // неизменяемый автор
       initiatorEmail: localTask.value.initiatorEmail,
       executors: [...localTask.value.executors],
-
-      comments: localTask.value.comments || props.task.comments,
-      editedAt: now,
-    }
-
-    store.commit('tasks/updateTask', updatedData)
-    await store.dispatch('tasks/update', {
-      id: props.task.id,
-      data: updatedData,
     })
 
     localTask.value = updatedData
@@ -359,102 +371,135 @@ const UpdateWorkerData = async () => {
     originalPriority.value = updatedData.priority
 
     emit('update', updatedData)
-    showToast.success('Данные успешно обновлены')
   } catch (error) {
-    // Откат при ошибке
-    localTask.value = { ...props.task }
-    originalStatus.value = props.task.status || ''
-    originalPriority.value = props.task.priority || 'medium'
-
-    // Восстанавливаем поля ввода
-    titleEditable.value = props.task.title || ''
-    descriptionEditable.value = props.task.description || ''
-    priorityEditable.value = props.task.priority || 'medium'
-    deadlineEditable.value = props.task.deadline || ''
-    directionEditable.value = props.task.direction || ''
-    projectIdEditable.value = props.task.projectId || ''
-    authorFioEditable.value = props.task.authorFio || ''
-
-    showToast.error('Не удалось сохранить изменения: ' + (error.message || 'неизвестная ошибка'))
+    resetToOriginalState()
   }
 }
 
-// ==================================================
-// 🟢 ОБНОВЛЕНИЕ СТАТУСА (отдельно, с отметкой времени)
-// ==================================================
+const resetToOriginalState = () => {
+  if (!props.task) return
 
-const handleSelectChange = async (value) => {
-  if (value === originalStatus.value) return
-  await updateStatus(value)
+  titleEditable.value = props.task.title || ''
+  descriptionEditable.value = props.task.description || ''
+  priorityEditable.value = props.task.priority || 'medium'
+  deadlineEditable.value = props.task.deadline || ''
+  directionEditable.value = props.task.direction || ''
+  projectIdEditable.value = props.task.projectId || ''
+
+  localTask.value = { ...props.task }
+  originalStatus.value = props.task.status || ''
+  originalPriority.value = props.task.priority || 'medium'
 }
 
-const updateStatus = async (status) => {
+// ==================================================
+// 🟢 ОБНОВЛЕНИЕ СТАТУСА
+// ==================================================
+
+const handleStatusChange = async (value) => {
+  if (value === originalStatus.value) return
+
   try {
-    const now = new Date().toISOString()
-    const updatedTask = {
-      ...localTask.value,
-      status,
-      statusUpdatedAt: now,
-      editedAt: now,
+    const updatedData = await taskService.updateField(props.task.id, 'status', value)
+
+    // ✅ Создаём полный объект задачи
+    const completeTask = {
+      ...props.task,
+      ...updatedData,
+      status: value,
+      statusUpdatedAt: new Date().toISOString(),
+      editedAt: new Date().toISOString(),
     }
 
-    localTask.value = updatedTask
-    store.commit('tasks/updateTask', updatedTask)
-    await store.dispatch('tasks/update', {
-      id: props.task.id,
-      data: updatedTask,
-    })
-
-    originalStatus.value = status
-    emit('update', updatedTask)
-    showToast.success('Статус успешно обновлён')
-  } catch (e) {
+    localTask.value = completeTask
+    originalStatus.value = value
+    emit('update', completeTask)
+  } catch (error) {
+    showToast.error('Не удалось обновить статус')
     localTask.value = { ...props.task }
-    showToast.error('Ошибка: ' + e.message)
   }
 }
 
 // ==================================================
-// 🟠 ОБНОВЛЕНИЕ ПРИОРИТЕТА (отдельно, с отметкой editedAt)
+// 🟠 ОБНОВЛЕНИЕ ПРИОРИТЕТА
 // ==================================================
 
 const handlePriorityChange = async (value) => {
   if (value === originalPriority.value) return
-  await updatePriority(value)
-}
 
-const updatePriority = async (priority) => {
   try {
-    const now = new Date().toISOString()
-    localTask.value = {
-      ...localTask.value,
-      priority,
-      editedAt: now,
+    const updatedData = await taskService.updateField(props.task.id, 'priority', value)
+
+    // ✅ ВАЖНО: создаём полный объект задачи, а не смешиваем
+    const completeTask = {
+      ...props.task, // берём оригинальную задачу как базу
+      ...updatedData, // применяем обновления с сервера
+      priority: value, // явно устанавливаем новый приоритет
+      editedAt: new Date().toISOString(), // обновляем время редактирования
     }
 
-    store.commit('tasks/updateTask', localTask.value)
-    await store.dispatch('tasks/update', {
-      id: props.task.id,
-      data: localTask.value,
-    })
+    // ✅ Обновляем localTask полностью
+    localTask.value = completeTask
+    originalPriority.value = value
 
-    emit('update', localTask.value)
-    originalPriority.value = priority
-    showToast.success('Приоритет успешно обновлён')
-  } catch (e) {
-    localTask.value = { ...props.task }
+    // ✅ Emit'им полный корректный объект
+    emit('update', completeTask)
+  } catch (error) {
+    showToast.error('Не удалось обновить приоритет')
     priorityEditable.value = props.task.priority || 'medium'
-    showToast.error('Ошибка: ' + e.message)
+    // ✅ При ошибке восстанавливаем из props.task
+    localTask.value = { ...props.task }
   }
 }
 
 // ==================================================
-// 🗑 УДАЛЕНИЕ ЗАДАЧИ (с подтверждением)
+// 💬 РАБОТА С КОММЕНТАРИЯМИ
+// ==================================================
+
+const commentService = new CommentService(store, props.task.id)
+
+const addComment = async () => {
+  const text = newCommentText.value.trim()
+  if (!text) return
+
+  const newComment = {
+    id: Date.now().toString(),
+    authorEmail: currentUserEmail.value,
+    date: new Date().toISOString(),
+    text,
+  }
+
+  // Optimistic UI
+  localComments.value.unshift(newComment)
+  newCommentText.value = ''
+
+  try {
+    await commentService.addComment(text, currentUserEmail.value)
+  } catch (error) {
+    localComments.value = localComments.value.filter((c) => c.id !== newComment.id)
+  }
+}
+
+const removeComment = async (commentId) => {
+  const commentIndex = localComments.value.findIndex((c) => c.id === commentId)
+  if (commentIndex === -1) return
+
+  const removedComment = localComments.value.splice(commentIndex, 1)[0]
+
+  try {
+    await commentService.removeComment(commentId)
+  } catch (error) {
+    localComments.value.splice(commentIndex, 0, removedComment)
+  }
+}
+
+// ==================================================
+// 🗑 УДАЛЕНИЕ ЗАДАЧИ
 // ==================================================
 
 const removeWithConfirm = () => {
   showConfirmModal.value = true
 }
+
 const cancelRemove = () => {
   showConfirmModal.value = false
 }
@@ -469,75 +514,9 @@ const confirmRemove = async () => {
     })
     emit('close')
   } catch (error) {
-    showToast.error('Ошибка при удалении ', error)
+    showToast.error('Ошибка при удалении', error)
   } finally {
     showConfirmModal.value = false
-  }
-}
-
-// ==================================================
-// 💬 РАБОТА С КОММЕНТАРИЯМИ (optimistic update)
-// — комментарий появляется мгновенно, отправка — в фоне
-// ==================================================
-
-// Получаем email текущего пользователя из Vuex
-const currentUserEmail = computed(() => store.getters['auth/userEmail'])
-// Геттеры
-const getAvatarByEmail = (email) => store.getters['users/getAvatarByEmail'](email)
-const getDisplayNameByEmail = (email) => store.getters['users/getDisplayNameByEmail'](email)
-const newCommentText = ref('')
-
-const authorDisplayName = (comment) => {
-  if (!comment.authorEmail) return ''
-  return getDisplayNameByEmail(comment.authorEmail) || comment.authorEmail
-}
-
-const addComment = async () => {
-  const text = newCommentText.value.trim()
-  if (!text) return
-
-  const newComment = {
-    id: Date.now().toString(),
-    authorEmail: currentUserEmail.value,
-    date: new Date().toISOString(),
-    text,
-  }
-
-  // Optimistic UI: сразу добавляем в интерфейс
-  localComments.value.unshift(newComment)
-  newCommentText.value = ''
-
-  try {
-    // Отправляем на сервер
-    await store.dispatch('tasks/addComment', {
-      taskId: props.task.id,
-      comment: newComment,
-    })
-  } catch (error) {
-    // Ошибка — откатываем
-    localComments.value = localComments.value.filter((c) => c.id !== newComment.id)
-    showToast.error('Не удалось сохранить комментарий', error)
-  }
-}
-//----------------   УДАЛЕНИЕ КОММЕНТАРИЯ   ----------------
-
-const removeComment = async (commentId) => {
-  // Optimistic UI: сразу удаляем из локального массива
-  const commentIndex = localComments.value.findIndex((c) => c.id === commentId)
-  if (commentIndex === -1) return
-
-  const removedComment = localComments.value.splice(commentIndex, 1)[0]
-
-  try {
-    await store.dispatch('tasks/removeComment', {
-      taskId: props.task.id,
-      commentId,
-    })
-    // Успех — комментарий уже удалён из localComments (optimistic)
-  } catch (error) {
-    // Откат: возвращаем комментарий на место
-    localComments.value.splice(commentIndex, 0, removedComment)
-    // Ошибка уже показана в action через showToast
   }
 }
 </script>
@@ -545,158 +524,5 @@ const removeComment = async (commentId) => {
 <style scoped>
 .task-modal-content {
   font-size: 14px;
-}
-
-.adaptive-modal {
-  max-height: min(80vh, 800px); /* Не больше 80% экрана и 800px */
-  min-height: 400px; /* Минимальная высота */
-  overflow-y: auto;
-  scrollbar-gutter: stable both-edges; /* Зарезервируем место под скроллбар */
-  padding-right: 8px;
-}
-.scroll-always {
-  overflow-y: scroll; /* Принудительное отображение скролла */
-  overscroll-behavior: contain; /* Контроль эффекта перекатывания */
-}
-
-.ease-out-back {
-  animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* ---------- ADD_COMMENT_BLOCK ---------------- */
-
-.addComment-enter-active,
-.addComment-leave-active {
-  transition: all 0.8s ease;
-  max-height: 200px;
-  opacity: 1;
-}
-
-.addComment-enter-from,
-.addComment-leave-to {
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-}
-
-/* ---------- ADD_COMMENT_LIST ---------------- */
-
-.list-enter-from {
-  opacity: 0;
-  transform: scale(0.6);
-}
-
-.list-enter-active {
-  transition: all 0.6s ease;
-}
-
-.list-leave-to {
-  opacity: 0;
-  transform: scale(0.6);
-}
-.list-leave-active {
-  transition: all 0.6s ease;
-  position: absolute;
-}
-.list-move {
-  transition: all 0.6s ease;
-}
-
-/* ---------------- ANIMATION_ADD_BTN ---------------- */
-
-.addBtn-enter-from,
-.addBtn-leave-to {
-  opacity: 0;
-}
-.addBtn-enter-active,
-.addBtn-leave-active {
-  transition: all 0.6s ease;
-}
-
-/* ---------------- ANIMATION_FOOTER ------------------*/
-
-.footer-enter-active,
-.footer-leave-active {
-  transition: all 0.6s ease;
-  transform: translateY(0);
-}
-
-.footer-enter-from,
-.footer-leave-to {
-  transform: translateY(30%);
-  opacity: 0;
-}
-
-/*-------------- INPUT_FOOTER ----------------------- */
-
-.input-wrapper {
-  width: 280px; /* или любая подходящая фиксированная ширина */
-}
-
-.input-width-enter-active,
-.input-width-leave-active {
-  transition:
-    width 0.6s ease,
-    opacity 0.6s ease;
-  overflow: hidden;
-}
-
-.input-width-enter-from,
-.input-width-leave-to {
-  width: 0;
-  opacity: 0;
-}
-
-/*-------------- КНОПКА ОБНОВИТЬ ----------------------- */
-
-.slide-fade-enter-active,
-.slide-fade-leave-active {
-  transition: all 0.6s ease;
-  transform: translateX(0);
-}
-.slide-fade-enter-from,
-.slide-fade-leave-to {
-  transform: translateX(30%);
-  opacity: 0;
-}
-
-/* ------------------ УДАЛЕНИЕ КОММЕТАРИЯ ---------------------*/
-/* Анимация удаления комментария */
-/* Появление */
-.comment-enter-active {
-  transition:
-    opacity 0.35s ease,
-    transform 0.35s ease,
-    max-height 0.35s ease;
-  max-height: 200px;
-  overflow: hidden;
-}
-
-.comment-enter-from {
-  opacity: 0;
-  transform: translateX(50px) scale(0.9);
-  max-height: 0;
-}
-
-.comment-enter-to {
-  opacity: 1;
-  transform: translateX(0) scale(1);
-  max-height: 200px;
-}
-
-/* Удаление */
-.comment-leave-active {
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s ease,
-    max-height 0.3s ease;
-  max-height: 200px;
-  overflow: hidden;
-}
-
-.comment-leave-to {
-  opacity: 0;
-  transform: translateX(50px) scale(0.9);
-  max-height: 0;
 }
 </style>

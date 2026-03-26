@@ -86,7 +86,7 @@ export default {
         // Используем данные из payload
         const { id, data } = payload
 
-        await taskAxios.put(`/tasks/${id}.json?auth=${token}`, data)
+        await taskAxios.patch(`/tasks/${id}.json?auth=${token}`, data)
       } catch (e) {
         if (!isAuthPage) {
           if (e.response && e.response.status === 401) {

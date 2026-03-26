@@ -1,7 +1,13 @@
 <template>
   <div
     @click="openCard"
-    :class="['card', 'priority', getPriorityColor(task.priority), $attrs.class]"
+    :class="[
+      'card',
+      'priority',
+      getPriorityColor(task.priority),
+      $attrs.class,
+      'h-full flex flex-col',
+    ]"
   >
     <!-- Заголовок -->
     <h5 class="mb-2 text-sm font-medium tracking-tight text-gray-900 dark:text-white">
@@ -9,9 +15,9 @@
     </h5>
 
     <!-- Исполнители + количество комментариев -->
-    <div class="flex flex-row justify-between pl-2">
+    <div class="flex flex-row justify-between pl-2 mt-auto">
       <!-- Исполнители (новый блок) -->
-      <div v-if="task.executors && task.executors.length > 0" class="mb-2">
+      <div v-if="task.executors && task.executors.length > 0" class="mb-2 flex-1">
         <div class="flex items-center gap-2 flex-wrap">
           <!-- Показываем максимум 3 исполнителя -->
           <UserAvatar
@@ -35,7 +41,7 @@
       </div>
 
       <!-- Количество комментариев -->
-      <div v-if="task.comments" class="flex gap-1 items-center">
+      <div v-if="task.comments" class="flex gap-1 items-center flex-shrink-0">
         <span class="text-sm text-gray-500">{{ task.comments?.length || 0 }}</span>
         <Icon icon="lucide:message-circle-more" class="w-4 h-4 text-gray-500" />
       </div>
@@ -86,3 +92,13 @@ const openCard = () => {
   emit('open-card', props.task)
 }
 </script>
+
+<style scoped>
+/* Убедимся, что карточка растягивается на всю высоту */
+.card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+</style>

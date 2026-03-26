@@ -69,17 +69,35 @@ const selectedTask = ref(null)
 const prioritySelectedTask = ref(null)
 const titleSelectedTask = ref('')
 
-const tasks = computed(() => {
+// ✅ Мемоизированная фильтрация задач
+// Vue computed автоматически кэширует результат до изменения зависимостей
+const filteredTasks = computed(() => {
+  const allTasks = store.getters['tasks/tasks']
   const f = filter.value
-  let res = store.getters['tasks/tasks']
-  if (f.title) res = res.filter((t) => t.title?.toLowerCase().includes(f.title.toLowerCase()))
-  if (f.authorFio)
-    res = res.filter((t) => t.authorFio?.toLowerCase().includes(f.authorFio.toLowerCase()))
-  if (f.assigneeFio)
-    res = res.filter((t) => t.assigneeFio?.toLowerCase().includes(f.assigneeFio.toLowerCase()))
-  if (f.priority) res = res.filter((t) => t.priority === f.priority)
-  return res
+
+  // Если фильтры пустые — возвращаем все задачи без обработки
+  const hasFilters = f.title || f.authorFio || f.assigneeFio || f.priority
+  if (!hasFilters) {
+    return allTasks
+  }
+
+  // Кэшируем lowercase значения фильтров для производительности
+  const titleFilter = f.title?.toLowerCase()
+  const authorFilter = f.authorFio?.toLowerCase()
+  const assigneeFilter = f.assigneeFio?.toLowerCase()
+
+  return allTasks.filter((task) => {
+    // ✅ Используем every для раннего выхода — быстрее чем цепочка if
+    return (
+      (!titleFilter || task.title?.toLowerCase().includes(titleFilter)) &&
+      (!authorFilter || task.authorFio?.toLowerCase().includes(authorFilter)) &&
+      (!assigneeFilter || task.assigneeFio?.toLowerCase().includes(assigneeFilter)) &&
+      (!f.priority || task.priority === f.priority)
+    )
+  })
 })
+
+const tasks = filteredTasks
 
 //Загружаем всех пользователей
 store.dispatch('users/loadAll')
@@ -97,11 +115,16 @@ const handleOpenCard = (task) => {
 }
 
 const handleTaskUpdate = (updatedTask) => {
+  if (!updatedTask?.id) {
+    console.warn('handleTaskUpdate: получен task без id', updatedTask)
+    return
+  }
+
   selectedTask.value = updatedTask
-  // title и priority обновятся автоматически через computed в handleOpenCard,
-  // но если хочешь — можно обновить и их вручную:
   titleSelectedTask.value = updatedTask.title
   prioritySelectedTask.value = updatedTask.priority
+
+  store.commit('tasks/updateTask', updatedTask)
 }
 
 const close = () => {

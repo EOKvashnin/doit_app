@@ -29,7 +29,7 @@ const iconMap = {
   new: 'line-md:document-add',
   low: 'line-md:coffee-twotone-loop',
   medium: 'line-md:cog-loop',
-  high: 'line-md:lightbulb-filled',
+  high: 'line-md:alert-square-loop',
   //urgent: 'majesticons:fire',
   urgent: 'line-md:hazard-lights-filled-loop',
 }

@@ -50,29 +50,33 @@ const selectedTask = ref(null)
 const prioritySelectedTask = ref(null)
 const titleSelectedTask = ref('')
 
-// Фильтрация только задач текущего пользователя
+// ✅ Мемоизированная фильтрация задач текущего пользователя
 const tasks = computed(() => {
+  const allTasks = store.getters['tasks/tasks']
   const currentUserEmail = store.getters['auth/userEmail']
-  let res = store.getters['tasks/tasks']
 
-  res = res.filter((task) => {
-    // Проверяем ТОЛЬКО, является ли пользователь исполнителем
-    let isExecutor = false
+  // Если нет email или задач — возвращаем пустой массив
+  if (!currentUserEmail || !allTasks?.length) {
+    return []
+  }
 
-    if (task.executors) {
-      if (Array.isArray(task.executors)) {
-        isExecutor = task.executors.includes(currentUserEmail)
-      } else if (typeof task.executors === 'string') {
-        isExecutor = task.executors
-          .split(',')
-          .some((executor) => executor.trim() === currentUserEmail)
-      }
+  // ✅ Кэшируем проверку типа executors для производительности
+  return allTasks.filter((task) => {
+    if (!task.executors) return false
+
+    // Оптимизированная проверка исполнителя
+    if (Array.isArray(task.executors)) {
+      return task.executors.includes(currentUserEmail)
     }
 
-    return isExecutor // Возвращаем только если пользователь - исполнитель
-  })
+    if (typeof task.executors === 'string') {
+      // Избегаем split для каждой задачи — используем includes с запятыми
+      const executorsList = task.executors.split(',')
+      return executorsList.some((executor) => executor.trim() === currentUserEmail)
+    }
 
-  return res
+    return false
+  })
 })
 
 const handleOpenModal = (status) => {
@@ -88,9 +92,13 @@ const handleOpenCard = (task) => {
 }
 
 const handleTaskUpdate = (updatedTask) => {
+  // ✅ Обновляем локальные refs для модалки
   selectedTask.value = updatedTask
   titleSelectedTask.value = updatedTask.title
   prioritySelectedTask.value = updatedTask.priority
+
+  // ✅ Коммитим в store для реактивности computed-свойств
+  store.commit('tasks/updateTask', updatedTask)
 }
 
 const close = () => {

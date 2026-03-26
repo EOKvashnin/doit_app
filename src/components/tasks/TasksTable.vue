@@ -1,134 +1,39 @@
 <template>
   <hr class="text-gray-50/10 w-[90%] mx-auto my-2" />
-  <div v-if="tasks.length === 0" class="flex flex-col justify-center items-center gap-4">
-    <h4 class="text-center text-gray-400 font-medium">Задач пока нет</h4>
-    <Icon icon="streamline-plump:empty-clipboard-remix" class="w-15 h-15 text-gray-300/50" />
-  </div>
 
-  <!-- ОСНОВНАЯ ТАБЛИЦА -->
+  <!-- Пустое состояние -->
+  <EmptyState v-if="tasks.length === 0" />
 
-  <div v-else class="w-[90%] mx-auto overflow-hidden grid grid-cols-[1fr_2fr_1fr] gap-4">
-    <!-- Колонка 1: Планируются -->
-    <div class="flex flex-col border-r border-gray-300/10">
-      <!-- Заголовок -->
-      <div class="flex justify-between py-2 mr-4">
-        <div class="flex items-center gap-2">
-          <Icon icon="lucide:square-pen" class="w-5 h-5 text-gray-500 dark:text-gray-300" />
-          <h1 class="text-gray-500 dark:text-gray-300 font-medium">Планируются</h1>
-          <span class="text-gray-700 font-bold px-1">{{ plannedTasksCount }}</span>
-        </div>
-        <Icon
-          icon="line-md:document-add"
-          class="w-6 h-6 text-gray-300 dark:text-gray-700 hover:text-indigo-600 cursor-pointer"
-          @click="openModal('todo')"
-        />
-      </div>
-
-      <!-- Контейнер с задачами и скроллом -->
-      <div
-        class="flex-1 flex-wrap overflow-y-auto py-2 scrollable-column pr-3"
-        :style="{ maxHeight: `calc(100vh - ${hScrollBlock}px)` }"
-      >
-        <div v-if="plannedTasks.length === 0" class="m-auto flex flex-col items-center gap-1">
-          <div class="text-gray-400 text-sm py-4 text-center">Нет задач</div>
-          <Icon icon="arcticons:emoji-beach-with-umbrella" class="w-15 h-15 text-gray-400" />
-        </div>
-        <TransitionGroup name="task" tag="div" class="flex flex-col">
-          <TaskTableCard
-            v-for="t in plannedTasks"
-            :key="t.id"
-            :task="t"
-            :get-avatar-by-email="getAvatarByEmail"
-            :get-display-name-by-email="getDisplayNameByEmail"
-            @open-card="emit('open-card', $event)"
-            class="mb-3"
-          />
-        </TransitionGroup>
-      </div>
-    </div>
-
-    <!-- Колонка 2: В РАБОТЕ -->
-    <div class="flex flex-col border-r border-gray-300/10">
-      <!-- Заголовок -->
-      <div class="flex justify-between py-2 mb-2 mr-4">
-        <div class="flex items-center gap-2">
-          <Icon icon="line-md:cog-filled-loop" class="w-5 h-5 text-gray-500 dark:text-gray-300" />
-          <h1 class="text-gray-500 dark:text-gray-300 font-medium">В работе</h1>
-          <span class="text-gray-700 font-bold px-1">{{ inProgressTasksCount }}</span>
-        </div>
-        <Icon
-          icon="line-md:document-add"
-          class="w-6 h-6 text-gray-300 dark:text-gray-700 hover:text-indigo-600 cursor-pointer"
-          @click="openModal('in_progress')"
-        />
-      </div>
-
-      <!-- Контейнер с FLEX-WRAP и скроллом -->
-      <div
-        class="max-h-screen overflow-y-auto flex flex-wrap gap-3 scrollable-column pr-3"
-        :style="{ maxHeight: `calc(100vh - ${hScrollBlock}px)` }"
-      >
-        <div v-if="inProgressTasks.length === 0" class="m-auto flex flex-col items-center gap-1">
-          <div class="text-gray-400 text-sm py-4 text-center">Нет задач</div>
-          <Icon icon="arcticons:emoji-beach-with-umbrella" class="w-15 h-15 text-gray-400" />
-        </div>
-
-        <TaskTableCard
-          v-for="t in inProgressTasks"
-          :key="t.id"
-          :task="t"
-          :get-avatar-by-email="getAvatarByEmail"
-          :get-display-name-by-email="getDisplayNameByEmail"
-          @open-card="emit('open-card', $event)"
-          class="flex-1 min-w-[250px]"
-        />
-      </div>
-    </div>
-
-    <!-- Колонка 3: ВЫПОЛНЕНО -->
-    <div class="flex flex-col">
-      <div class="flex justify-between py-2">
-        <div class="flex items-center gap-2">
-          <Icon icon="lucide:circle-check-big" class="w-5 h-5 text-gray-500 dark:text-gray-300" />
-          <h1 class="text-gray-500 dark:text-gray-300 font-medium">Выполнено</h1>
-          <span class="text-gray-700 font-bold px-1">{{ doneTasksCount }}</span>
-        </div>
-        <Icon
-          icon="line-md:document-add"
-          class="w-6 h-6 text-gray-300 dark:text-gray-700 hover:text-indigo-600 cursor-pointer"
-          @click="openModal('done')"
-        />
-      </div>
-
-      <div
-        class="flex-1 overflow-y-auto py-2 scrollable-column pr-3"
-        :style="{ maxHeight: `calc(100vh - ${hScrollBlock}px)` }"
-      >
-        <div v-if="doneTasks.length === 0" class="flex flex-col items-center gap-1">
-          <div class="text-gray-400 text-sm py-4 text-center">Нет задач</div>
-          <Icon icon="arcticons:emoji-beach-with-umbrella" class="w-15 h-15 text-gray-400" />
-        </div>
-        <TransitionGroup name="task" tag="div" class="flex flex-col">
-          <TaskTableCard
-            v-for="t in doneTasks"
-            :key="t.id"
-            :task="t"
-            :get-avatar-by-email="getAvatarByEmail"
-            :get-display-name-by-email="getDisplayNameByEmail"
-            @open-card="emit('open-card', $event)"
-            class="mb-3"
-          />
-        </TransitionGroup>
-      </div>
-    </div>
-  </div>
+  <!-- Основная таблица -->
+  <template v-else>
+    <Motion
+      :initial="{ opacity: 0 }"
+      :animate="{ opacity: 1 }"
+      :transition="{ duration: 0.3 }"
+      class="w-[90%] mx-auto overflow-hidden grid grid-cols-[1fr_2fr_1fr] gap-4"
+    >
+      <!-- Генерируем колонки динамически -->
+      <ColumnContainer
+        v-for="column in columns"
+        :key="column.id"
+        :column="column"
+        :tasks="columnTasks[column.id]"
+        :get-avatar-by-email="getAvatarByEmail"
+        :get-display-name-by-email="getDisplayNameByEmail"
+        :h-scroll-block="hScrollBlock"
+        @open-modal="openModal"
+        @open-card="handleOpenCard"
+      />
+    </Motion>
+  </template>
 </template>
 
 <script setup>
-import { Icon } from '@iconify/vue'
-import { computed, onMounted, ref } from 'vue'
+import { Motion } from 'motion-v'
+import { computed, onMounted, onUnmounted, watch } from 'vue'
 import { useStore } from 'vuex'
-import TaskTableCard from './TaskTableCard.vue'
+import ColumnContainer from './ColumnContainer.vue'
+import EmptyState from './EmptyState.vue'
 
 const store = useStore()
 const emit = defineEmits(['openModal', 'open-card'])
@@ -145,116 +50,211 @@ const props = defineProps({
   },
 })
 
-/*---- ПОЛУЧАЕМ ГЕТТЕРЫ ИЗ СТОРА ----*/
+// ==================== КОНФИГУРАЦИЯ КОЛОНОК ====================
+const COLUMN_CONFIG = [
+  {
+    id: 'todo',
+    title: 'Планируются',
+    icon: 'lucide:square-pen',
+    status: ['todo'],
+    layout: 'column',
+    addIcon: 'line-md:document-add',
+    emptyIcon: 'arcticons:emoji-beach-with-umbrella',
+  },
+  {
+    id: 'in_progress',
+    title: 'В работе',
+    icon: 'line-md:cog-filled-loop',
+    status: ['in_progress', 'review'],
+    layout: 'grid',
+    addIcon: 'line-md:document-add',
+    emptyIcon: 'arcticons:emoji-beach-with-umbrella',
+  },
+  {
+    id: 'done',
+    title: 'Выполнено',
+    icon: 'lucide:circle-check-big',
+    status: ['done'],
+    layout: 'column',
+    addIcon: 'line-md:document-add',
+    emptyIcon: 'arcticons:emoji-beach-with-umbrella',
+  },
+]
 
-// Геттеры из стора пользователей
+// ==================== ВЫСОТА СКРОЛЛА ====================
+const hScrollBlock = computed(() => (props.showFilters ? 250 : 180))
+
+// ==================== ГЕТТЕРЫ ИЗ СТОРА ====================
 const getAvatarByEmail = computed(() => store.getters['users/getAvatarByEmail'])
 const getDisplayNameByEmail = computed(() => store.getters['users/getDisplayNameByEmail'])
-const getUserByEmail = computed(() => store.getters['users/getUserByEmail'])
 
-/*---- ВЫСОТА СТОЛБЦА В ЗАВИСИМОСТИ ОТ ОТОБРАЖЕНИЯ ФИЛЬТРА ----*/
+// ==================== 🎯 ЛОГИКА СОРТИРОВКИ ====================
 
-const hScrollBlock = ref('190')
+/**
+ * 📊 Порядок приоритетов для сортировки (меньше = выше)
+ */
+const PRIORITY_ORDER = Object.freeze({
+  urgent: 0, // 🔴 Максимальный
+  high: 1, // 🟠 Высокий
+  medium: 2, // 🟢 Средний
+  low: 3, // ⚫ Низкий
+  default: 999, // Задачи без приоритета — в самый конец
+})
 
-if (props.showFilters) {
-  hScrollBlock.value = 250
-} else {
-  hScrollBlock.value = 180
+/**
+ * 🔍 Кэш для дат последних комментариев (мемоизация)
+ * Ключ: taskId, Значение: Date|null
+ */
+const commentDateCache = new Map()
+
+/**
+ * 🔍 Получает дату последнего комментария (валидную Date или null)
+ * @param {string} taskId - ID задачи для кэширования
+ * @param {Array} comments - массив комментариев задачи
+ * @returns {Date|null}
+ */
+function getLastCommentDate(taskId, comments) {
+  // Проверяем кэш
+  if (commentDateCache.has(taskId)) {
+    return commentDateCache.get(taskId)
+  }
+
+  // Базовая валидация
+  if (!comments || !Array.isArray(comments) || comments.length === 0) {
+    commentDateCache.set(taskId, null)
+    return null
+  }
+
+  // Фильтруем только комментарии с валидной датой
+  const validComments = comments.filter((c) => {
+    if (!c?.date) return false
+    const timestamp = new Date(c.date).getTime()
+    return !isNaN(timestamp) // true только для корректных дат ISO
+  })
+
+  if (validComments.length === 0) {
+    commentDateCache.set(taskId, null)
+    return null
+  }
+
+  // Находим комментарий с максимальной датой
+  const latest = validComments.reduce((prev, curr) => {
+    return new Date(curr.date) > new Date(prev.date) ? curr : prev
+  })
+
+  const result = new Date(latest.date)
+  commentDateCache.set(taskId, result)
+  return result
 }
 
-/*---- УПРАВЛЕНИЕ МОДАЛЬНЫМ ОКНОМ ------------------------------*/
+/**
+ * 🔄 Двухуровневая сортировка задач:
+ * 1. По приоритету (ascending: urgent → low)
+ * 2. Внутри одного приоритета — по дате последнего комментария (descending: новые сверху)
+ *
+ * @param {Array} tasks - массив задач для сортировки
+ * @returns {Array} отсортированный массив (новая ссылка, иммутабельно)
+ */
+function sortTasks(tasks) {
+  return [...tasks].sort((a, b) => {
+    // 🛡️ Защита от невалидных данных
+    if (!a?.id || !a?.status) return 1
+    if (!b?.id || !b?.status) return -1
 
+    // ─────────────────────────────────────────
+    // 🔹 КРИТЕРИЙ 1: Сортировка по приоритету
+    // ─────────────────────────────────────────
+    const priorityA = PRIORITY_ORDER[a.priority] ?? PRIORITY_ORDER.default
+    const priorityB = PRIORITY_ORDER[b.priority] ?? PRIORITY_ORDER.default
+
+    // Если приоритеты разные — сортируем по ним и завершаем сравнение
+    if (priorityA !== priorityB) {
+      return priorityA - priorityB // ascending: 0 < 1 < 2 < 3
+    }
+
+    // ─────────────────────────────────────────
+    // 🔹 КРИТЕРИЙ 2: Сортировка по дате комментария (внутри одного приоритета)
+    // ─────────────────────────────────────────
+    const dateA = getLastCommentDate(a.id, a.comments)
+    const dateB = getLastCommentDate(b.id, b.comments)
+
+    // Если у обеих задач нет валидных дат комментариев — сохраняем относительный порядок
+    if (!dateA && !dateB) return 0
+
+    // Задача с комментарием всегда выше задачи без комментариев
+    if (!dateA) return 1 // a без даты → ниже
+    if (!dateB) return -1 // b без даты → ниже
+
+    // Сортируем по убыванию: новые комментарии сверху
+    return dateB - dateA
+  })
+}
+
+// ==================== ФИЛЬТРАЦИЯ И СОРТИРОВКА ПО КОЛОНКАМ ====================
+const columnTasks = computed(() => {
+  const result = {}
+
+  COLUMN_CONFIG.forEach((column) => {
+    // 1. Фильтрация задач по статусам колонки
+    const filtered = props.tasks.filter((task) => {
+      if (!task || !task.id || !task.status) return false
+      return column.status.includes(task.status)
+    })
+
+    // 2. 🎯 Сортировка отфильтрованных задач
+    result[column.id] = sortTasks(filtered)
+  })
+
+  return result
+})
+
+// ==================== КОЛИЧЕСТВО ЗАДАЧ ====================
+const tasksCount = computed(() => {
+  const counts = {}
+  COLUMN_CONFIG.forEach((column) => {
+    counts[column.id] = columnTasks.value[column.id]?.length || 0
+  })
+  return counts
+})
+
+// ==================== КОЛОНКИ С КОЛИЧЕСТВОМ ====================
+const columns = computed(() =>
+  COLUMN_CONFIG.map((column) => ({
+    ...column,
+    count: tasksCount.value[column.id],
+  })),
+)
+
+// ==================== МЕТОДЫ ====================
 function openModal(defaultStatus) {
   emit('openModal', defaultStatus)
 }
 
-/*---- СЧИТАЕМ КОЛИЧЕСТВО ЗАДАЧ ПО СТАТУСАМ --------------------*/
-
-const plannedTasksCount = computed(() => plannedTasks.value.length)
-const inProgressTasksCount = computed(() => inProgressTasks.value.length)
-const doneTasksCount = computed(() => doneTasks.value.length)
-
-// Создаем карту весов для приоритетов
-const PRIORITY_ORDER = {
-  urgent: 0,
-  high: 1,
-  medium: 2,
-  low: 3,
+function handleOpenCard(event) {
+  emit('open-card', event)
 }
 
-// Функция для получения даты последнего комментария
-function getLastCommentDate(comments) {
-  if (!comments || comments.length === 0) return null
-
-  const latest = comments.reduce((prev, curr) => {
-    const prevDate = new Date(prev.date)
-    const currDate = new Date(curr.date)
-    return currDate > prevDate ? curr : prev
-  })
-
-  return new Date(latest.date)
-}
-
-// Функция сортировки задач
-function sortTasks(tasks) {
-  return [...tasks].sort((a, b) => {
-    // 1. Приоритет
-    const prioA = PRIORITY_ORDER[a.priority] ?? 999
-    const prioB = PRIORITY_ORDER[b.priority] ?? 999
-    if (prioA !== prioB) return prioA - prioB
-
-    // 2. Дата последнего комментария
-    const dateA = getLastCommentDate(a.comments)
-    const dateB = getLastCommentDate(b.comments)
-
-    if (dateA && dateB) return dateB - dateA // новые наверх
-    if (dateA) return -1 // a выше
-    if (dateB) return 1 // b выше
-    return 0 // равны
-  })
-}
-
-// --- ПРИМЕНЯЕМ В COMPUTED ---
-
-const plannedTasks = computed(() => sortTasks(props.tasks.filter((t) => t.status === 'todo')))
-
-const inProgressTasks = computed(() =>
-  sortTasks(props.tasks.filter((t) => ['in_progress', 'review'].includes(t.status))),
-)
-
-const doneTasks = computed(() => sortTasks(props.tasks.filter((t) => t.status === 'done')))
-
-/*---- ЗАГРУЗКА ПОЛЬЗОВАТЕЛЕЙ ПРИ МОНТИРОВАНИИ (опционально) ----*/
-
+// ==================== ЖИЗНЕННЫЙ ЦИКЛ ====================
 onMounted(() => {
-  // Если пользователи еще не загружены, загружаем их
   if (store.state.users.allUsers.length === 0) {
-    store.dispatch('users/loadAll')
+    store.dispatch('users/loadAll').catch((err) => {
+      console.error('Ошибка загрузки пользователей:', err)
+    })
   }
 })
+
+// ✅ Очистка кэша комментариев при изменении задач
+watch(
+  () => props.tasks,
+  () => {
+    // Очищаем кэш при изменении набора задач
+    commentDateCache.clear()
+  },
+  { deep: false }, // Следим только за ссылкой на массив
+)
+
+// ✅ Очистка кэша при размонтировании компонента
+onUnmounted(() => {
+  commentDateCache.clear()
+})
 </script>
-
-<style scoped>
-/* Базовое состояние: все задачи на месте */
-.task-enter-from,
-.task-leave-to {
-  opacity: 0;
-  transform: translateX(100%); /* начинаем справа */
-}
-
-/* Финальное состояние: на месте */
-.task-enter-to {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* Анимация появления */
-.task-enter-active {
-  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-/* (опционально) Анимация удаления */
-.task-leave-active {
-  transition: all 0.6s ease;
-}
-</style>

@@ -10,7 +10,7 @@
             <h1 class="text-2xl text-indigo-600 font-bold">Do <mark>it</mark></h1>
           </div>
           <div class="hidden sm:ml-6 sm:block">
-            <div class="flex space-x-4">
+            <div class="flex space-x-3">
               <router-link to="/" class="nav-title" active-class="nav-title-active" exact>
                 <div class="flex flex-row gap-2 items-center">
                   <Icon icon="lucide:briefcase-business" class="w-6 h-6" />Все задачи

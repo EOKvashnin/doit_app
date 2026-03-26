@@ -82,10 +82,19 @@ export default {
       return state.emailToUser[email] || null
     },
     getAvatarByEmail: (state) => (email) => {
+      // ✅ Vuex getters автоматически кэшируются на основе реактивных зависимостей
+      // Пересчитываются только при изменении state.emailToUser
       return state.emailToUser[email]?.avatarUrl || null
     },
     getDisplayNameByEmail: (state) => (email) => {
+      // ✅ Возвращаем displayName или email по умолчанию
       return state.emailToUser[email]?.displayName || email
+    },
+    // ✅ Добавляем селектор для получения всех пользователей — полезно для списков
+    allUsersList: (state) => state.allUsers,
+    // ✅ Селектор для быстрого получения пользователя по ID
+    getUserById: (state) => (id) => {
+      return state.allUsers.find((u) => u.id === id) || null
     },
   },
 }

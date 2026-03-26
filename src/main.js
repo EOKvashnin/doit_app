@@ -4,6 +4,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+import 'flowbite'
 import 'vue-toast-notification/dist/theme-default.css'
 
 import './style.css'
