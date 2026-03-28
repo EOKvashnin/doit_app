@@ -21,6 +21,16 @@
                   <Icon icon="lucide:user-lock" class="w-6 h-6" />Мои задачи
                 </div>
               </router-link>
+              <router-link
+                to="/boss-report"
+                class="nav-title"
+                active-class="nav-title-active"
+                exact
+              >
+                <div class="flex flex-row gap-2 items-center">
+                  <Icon icon="lucide:chart-bar" class="w-6 h-6" />Отчёт руководителя
+                </div>
+              </router-link>
             </div>
           </div>
         </div>

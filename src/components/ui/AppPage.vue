@@ -3,8 +3,8 @@
     <router-link class="text-white" to="/">Вернуться к списку заявок</router-link>
   </div> -->
   <div class="h-screen flex flex-col items-center justify-start py-3">
-    <div class="w-full max-w-[1800px] px-4">
-      <div class="w-full max-w-[90%] mx-auto">
+    <div class="w-full max-w-[1800px] px-4 flex flex-col flex-1 min-h-0">
+      <div class="w-full max-w-[90%] mx-auto flex-shrink-0">
         <h1
           class="flex justify-between items-center text-2xl font-medium text-gray-500 dark:text-gray-300 w-full mb-3 all-sm-caps"
         >

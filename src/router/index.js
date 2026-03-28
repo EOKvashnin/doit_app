@@ -40,6 +40,15 @@ const routes = [
       auth: true,
     },
   },
+  {
+    path: '/boss-report',
+    name: 'BossReport',
+    component: () => import('../views/BossReport.vue'),
+    meta: {
+      layout: 'main',
+      auth: true,
+    },
+  },
 ]
 
 const router = createRouter({

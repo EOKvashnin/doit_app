@@ -87,11 +87,22 @@ const filteredTasks = computed(() => {
   const assigneeFilter = f.assigneeFio?.toLowerCase()
 
   return allTasks.filter((task) => {
+    // ✅ Проверка фильтра по исполнителю (массив email'ов)
+    const matchesAssignee =
+      !assigneeFilter ||
+      (task.executors &&
+        Array.isArray(task.executors) &&
+        task.executors.some((email) => {
+          const user = store.getters['users/getUserByEmail'](email)
+          const displayName = user?.displayName || email
+          return displayName.toLowerCase().includes(assigneeFilter)
+        }))
+
     // ✅ Используем every для раннего выхода — быстрее чем цепочка if
     return (
       (!titleFilter || task.title?.toLowerCase().includes(titleFilter)) &&
       (!authorFilter || task.authorFio?.toLowerCase().includes(authorFilter)) &&
-      (!assigneeFilter || task.assigneeFio?.toLowerCase().includes(assigneeFilter)) &&
+      matchesAssignee &&
       (!f.priority || task.priority === f.priority)
     )
   })
